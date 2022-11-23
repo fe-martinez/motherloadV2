@@ -8,6 +8,8 @@ import javafx.scene.input.KeyCode;
 import jugador.Accion;
 import jugador.AccionItem;
 import jugador.AccionMovimiento;
+import jugador.Colisiones;
+import jugador.Interacciones;
 import jugador.Jugador;
 import jugador.Posicion;
 import mejoras.*;
@@ -19,12 +21,15 @@ public class Juego {
 	public static final int FPS = 60;
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
+	private static final double COEF_REDUCCION = 0.02;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
 	private Jugador jugador;
 	private Vista vista;
 	private Scanner input;
+	private Interacciones interacciones;
+	private Colisiones colisiones;
 	private Map<KeyCode, Accion> controles;
 	
 	private long msSinceLastFrame = 0;
@@ -35,13 +40,15 @@ public class Juego {
 		this.tiendas = tiendas;
 		this.input = null;
 		this.vista = new Vista(tiendas, suelo, jugador, jugador.getInventario(), Main.ANCHO, Main.ALTURA);
+		this.interacciones = new Interacciones(jugador, suelo, tiendas);
+		this.colisiones = new Colisiones(suelo, tiendas, jugador);
 		
 		//Usa Character de momento pero con JavaFX pasaria a ser KeyCode.
 		final Map<KeyCode, Accion> controles = Map.of(
-				KeyCode.UP, new AccionMovimiento(jugador, suelo, tiendas, 0, -0.1),
-				KeyCode.DOWN, new AccionMovimiento(jugador, suelo, tiendas, 0, 0.1),
-				KeyCode.RIGHT, new AccionMovimiento(jugador, suelo, tiendas, 0.1, 0),
-				KeyCode.LEFT, new AccionMovimiento(jugador, suelo, tiendas, -0.1, 0),
+				KeyCode.UP, new AccionMovimiento(jugador, 0, -0.1),
+				KeyCode.DOWN, new AccionMovimiento(jugador, 0, 0.1),
+				KeyCode.RIGHT, new AccionMovimiento(jugador, 0.1, 0),
+				KeyCode.LEFT, new AccionMovimiento(jugador, -0.1, 0),
 				KeyCode.F, new AccionItem(jugador, new MejoraTanqueExtra()),
 				KeyCode.Q, new AccionItem(jugador, new MejoraTeleport()),
 				KeyCode.R, new AccionItem(jugador, new MejoraHullRepairNanobots()),
@@ -78,7 +85,7 @@ public class Juego {
 		if(jugador.getY() < jugador.getLimiteAlto()){
 			Posicion debajo = new Posicion(jugador.getX(), jugador.getY() + 1);
 			if(suelo.casilleroVacio(debajo) && jugador.getY() < jugador.getLimiteAlto() - 2) {
-				jugador.setY(jugador.getY() + 0.01);
+				jugador.setY(jugador.getY() + 0.03);
 				debajo.setY(debajo.getY() + 1);
 			}
 		}
@@ -90,12 +97,33 @@ public class Juego {
 	public void realizarAccion(ArrayList<Accion> acciones, long dt) {
 		for(var accion: acciones) {
 			accion.aplicar();
-		}
+			
+			if(!colisiones.chequear()) {
+				this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
+				this.jugador.setY(this.jugador.getY() + this.jugador.getVelY());
+			}
+			interacciones.chequear();
+			
+			}
 		
-//		msSinceLastFrame += dt / 1000000;
-//		while (msSinceLastFrame >= MS_PER_FRAME) {
-//			msSinceLastFrame -= MS_PER_FRAME;
-//			caer();
+//		if(this.jugador.getVelX() > 0) {
+//			this.jugador.setVelX(this.jugador.getVelX() - COEF_REDUCCION);				
+//		} else if(this.jugador.getVelX() < 0) {
+//			this.jugador.setVelX(this.jugador.getVelX() + COEF_REDUCCION);
+//		}
+//			
+//		if(Math.abs(jugador.getVelX()) <= 0.02){
+//			this.jugador.setVelX(0);
+//		}
+//		
+//		if(this.jugador.getVelY() > 0) {
+//			this.jugador.setVelY(this.jugador.getVelY() - COEF_REDUCCION);
+//		} else if(this.jugador.getVelY() < 0) {
+//			this.jugador.setVelY(this.jugador.getVelY() + COEF_REDUCCION);
+//		}
+//			
+//		if(Math.abs(jugador.getVelY()) <= 0.02) {
+//			this.jugador.setVelY(0);
 //		}
 		caer();
 	}

@@ -23,7 +23,10 @@ public class Suelo {
 	
 	//Destruye el bloque de la posicion dada
 	public void destruirBloque(Posicion pos) {
-		bloques[(int)pos.getY()][(int)pos.getX()] = new Aire();
+		if(bloques[(int)pos.getY()][(int)pos.getX()].getBloqueID() != ' ') {
+			bloques[(int)pos.getY()][(int)pos.getX()] = new Aire();
+			System.out.println("Se destruye el bloque de " + pos.getX() + "; " + pos.getY());
+		}
 	}
 	
 	//Devuelve true si el casillero de la posicion dada está vacío y false en caso contrario.
@@ -32,7 +35,7 @@ public class Suelo {
 			return false;
 		}
 		
-		return(bloques[(int)posicion.getY()][(int)posicion.getX()] instanceof Aire);
+		return(bloques[(int)posicion.getY()][(int)posicion.getX()].getBloqueID() == ' ');
 	}
 
 	public int getAlto() {

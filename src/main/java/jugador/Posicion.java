@@ -64,14 +64,13 @@ public class Posicion {
 		return false;
 	}
 	
-	public static double redondear(double pos) {
-//		var decimal = Math.abs(pos - (int)pos);
-//		if(decimal < 0.1) {
-//			return pos - decimal;
-//		} else if(decimal > 0.7) {
-//			return Math.round(pos);
-//		}
-//		return pos;
+	public static int redondear(double pos) {
+		var decimal = Math.abs(pos - (int)pos);
+		if(decimal < 0.2) {
+			return (int)pos - 1;
+		} else if(decimal > 0.8) {
+			return (int)Math.round(pos);
+		}
 		return (int)pos;
 	}
 	

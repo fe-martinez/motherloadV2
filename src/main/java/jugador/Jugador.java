@@ -13,6 +13,8 @@ public class Jugador implements Bloque {
 	private int dinero;
 	private int altoTerreno;
 	private int anchoTerreno;
+	private double velY;
+	private double velX;
 	
 	//Cuidado con los limites a las pos, las pruebas usan y != 0
 	//Entonces cambiá las pruebas xD
@@ -31,6 +33,8 @@ public class Jugador implements Bloque {
 		
 		this.altoTerreno = altoTerreno;
 		this.anchoTerreno = anchoTerreno;
+		this.velY = 0;
+		this.velX = 0;
 	}	
 	
 	//------------------------------------------------
@@ -102,6 +106,22 @@ public class Jugador implements Bloque {
 		}
 	}
 	
+	public double getVelY() {
+		return velY;
+	}
+
+	public void setVelY(double velY) {
+		this.velY = velY;
+	}
+
+	public double getVelX() {
+		return velX;
+	}
+
+	public void setVelX(double velX) {
+		this.velX = velX;
+	}
+
 	public int getLimiteAlto() {
 		return this.altoTerreno;
 	}
