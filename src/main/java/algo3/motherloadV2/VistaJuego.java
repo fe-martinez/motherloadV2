@@ -61,6 +61,7 @@ public class VistaJuego {
         //Pa debuggear.
         Text text = new Text();
         Text text2 = new Text();
+        Text text3 = new Text();
     	text.setText("PosX: " + pj.getX() + "\nPosY: " + pj.getY());
     	text.setX(10);
     	text.setY(20);
@@ -69,6 +70,8 @@ public class VistaJuego {
         root.getChildren().add(canvas);
         root.getChildren().add(text);
         root.getChildren().add(text2);
+        root.getChildren().add(text3);
+
         Scene escena = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(escena);
         
@@ -91,6 +94,11 @@ public class VistaJuego {
 		    	text2.setFont(fuente);
 		    	text2.setX(300);
 		    	text2.setY(20);
+		    	text3.setText("VEL X: " + pj.getVelX() + "VEL Y" + pj.getVelY());
+		    	text3.setFont(fuente);
+		    	text3.setX(600);
+		    	text3.setY(20);
+		    	
 		    	//Convertir input y realizar accion son bastante diferentes a los de la Etapa 2. Estan integrados a esta version
 		    	// y no a la de consola.
 				var acciones = new ArrayList<Accion>();
@@ -115,8 +123,8 @@ public class VistaJuego {
 	
 	private static void dibujar(GraphicsContext context, Juego juego, ArrayList<Image> imagenes) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
-    	dibujarTerreno(context, juego.getSuelo(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
-    	dibujarJugador(context, imagenes, juego.getJugador());
+    	dibujarTerreno2(context, juego.getSuelo(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
+    	dibujarJugador2(context, imagenes, juego.getJugador());
     }
     
     //La idea de comienzoI y comienzoJ es no dibujar al jugador antes del 0 o despues del max, probablemente haya maneras mejores
@@ -198,7 +206,7 @@ public class VistaJuego {
     	var imagenes = new ArrayList<Image>();
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Cielo.png", 64));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Tierra.png", 64));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Jugador.png", 48));
+		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Jugador.png", 64));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Minado.png", 64));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Bronce.png", 64));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Hierro.png", 64));
@@ -228,29 +236,29 @@ public class VistaJuego {
 	}
 	
 	
-//	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
-//    private static void dibujarJugador2(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
-//    	context.drawImage(imagenes.get(2), ((WIDTH/2) - (GRILLA_ANCHO/2)), (HEIGHT/2) - (GRILLA_ALTO/2));
-//	}
-//	
-//	public static void dibujarTerreno2(GraphicsContext context, Suelo suelo, ArrayList<Image> imagenes, double pjX, double pjY) {
-//		double playerScreenX = (WIDTH/2) - (GRILLA_ANCHO/2);
-//		double playerScreenY = (HEIGHT/2) - (GRILLA_ALTO/2);
-//		for(double i = 0; i < FILAS; i++) {
-//			for(double j = 0; j < COLUMNAS; j++) {
-//				double worldX = j * GRILLA_ANCHO;
-//				double worldY = i * GRILLA_ALTO;
-//				double screenX = worldX - (pjX * GRILLA_ANCHO) + playerScreenX;
-//				double screenY = worldY - (pjY * GRILLA_ALTO) + playerScreenY;
-//				
-//				if (worldX + GRILLA_ANCHO > (pjX * GRILLA_ANCHO) - playerScreenX &&
-//					worldX - GRILLA_ANCHO < (pjX * GRILLA_ANCHO) + playerScreenX &&
-//					worldY + GRILLA_ALTO > (pjY * GRILLA_ALTO) - playerScreenY &&
-//					worldY - GRILLA_ALTO < (pjY * GRILLA_ALTO) + playerScreenY) {
-//					
-//					context.drawImage(tipoImagen(suelo, imagenes, j, i), screenX, screenY);
-//				}
-//			}
-//		}
-//	}
+	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
+    private static void dibujarJugador2(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
+    	context.drawImage(imagenes.get(2), ((WIDTH/2) - (GRILLA_ANCHO/2)), (HEIGHT/2) - (GRILLA_ALTO/2));
+	}
+	
+	public static void dibujarTerreno2(GraphicsContext context, Suelo suelo, ArrayList<Image> imagenes, double pjX, double pjY) {
+		double playerScreenX = (WIDTH/2) - (GRILLA_ANCHO/2);
+		double playerScreenY = (HEIGHT/2) - (GRILLA_ALTO/2);
+		for(double i = 0; i < FILAS; i++) {
+			for(double j = 0; j < COLUMNAS; j++) {
+				double worldX = j * GRILLA_ANCHO;
+				double worldY = i * GRILLA_ALTO;
+				double screenX = worldX - (pjX * GRILLA_ANCHO) + playerScreenX;
+				double screenY = worldY - (pjY * GRILLA_ALTO) + playerScreenY;
+				
+				if (worldX + GRILLA_ANCHO > (pjX * GRILLA_ANCHO) - playerScreenX &&
+					worldX - GRILLA_ANCHO < (pjX * GRILLA_ANCHO) + playerScreenX &&
+					worldY + GRILLA_ALTO > (pjY * GRILLA_ALTO) - playerScreenY &&
+					worldY - GRILLA_ALTO < (pjY * GRILLA_ALTO) + playerScreenY) {
+					
+					context.drawImage(tipoImagen(suelo, imagenes, j, i), screenX, screenY);
+				}
+			}
+		}
+	}
 }

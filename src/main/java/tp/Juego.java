@@ -29,6 +29,9 @@ public class Juego {
 	private Scanner input;
 	private Interacciones interacciones;
 	private Map<KeyCode, Accion> controles;
+	private double ticks;
+	private double direccionVertical;
+	private double direccionHorizontal;
 	
 	private long msSinceLastFrame = 0;
 	
@@ -39,6 +42,9 @@ public class Juego {
 		this.input = null;
 		this.vista = new Vista(tiendas, suelo, jugador, jugador.getInventario(), Main.ANCHO, Main.ALTURA);
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
+		this.ticks = 0;
+		this.direccionVertical = 0;
+		this.direccionHorizontal = 0;
 		
 		//Usa Character de momento pero con JavaFX pasaria a ser KeyCode.
 		final Map<KeyCode, Accion> controles = Map.of(
@@ -88,18 +94,35 @@ public class Juego {
 		}
 	}
 	
+	private void taladrar() {
+		if(direccionVertical > 0 && this.jugador.getVelY() > 0) {
+			ticks += 1;
+		} if(direccionHorizontal > 0 && this.jugador.getVelX() > 0) {
+			ticks += 1;
+		} if(direccionHorizontal < 0 && this.jugador.getVelX() < 0) {
+			ticks += 1;
+		}
+	}
+	
 	//Realiza las acciones que encuentra en la lista de acciones y las remueve de la misma.
 	//De momento, para ser utilizada por consola funciona de esta manera, pero la idea es que sea un loop que ejecute todas las acciones,
 	//una por cada una de las teclas que estan siendo presionadas de momento.
 	public void realizarAccion(ArrayList<Accion> acciones, long dt) {
 		for(var accion: acciones) {
 			accion.aplicar();
-			
-			if(!interacciones.chequearColision()) {
+			direccionVertical = jugador.getVelY();
+			direccionHorizontal = jugador.getVelX();
+			System.out.println(ticks);
+			taladrar();
+			if(!interacciones.chequearColision(this.ticks)) {
 				this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
 				this.jugador.setY(this.jugador.getY() + this.jugador.getVelY());
 			}
+			
 			interacciones.chequearBloques();
+			if(ticks > 51) {
+				ticks = 0;
+			}
 			
 			}
 		

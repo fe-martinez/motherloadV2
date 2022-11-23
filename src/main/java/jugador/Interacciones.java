@@ -5,6 +5,8 @@ import terreno.Suelo;
 import terreno.TipoEntidad;
 
 public class Interacciones {
+	private static final double MAX_TICKS = 35;
+	
 	private Jugador pj;
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -25,7 +27,6 @@ public class Interacciones {
 		var buscada = Posicion.redondear(new Posicion(pj.getX(), pj.getY()));
 		
 		if(suelo.casilleroVacio(buscada) || suelo.getBloque(buscada).getBloqueID() == 'T') {
-			System.out.println("Es tierra o aire " + buscada.getX() + buscada.getY());
 			suelo.destruirBloque(buscada);
 			return;
 		}
@@ -38,7 +39,6 @@ public class Interacciones {
 		
 		pj.observarBloque(suelo.getBloque(buscada));
 		suelo.destruirBloque(buscada);
-		System.out.println("Se lee el bloque de la posicion " + buscada.getX() + "///" + buscada.getY());
 	}
 	
 	public boolean chequearBloques() {
@@ -58,7 +58,6 @@ public class Interacciones {
 			if(pj.getY() == 0) {
 				return false;
 			}
-			
 			Posicion arriba = Posicion.redondear(new Posicion(pj.getX(), pj.getY() - 1));
 			if(suelo.casilleroVacio(arriba)) {
 					return false;
@@ -67,10 +66,51 @@ public class Interacciones {
 			return true;
 		}
 		
-		public boolean chequearColision() {
+		private boolean chocaDireccionVertical(int direccion) {
+			if(pj.getY() == 0) {
+				return false;
+			}
+			Posicion arriba = Posicion.redondear(new Posicion(pj.getX(), pj.getY() + direccion));
+			if(suelo.casilleroVacio(arriba)) {
+					return false;
+			}
+
+			return true;
+		}
+		
+		private boolean chocaDireccionHorizontal(int direccion) {
+			Posicion casillero = Posicion.redondear(new Posicion(pj.getX() + direccion, pj.getY()));
+			if(suelo.casilleroVacio(casillero)) {
+					return false;
+			}
+			return true;
+		}
+		
+		public boolean chequearColision(double ticks) {
 			if(chocaArriba() && pj.getVelY() < 0) {
 				return true;
 			}
+			if(pj.getVelY() > 0 && chocaDireccionVertical(1)) {
+				if(ticks < MAX_TICKS) {
+					return true;
+				}
+				return false;
+			} if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
+				if(ticks < MAX_TICKS) {
+					return true;
+				}
+				return false;
+			}
+			
+			if(pj.getVelX() < 0 && chocaDireccionHorizontal(-1)) {
+				if(ticks < MAX_TICKS) {
+					return true;
+				}
+				return false;
+			}
+			
+			
+			
 			return false;
 		}
 	
