@@ -64,14 +64,31 @@ public class Posicion {
 		return false;
 	}
 	
-	public static int redondear(double pos) {
-		var decimal = Math.abs(pos - (int)pos);
-		if(decimal < 0.2) {
-			return (int)pos - 1;
-		} else if(decimal > 0.8) {
-			return (int)Math.round(pos);
+	//Para que las interacciones concuerden con la posicion de la animacion.
+	//(int) corta todo lo que viene detras del punto. (int)3.6666 --> 3.0.
+	//round lo lleva al entero mas cercano. Math.round(3.666) --> 4.0.
+	public static Posicion redondear(Posicion pos) {
+		var decimalX = Math.abs(pos.getX() - ((int)pos.getX()));
+		var nuevaX = 0;
+		if(decimalX < 0.2) {
+			nuevaX = (int)pos.getX() - 1;
+		} else if(decimalX > 0.8) {
+			nuevaX = (int)Math.round(pos.getX());
+		} else {
+			nuevaX = (int)pos.getX();
 		}
-		return (int)pos;
+		
+		
+		var decimalY = Math.abs(pos.getY() - ((int)pos.getY()));
+		var nuevaY = 0;
+		if(decimalY > 0.8) {
+			nuevaY = (int)Math.round(pos.getY());
+		} else {
+			nuevaY = (int)pos.getY();
+		}
+
+		Posicion nueva = new Posicion(nuevaX, nuevaY);
+		return nueva;
 	}
 	
 	

@@ -8,7 +8,6 @@ import javafx.scene.input.KeyCode;
 import jugador.Accion;
 import jugador.AccionItem;
 import jugador.AccionMovimiento;
-import jugador.Colisiones;
 import jugador.Interacciones;
 import jugador.Jugador;
 import jugador.Posicion;
@@ -21,7 +20,7 @@ public class Juego {
 	public static final int FPS = 60;
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
-	private static final double COEF_REDUCCION = 0.02;
+	//private static final double COEF_REDUCCION = 0.02;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -29,7 +28,6 @@ public class Juego {
 	private Vista vista;
 	private Scanner input;
 	private Interacciones interacciones;
-	private Colisiones colisiones;
 	private Map<KeyCode, Accion> controles;
 	
 	private long msSinceLastFrame = 0;
@@ -41,7 +39,6 @@ public class Juego {
 		this.input = null;
 		this.vista = new Vista(tiendas, suelo, jugador, jugador.getInventario(), Main.ANCHO, Main.ALTURA);
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
-		this.colisiones = new Colisiones(suelo, tiendas, jugador);
 		
 		//Usa Character de momento pero con JavaFX pasaria a ser KeyCode.
 		final Map<KeyCode, Accion> controles = Map.of(
@@ -98,11 +95,11 @@ public class Juego {
 		for(var accion: acciones) {
 			accion.aplicar();
 			
-			if(!colisiones.chequear()) {
+			if(!interacciones.chequearColision()) {
 				this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
 				this.jugador.setY(this.jugador.getY() + this.jugador.getVelY());
 			}
-			interacciones.chequear();
+			interacciones.chequearBloques();
 			
 			}
 		

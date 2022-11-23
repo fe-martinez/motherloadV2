@@ -14,8 +14,6 @@ public class Interacciones {
 		this.suelo = suelo;
 		this.tiendas = tiendas;
 	}
-
-
 	
 	//Calcula el daño según la altura desde la que cae.
 	private int calcularDanio(int altura) {
@@ -24,7 +22,7 @@ public class Interacciones {
 	
 	//Permite al Jugador taladrar y ver si debe recolectar un Mineral o no.
 	private void taladrar(Posicion pos) {
-		var buscada = new Posicion(Posicion.redondear(pj.getX()), Posicion.redondear(pj.getY()));
+		var buscada = Posicion.redondear(new Posicion(pj.getX(), pj.getY()));
 		
 		if(suelo.casilleroVacio(buscada) || suelo.getBloque(buscada).getBloqueID() == 'T') {
 			System.out.println("Es tierra o aire " + buscada.getX() + buscada.getY());
@@ -43,7 +41,7 @@ public class Interacciones {
 		System.out.println("Se lee el bloque de la posicion " + buscada.getX() + "///" + buscada.getY());
 	}
 	
-	public boolean chequear() {
+	public boolean chequearBloques() {
 		taladrar(pj.getPosicion());
 		
 		if((int)pj.getY() == 0 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
@@ -54,5 +52,26 @@ public class Interacciones {
 		
 		return false;
 	}
+	
+	//Devuelve true si choca con algo arriba o false si no se choca con nada.
+		private boolean chocaArriba() {
+			if(pj.getY() == 0) {
+				return false;
+			}
+			
+			Posicion arriba = Posicion.redondear(new Posicion(pj.getX(), pj.getY() - 1));
+			if(suelo.casilleroVacio(arriba)) {
+					return false;
+			}
+
+			return true;
+		}
+		
+		public boolean chequearColision() {
+			if(chocaArriba() && pj.getVelY() < 0) {
+				return true;
+			}
+			return false;
+		}
 	
 }
