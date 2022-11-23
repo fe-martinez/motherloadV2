@@ -5,7 +5,7 @@ import terreno.Suelo;
 import terreno.TipoEntidad;
 
 public class Interacciones {
-	private static final double MAX_TICKS = 35;
+	public static final double MAX_TICKS = 35;
 	
 	private Jugador pj;
 	private Suelo suelo;

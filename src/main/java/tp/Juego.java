@@ -120,7 +120,7 @@ public class Juego {
 			}
 			
 			interacciones.chequearBloques();
-			if(ticks > 51) {
+			if(ticks > Interacciones.MAX_TICKS) {
 				ticks = 0;
 			}
 			
