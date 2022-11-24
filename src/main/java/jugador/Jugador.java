@@ -15,6 +15,7 @@ public class Jugador implements Bloque {
 	private int anchoTerreno;
 	private double velY;
 	private double velX;
+	EstadoJugador estado;
 	
 	//Cuidado con los limites a las pos, las pruebas usan y != 0
 	//Entonces cambiá las pruebas xD
@@ -35,8 +36,9 @@ public class Jugador implements Bloque {
 		this.anchoTerreno = anchoTerreno;
 		this.velY = 0;
 		this.velX = 0;
+		this.estado = EstadoJugador.INICIAL;
 	}	
-	
+
 	//------------------------------------------------
 	//          		DINERO
 	//------------------------------------------------
@@ -171,6 +173,15 @@ public class Jugador implements Bloque {
 	//Devuelve true si no puede continuar, false en caso contrario.
 	public boolean noPuedeContinuar() {
 		return (nave.seEstrello() || nave.seQuedoSinCombustible());
+	}
+	
+	
+	public EstadoJugador getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoJugador estado) {
+		this.estado = estado;
 	}
 
 }

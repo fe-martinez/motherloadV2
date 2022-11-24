@@ -9,6 +9,7 @@ import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -19,8 +20,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jugador.Accion;
@@ -56,13 +63,23 @@ public class App extends Application {
         VistaJuego juego = new VistaJuego(stage);
         
         Group root = new Group();
-		StackPane spane = new StackPane();
-		Scene escena = new Scene(spane, WIDTH, HEIGHT);
+		VBox vbox = new VBox();
+		Scene escena = new Scene(vbox, WIDTH, HEIGHT);
+		
 		Button boton = new Button("Comenzar");
-		Image fondo = obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png", WIDTH);
-		ImageView imgView = new ImageView(fondo);
-		spane.getChildren().add(imgView);
-		spane.getChildren().add(boton);
+		boton.setPrefSize(500, 100);
+		
+		Image fondo = obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png");
+		BackgroundImage bfondo = new BackgroundImage(fondo, null, null, null, null);
+		
+		Text texto = new Text("Las aventuras de\n miguelito la excavadora");
+		texto.setFont(Font.font("FreeMono", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
+		texto.setFill(Color.CYAN);
+		
+		vbox.setBackground(new Background(bfondo));
+		vbox.getChildren().add(texto);
+		vbox.getChildren().add(boton);
+		vbox.setAlignment(Pos.CENTER);
 		stage.setScene(escena);
 		stage.show();
 		
@@ -75,10 +92,10 @@ public class App extends Application {
         launch();
     }
     
-    private static Image obtenerImagen(String nombre, double size) {
+    private static Image obtenerImagen(String nombre) {
 		Image image = null;
 		try {
-			image = new Image(new FileInputStream(nombre), size, size, true, false);
+			image = new Image(new FileInputStream(nombre), WIDTH, HEIGHT, true, false);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

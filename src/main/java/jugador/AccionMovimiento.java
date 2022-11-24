@@ -32,14 +32,9 @@ public class AccionMovimiento implements Accion{
 		
 		if(this.dx != 0) {
 			this.pj.setVelX(dx);
-		} else if(this.dx == 0) {
-			this.pj.setVelX(0);
 		}
-		
 		if(this.dy != 0) {
 			this.pj.setVelY(dy);
-		} else if(this.dy == 0) {
-			this.pj.setVelY(0);
 		}
 		
 		this.pj.getNave().gastarCombustible(GASTO_COMBUSTIBLE_MOVIMIENTO);

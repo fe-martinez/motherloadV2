@@ -29,8 +29,13 @@ public class FabricaDeSuelo {
 			bloques[1][k] = new Aire();
 			bloques[2][k] = new Aire();
 			bloques[3][k] = new Aire();
+			bloques[4][k] = new Aire();
+			bloques[5][k] = new Aire();
+			bloques[6][k] = new Aire();
+			bloques[7][k] = new Aire();
+			bloques[8][k] = new Aire();
 		}
-		for(int i = 4; i < alto; i++) {
+		for(int i = 9; i < alto; i++) {
 			for(int j = 0; j < ancho; j++) {
 				bloques[i][j] = ponerBloque();
 			}

@@ -8,6 +8,7 @@ import javafx.scene.input.KeyCode;
 import jugador.Accion;
 import jugador.AccionItem;
 import jugador.AccionMovimiento;
+import jugador.EstadoJugador;
 import jugador.Interacciones;
 import jugador.Jugador;
 import jugador.Posicion;
@@ -20,7 +21,8 @@ public class Juego {
 	public static final int FPS = 60;
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
-	//private static final double COEF_REDUCCION = 0.02;
+	private static final double COEF_REDUCCION = 0.002;
+	private static final double GRAVEDAD = 0.06;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -85,10 +87,10 @@ public class Juego {
 	}
 	
 	private void caer() {
-		if(jugador.getY() < jugador.getLimiteAlto()){
+		if(jugador.getY() < jugador.getLimiteAlto() && jugador.getVelY() >= 0){
 			Posicion debajo = new Posicion(jugador.getX(), jugador.getY() + 1);
 			if(suelo.casilleroVacio(debajo) && jugador.getY() < jugador.getLimiteAlto() - 2) {
-				jugador.setY(jugador.getY() + 0.03);
+				jugador.setY(jugador.getY() + GRAVEDAD);
 				debajo.setY(debajo.getY() + 1);
 			}
 		}
@@ -97,11 +99,67 @@ public class Juego {
 	private void taladrar() {
 		if(direccionVertical > 0 && this.jugador.getVelY() > 0) {
 			ticks += 1;
-		} if(direccionHorizontal > 0 && this.jugador.getVelX() > 0) {
+		} else if(direccionHorizontal > 0 && this.jugador.getVelX() > 0) {
 			ticks += 1;
-		} if(direccionHorizontal < 0 && this.jugador.getVelX() < 0) {
+		} else if(direccionHorizontal < 0 && this.jugador.getVelX() < 0) {
 			ticks += 1;
+		} else {
+			ticks = 0;
 		}
+		
+		if(this.jugador.getVelY() > 0) {
+			if(ticks > 0 && ticks < Interacciones.MAX_TICKS/4) {
+				jugador.setEstado(EstadoJugador.TALADRANDO_ABAJO_INICIO);
+			} else if(ticks >= Interacciones.MAX_TICKS/4 && ticks <= Interacciones.MAX_TICKS) {
+				jugador.setEstado(EstadoJugador.TALADRANDO_ABAJO_FULL);
+			} else {
+				jugador.setEstado(EstadoJugador.INICIAL);
+			}
+		} else if(this.jugador.getVelX() > 0) {
+			if(ticks > 0 && ticks < Interacciones.MAX_TICKS/4) {
+				jugador.setEstado(EstadoJugador.TALADRANDO_DERECHA_INICIO);
+			} else if(ticks >= Interacciones.MAX_TICKS/4 && ticks <= Interacciones.MAX_TICKS) {
+				jugador.setEstado(EstadoJugador.TALADRANDO_DERECHA_FULL);
+			} else {
+				jugador.setEstado(EstadoJugador.INICIAL);
+			}
+		} else if(this.jugador.getVelX() < 0) {
+			if(ticks > 0 && ticks < Interacciones.MAX_TICKS/4) {
+				jugador.setEstado(EstadoJugador.TALADRANDO_IZQUIERDA_INICIO);
+			} else if(ticks >= Interacciones.MAX_TICKS/4 && ticks <= Interacciones.MAX_TICKS) {
+				jugador.setEstado(EstadoJugador.TALADRANDO_IZQUIERDA_FULL);
+			} else {
+				jugador.setEstado(EstadoJugador.INICIAL);
+			}
+		} else {
+			jugador.setEstado(EstadoJugador.INICIAL);
+		}
+	}
+	
+	
+	private void actualizar() {
+		if(this.jugador.getVelX() > 0) {
+			this.jugador.setVelX(this.jugador.getVelX() - COEF_REDUCCION);				
+		} else if(this.jugador.getVelX() < 0) {
+			this.jugador.setVelX(this.jugador.getVelX() + COEF_REDUCCION);
+		}
+			
+		if(Math.abs(jugador.getVelX()) <= COEF_REDUCCION){
+			this.jugador.setVelX(0);
+		}
+		
+		if(this.jugador.getVelY() > 0) {
+			this.jugador.setVelY(this.jugador.getVelY() - COEF_REDUCCION);
+		} else if(this.jugador.getVelY() < 0) {
+			this.jugador.setVelY(this.jugador.getVelY() + COEF_REDUCCION);
+		}
+			
+		if(Math.abs(jugador.getVelY()) <= COEF_REDUCCION) {
+			this.jugador.setVelY(0);
+		}
+		
+		this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
+		this.jugador.setY(this.jugador.getY() + this.jugador.getVelY());
 	}
 	
 	//Realiza las acciones que encuentra en la lista de acciones y las remueve de la misma.
@@ -110,13 +168,21 @@ public class Juego {
 	public void realizarAccion(ArrayList<Accion> acciones, long dt) {
 		for(var accion: acciones) {
 			accion.aplicar();
+		}
+		
+		msSinceLastFrame += dt / 1_000_000;
+		while (msSinceLastFrame >= MS_PER_FRAME) {
+			msSinceLastFrame -= MS_PER_FRAME;
+			
 			direccionVertical = jugador.getVelY();
 			direccionHorizontal = jugador.getVelX();
-			System.out.println(ticks);
 			taladrar();
 			if(!interacciones.chequearColision(this.ticks)) {
-				this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
-				this.jugador.setY(this.jugador.getY() + this.jugador.getVelY());
+				actualizar();
+			} else {
+				//Habia un escenario donde el pj sigue taladrando un rato por mas de que no se apretaba nada
+				this.jugador.setVelX(0);
+				this.jugador.setVelY(0);
 			}
 			
 			interacciones.chequearBloques();
@@ -124,28 +190,8 @@ public class Juego {
 				ticks = 0;
 			}
 			
-			}
-		
-//		if(this.jugador.getVelX() > 0) {
-//			this.jugador.setVelX(this.jugador.getVelX() - COEF_REDUCCION);				
-//		} else if(this.jugador.getVelX() < 0) {
-//			this.jugador.setVelX(this.jugador.getVelX() + COEF_REDUCCION);
-//		}
-//			
-//		if(Math.abs(jugador.getVelX()) <= 0.02){
-//			this.jugador.setVelX(0);
-//		}
-//		
-//		if(this.jugador.getVelY() > 0) {
-//			this.jugador.setVelY(this.jugador.getVelY() - COEF_REDUCCION);
-//		} else if(this.jugador.getVelY() < 0) {
-//			this.jugador.setVelY(this.jugador.getVelY() + COEF_REDUCCION);
-//		}
-//			
-//		if(Math.abs(jugador.getVelY()) <= 0.02) {
-//			this.jugador.setVelY(0);
-//		}
-		caer();
+			caer();
+		}
 	}
 	
 	public Suelo getSuelo() {
