@@ -124,6 +124,7 @@ public class App extends Application {
 		Button botonOK = new Button("Ok");
 		botonOK.setPrefWidth(100);
 		
+		vbox.setSpacing(20);
 		vbox.getChildren().add(label);
 		vbox.getChildren().add(botonOK);
 		vbox.setAlignment(Pos.CENTER);
