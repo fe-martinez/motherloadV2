@@ -1,5 +1,6 @@
 package jugador;
 
+import algo3.motherloadV2.VistaJuego;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.TipoEntidad;
@@ -86,6 +87,26 @@ public class Interacciones {
 			return true;
 		}
 		
+		//La idea general de las colisiones. EL modelo del pj se dibuja desde la esquina superior izquierda
+		//pj.getX() * GRILLA_ANCHO es el pixel donde arranca a dibujarse pj. Si le sumamos PJ_ANCHO, nos da el ultimo pixel.
+		//Tomando la parte entera de pj.getX() y la parte entera de la division del ultimo pixel y el ancho de la grilla
+		//nos da sobre que casilleros de la matriz esta parado el dibujo del pj (puede ser 1 o maximo 2 casilleros a la vez).
+		//esta funcion es para ver si puede caer, pero el concepto es ese. si el modelo del pj es un poco mas chico en pixeles que
+		//el de las casillas siempre va a haber hueco para que pase el jugador.
+		public boolean puedePasarEntreCasillas() {
+			var limiteDerecho = (pj.getX() * VistaJuego.GRILLA_ANCHO) + VistaJuego.GRILLA_PJ_ANCHO;
+			var casillaLimiteDerecho = (int)(limiteDerecho/VistaJuego.GRILLA_ANCHO);
+			System.out.println((int)pj.getX() + "--" + casillaLimiteDerecho);
+			
+			Posicion izquierda = new Posicion((int)pj.getX(), (int)pj.getY());
+			Posicion derecha = new Posicion(casillaLimiteDerecho, (int)pj.getY());
+			
+			if(suelo.casilleroVacio(izquierda) && suelo.casilleroVacio(derecha)) {
+					return true;
+			}
+			return false;
+		}
+		
 		public boolean chequearColision(double ticks) {
 			if(chocaArriba() && pj.getVelY() < 0) {
 				return true;
@@ -108,6 +129,8 @@ public class Interacciones {
 				}
 				return false;
 			}
+			
+			
 			
 			
 			

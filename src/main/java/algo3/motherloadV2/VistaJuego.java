@@ -30,17 +30,17 @@ import tp.Juego;
 public class VistaJuego {
 	private static final double WIDTH = 1024;
 	private static final double HEIGHT = 768;
+
+	public static final double GRILLA_ANCHO = 64;
+	public static final double GRILLA_ALTO = 64;
 	
-	private static final double GRILLA_ANCHO = 128;
-	private static final double GRILLA_ALTO = 128;
+	public static final double GRILLA_PJ_ANCHO = 48;
+	public static final double GRILLA_PJ_ALTO = 48;
 	
-	public static final double GRILLA_PJ_ANCHO = 80;
-	public static final double GRILLA_PJ_ALTO = 80;
+	private static final double COLUMNAS_DIBUJADAS = (WIDTH/GRILLA_ANCHO);
+	private static final double FILAS_DIBUJADAS = (HEIGHT/GRILLA_ALTO);
 	
-	private static final double COLUMNAS_DIBUJADAS = WIDTH/GRILLA_ANCHO;
-	private static final double FILAS_DIBUJADAS = HEIGHT/GRILLA_ALTO;
-	
-	private static final double FILAS = 256;
+	private static final double FILAS = 64;
 	private static final double COLUMNAS = 64;
 	
 	Stage stage;
@@ -94,15 +94,12 @@ public class VistaJuego {
 				last = now;
 			}
         }.start();
-        
-        
         stage.show();
 	}
 	
 	
 	private static void dibujar(GraphicsContext context, Juego juego, ArrayList<Image> imagenes, ArrayList<Image> imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
-    	context.drawImage(imagenes.get(8), 0, 0);
     	dibujarFondo(context, imagenes, juego.getJugador());
     	dibujarTerreno(context, juego.getSuelo(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
     	dibujarJugador(context, imagenesJugador, juego.getJugador());
@@ -125,7 +122,7 @@ public class VistaJuego {
     		comienzoI = finI - COLUMNAS_DIBUJADAS;
     	}
     	
-    	context.drawImage(tipoImagenJugador(jugador, imagenes), ((jugador.getX() - comienzoI) * GRILLA_ANCHO), ((jugador.getY() - comienzoJ) * GRILLA_ALTO) + 64);
+    	context.drawImage(tipoImagenJugador(jugador, imagenes), ((jugador.getX() - comienzoI) * GRILLA_ANCHO), ((jugador.getY() - comienzoJ) * GRILLA_ALTO) + 24);
 	}
 
     
@@ -145,12 +142,6 @@ public class VistaJuego {
     	if(finJ - comienzoJ != FILAS_DIBUJADAS) {
     		comienzoJ = finJ - FILAS_DIBUJADAS;
     	}
-    	
-//    	for(double j = comienzoJ; j < finJ; j++) {
-//        	for(double i = comienzoI; i < finI; i++) {
-//        		context.drawImage(tipoImagen(suelo, imagenes, i, j), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
-//        	}
-//        }
     	
     	for(double i = comienzoI; i < finI; i++) {
     		for(double j = comienzoJ; j < finJ; j++) {
@@ -186,7 +177,7 @@ public class VistaJuego {
     		return imagenes.get(5);
     	}
     	
-    	return null;
+    	return imagenes.get(1);
     }
     
     private static Image tipoImagenJugador(Jugador pj, ArrayList<Image> imagenesJugador) {
@@ -205,14 +196,13 @@ public class VistaJuego {
     	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_IZQUIERDA_FULL) {
     		return imagenesJugador.get(6);
     	} 
-    	
     	return imagenesJugador.get(0);
     }
     
     private ArrayList<Image> cargarImagenes(){
     	var imagenes = new ArrayList<Image>();
 		//imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Cielo.png", 64));
-    	imagenes.add(null);
+    	imagenes.add(null); //Aca va la del cielo, puse null para probar lo del fondo!
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Tierra.png", GRILLA_ANCHO));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Jugador.png", GRILLA_PJ_ANCHO));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Minado.png", GRILLA_ANCHO));
@@ -221,7 +211,7 @@ public class VistaJuego {
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Plata.png", GRILLA_ANCHO));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Oro.png", GRILLA_ANCHO));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Background.jpg", 1920));
-    	
+  
     	return imagenes;
     }
     
@@ -234,7 +224,6 @@ public class VistaJuego {
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Derecha2.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Izquierda1.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Izquierda2.png", GRILLA_PJ_ANCHO));
-		
 		return imagenesJugador;
     }
     
@@ -247,40 +236,5 @@ public class VistaJuego {
 			e.printStackTrace();
 		}
 		return image1;
-	}
-	
-	private String listarIDMinerales(List<Mineral> minerales) {
-		var result = "";
-		for(var mineral: minerales) {
-			result = result + mineral.getBloqueID();
-		}
-		return result;
-	}
-	
-	
-	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
-    private static void dibujarJugador2(GraphicsContext context, ArrayList<Image> imagenesJugador,  Jugador jugador) {
-    	context.drawImage(tipoImagenJugador(jugador, imagenesJugador), ((WIDTH/2) - (GRILLA_ANCHO/2)), (HEIGHT/2) - (GRILLA_ALTO/2) + (GRILLA_ALTO/4));
-	}
-	
-	public static void dibujarTerreno2(GraphicsContext context, Suelo suelo, ArrayList<Image> imagenes, double pjX, double pjY) {
-		double playerScreenX = (WIDTH/2) - (GRILLA_ANCHO/2);
-		double playerScreenY = (HEIGHT/2) - (GRILLA_ALTO/2);
-		for(double i = 9; i < FILAS; i++) {
-			for(double j = 0; j < COLUMNAS; j++) {
-				double worldX = j * GRILLA_ANCHO;
-				double worldY = i * GRILLA_ALTO;
-				double screenX = worldX - (pjX * GRILLA_ANCHO) + playerScreenX;
-				double screenY = worldY - (pjY * GRILLA_ALTO) + playerScreenY;
-				
-				if (worldX + GRILLA_ANCHO > (pjX * GRILLA_ANCHO) - playerScreenX &&
-					worldX - GRILLA_ANCHO < (pjX * GRILLA_ANCHO) + playerScreenX &&
-					worldY + GRILLA_ALTO > (pjY * GRILLA_ALTO) - playerScreenY &&
-					worldY - GRILLA_ALTO < (pjY * GRILLA_ALTO) + playerScreenY) {
-					
-					context.drawImage(tipoImagen(suelo, imagenes, j, i), screenX, screenY);
-				}
-			}
-		}
 	}
 }

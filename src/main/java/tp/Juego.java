@@ -18,11 +18,11 @@ import terreno.Suelo;
 import terreno.Vista;
 
 public class Juego {	
-	public static final int FPS = 60;
+	public static final int FPS = 90;
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
 	private static final double COEF_REDUCCION = 0.002;
-	private static final double GRAVEDAD = 0.06;
+	private static final double GRAVEDAD = 0.0045;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -90,7 +90,8 @@ public class Juego {
 		if(jugador.getY() < jugador.getLimiteAlto() && jugador.getVelY() >= 0){
 			Posicion debajo = new Posicion(jugador.getX(), jugador.getY() + 1);
 			if(suelo.casilleroVacio(debajo) && jugador.getY() < jugador.getLimiteAlto() - 2) {
-				jugador.setY(jugador.getY() + GRAVEDAD);
+				jugador.setVelY(jugador.getVelY() + GRAVEDAD);
+				jugador.setY(jugador.getY() + jugador.getVelY());
 				debajo.setY(debajo.getY() + 1);
 			}
 		}
@@ -190,7 +191,9 @@ public class Juego {
 				ticks = 0;
 			}
 			
-			caer();
+			if(interacciones.puedePasarEntreCasillas()) {
+				caer();
+			}
 		}
 	}
 	
