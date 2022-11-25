@@ -22,7 +22,7 @@ public class Juego {
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
 	private static final double COEF_REDUCCION = 0.002;
-	private static final double GRAVEDAD = 0.0045;
+	private static final double GRAVEDAD = 0.0042;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -87,7 +87,7 @@ public class Juego {
 	}
 	
 	private void caer() {
-		if(jugador.getY() < jugador.getLimiteAlto() && jugador.getVelY() >= 0){
+		if(jugador.getY() < jugador.getLimiteAlto() && this.direccionVertical >= 0){
 			Posicion debajo = new Posicion(jugador.getX(), jugador.getY() + 1);
 			if(suelo.casilleroVacio(debajo) && jugador.getY() < jugador.getLimiteAlto() - 2) {
 				jugador.setVelY(jugador.getVelY() + GRAVEDAD);
@@ -166,12 +166,12 @@ public class Juego {
 	//Realiza las acciones que encuentra en la lista de acciones y las remueve de la misma.
 	//De momento, para ser utilizada por consola funciona de esta manera, pero la idea es que sea un loop que ejecute todas las acciones,
 	//una por cada una de las teclas que estan siendo presionadas de momento.
-	public void realizarAccion(ArrayList<Accion> acciones, long dt) {
+	public void realizarAccion(ArrayList<Accion> acciones, double t) {
 		for(var accion: acciones) {
 			accion.aplicar();
 		}
 		
-		msSinceLastFrame += dt / 1_000_000;
+		msSinceLastFrame += t / 1_000_000;
 		while (msSinceLastFrame >= MS_PER_FRAME) {
 			msSinceLastFrame -= MS_PER_FRAME;
 			
@@ -183,17 +183,20 @@ public class Juego {
 			} else {
 				//Habia un escenario donde el pj sigue taladrando un rato por mas de que no se apretaba nada
 				this.jugador.setVelX(0);
-				this.jugador.setVelY(0);
+				this.jugador.setVelY(0);					
 			}
+			
 			
 			interacciones.chequearBloques();
 			if(ticks > Interacciones.MAX_TICKS) {
 				ticks = 0;
 			}
 			
-			if(interacciones.puedePasarEntreCasillas()) {
-				caer();
-			}
+			caer();
+			
+//			if(interacciones.puedePasarEntreCasillas()) {
+//				caer();
+//			}
 		}
 	}
 	

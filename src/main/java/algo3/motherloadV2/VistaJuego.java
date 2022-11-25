@@ -7,13 +7,22 @@ import java.util.HashSet;
 import java.util.List;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -63,12 +72,17 @@ public class VistaJuego {
         dibujar(context, juego, imagenes, imagenesJugador);
         hud.dibujarHUD();
         
+        
+        AnchorPane apane = new AnchorPane();
+        
         root.getChildren().add(canvas);
 
         Scene escena = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(escena);
         
         var keysPressed = new HashSet<KeyCode>();
+        
+        escena.setOnMouseClicked(e -> checkMenu(e, root));
         
         escena.setOnKeyPressed(e -> {keysPressed.add(e.getCode()); });
         escena.setOnKeyReleased(e -> {keysPressed.remove(e.getCode()); });
@@ -103,7 +117,13 @@ public class VistaJuego {
     	dibujarFondo(context, imagenes, juego.getJugador());
     	dibujarTerreno(context, juego.getSuelo(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
     	dibujarJugador(context, imagenesJugador, juego.getJugador());
+    	dibujarBoton(context);
     }
+	
+	private static void dibujarBoton(GraphicsContext context) {
+		context.setFill(Color.RED);
+		context.fillRect(950, 20, 30, 30);
+	}
 	
 	private static void dibujarFondo(GraphicsContext context, ArrayList<Image> imagenes, Jugador pj) {
 		double playerScreenX = (WIDTH/2) - Math.round(pj.getX()) - (GRILLA_ANCHO/2);
@@ -150,6 +170,54 @@ public class VistaJuego {
     	}
     	
     }
+	
+	private static void checkMenu(MouseEvent e, Group root) {
+		var x = e.getSceneX();
+		var y = e.getSceneY();
+		
+		if(x >= 950 && x <= 980 && y >= 20 && y <= 50) {
+	    	StackPane pane = new StackPane();
+	    	VBox vbox = new VBox();
+	    	Rectangle rect = new Rectangle(0, 0, 900, 600);
+	    	Color colorcito = new Color(0.7, 0.7, 0.7, 0.3);
+	    	rect.setFill(colorcito);
+	    	
+	    	Label label = new Label("Work in progress :p");
+			label.setFont(Font.font(50));
+			
+			Button botonOK = new Button("Continue");
+			botonOK.setPrefWidth(200);
+			
+			Button botonSalir = new Button("Salir de la partida");
+			botonSalir.setPrefWidth(200);
+			
+			vbox.getChildren().add(label);
+			vbox.getChildren().add(botonOK);
+			vbox.getChildren().add(botonSalir);
+			vbox.setAlignment(Pos.CENTER);
+			
+	    	pane.getChildren().add(rect);
+	    	pane.getChildren().add(vbox);
+	    	
+	    	pane.setAlignment(Pos.CENTER);
+	    	pane.setLayoutX((WIDTH - 900) / 2);
+	    	pane.setLayoutY((HEIGHT - 600) / 2);
+	    	
+	    	root.getChildren().add(pane);
+	    	
+	    	
+	    	
+//	    	Popup popup = new Popup();
+//	    	
+//	    	popup.setAnchorLocation(AnchorLocation.CONTENT_TOP_LEFT);
+//	    	popup.getContent().add(pane);
+//	    	
+	    	botonOK.setOnAction(t -> root.getChildren().remove(pane));
+		}
+		
+	}
+	
+	
 	  
     private static Image tipoImagen(Suelo suelo, ArrayList<Image> imagenes, double x, double y) {
     	var bloque = suelo.getBloque(new Posicion((int)x, (int)y));
