@@ -22,7 +22,7 @@ public class Juego {
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
 	private static final double COEF_REDUCCION = 0.002;
-	private static final double GRAVEDAD = 0.0042;
+	private static final double GRAVEDAD = 0.0045;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -42,7 +42,6 @@ public class Juego {
 		this.jugador = jugador;
 		this.tiendas = tiendas;
 		this.input = null;
-		this.vista = new Vista(tiendas, suelo, jugador, jugador.getInventario(), Main.ANCHO, Main.ALTURA);
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
 		this.ticks = 0;
 		this.direccionVertical = 0;
@@ -166,12 +165,12 @@ public class Juego {
 	//Realiza las acciones que encuentra en la lista de acciones y las remueve de la misma.
 	//De momento, para ser utilizada por consola funciona de esta manera, pero la idea es que sea un loop que ejecute todas las acciones,
 	//una por cada una de las teclas que estan siendo presionadas de momento.
-	public void realizarAccion(ArrayList<Accion> acciones, double t) {
+	public void realizarAccion(ArrayList<Accion> acciones, long dt) {
 		for(var accion: acciones) {
 			accion.aplicar();
 		}
 		
-		msSinceLastFrame += t / 1_000_000;
+		msSinceLastFrame += dt / 1_000_000;
 		while (msSinceLastFrame >= MS_PER_FRAME) {
 			msSinceLastFrame -= MS_PER_FRAME;
 			
@@ -183,9 +182,8 @@ public class Juego {
 			} else {
 				//Habia un escenario donde el pj sigue taladrando un rato por mas de que no se apretaba nada
 				this.jugador.setVelX(0);
-				this.jugador.setVelY(0);					
+				this.jugador.setVelY(0);
 			}
-			
 			
 			interacciones.chequearBloques();
 			if(ticks > Interacciones.MAX_TICKS) {
@@ -193,12 +191,9 @@ public class Juego {
 			}
 			
 			caer();
-			
-//			if(interacciones.puedePasarEntreCasillas()) {
-//				caer();
-//			}
 		}
 	}
+	
 	
 	public Suelo getSuelo() {
 		return this.suelo;

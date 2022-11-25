@@ -2,13 +2,13 @@ package terreno;
 
 import java.util.Map;
 
+import algo3.motherloadV2.VistaJuego;
 import jugador.Posicion;
 import tiendas.EstacionDeReparacion;
 import tiendas.EstacionDeServicio;
 import tiendas.EstacionDeVenta;
 import tiendas.TiendaDeConsumibles;
 import tiendas.TiendaDeMejoras;
-import tp.Main;
 import java.util.HashMap;
 
 public class PisoSuperior {
@@ -20,11 +20,11 @@ public class PisoSuperior {
 
 	//Crear una configuracion especificada.
 	public void crearConfiguracion() {
-		var ypf = new EstacionDeServicio(new Posicion((int)(Main.ANCHO * 0.3), 0));
-		var mecanico = new EstacionDeReparacion(new Posicion((int)(Main.ANCHO * 0.6), 0));
-		var mejoras = new TiendaDeMejoras(new Posicion((int)(Main.ANCHO * 0.9), 0));
-		var consumibles = new TiendaDeConsumibles(new Posicion((int)(Main.ANCHO * 0.7), 0));
-		var estacionDeVentas = new EstacionDeVenta(new Posicion((int)(Main.ANCHO * 0.4), 0));
+		var ypf = new EstacionDeServicio(new Posicion((int)(VistaJuego.COLUMNAS * 0.3), 0));
+		var mecanico = new EstacionDeReparacion(new Posicion((int)(VistaJuego.COLUMNAS * 0.6), 0));
+		var mejoras = new TiendaDeMejoras(new Posicion((int)(VistaJuego.COLUMNAS * 0.9), 0));
+		var consumibles = new TiendaDeConsumibles(new Posicion((int)(VistaJuego.COLUMNAS * 0.7), 0));
+		var estacionDeVentas = new EstacionDeVenta(new Posicion((int)(VistaJuego.COLUMNAS * 0.4), 0));
 
 		this.tiendas = new HashMap<Integer, Entidad>();
 	

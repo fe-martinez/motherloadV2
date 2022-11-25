@@ -49,8 +49,8 @@ public class VistaJuego {
 	private static final double COLUMNAS_DIBUJADAS = (WIDTH/GRILLA_ANCHO);
 	private static final double FILAS_DIBUJADAS = (HEIGHT/GRILLA_ALTO);
 	
-	private static final double FILAS = 64;
-	private static final double COLUMNAS = 64;
+	public static final double FILAS = 64;
+	public static final double COLUMNAS = 64;
 	
 	Stage stage;
 
@@ -175,21 +175,13 @@ public class VistaJuego {
     		return imagenes.get(0);
     	} else if(bloque instanceof Aire && y >= 9) {
     		return imagenes.get(3);
-    	}
-    	    	
-    	if(bloque.getBloqueID() == 'P') {
+    	} else if(bloque.getBloqueID() == 'P') {
     		return imagenes.get(6);
-    	}
-    	
-    	if(bloque.getBloqueID() == 'O') {
+    	} else if(bloque.getBloqueID() == 'O') {
     		return imagenes.get(7);
-    	}
-    	
-    	if(bloque.getBloqueID() == 'B') {
+    	} else if(bloque.getBloqueID() == 'B') {
     		return imagenes.get(4);
-    	}
-    	
-    	if(bloque.getBloqueID() == 'H') {
+    	} else if(bloque.getBloqueID() == 'H') {
     		return imagenes.get(5);
     	}
     	

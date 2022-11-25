@@ -2,8 +2,8 @@ package mejoras;
 
 import java.util.Random;
 
+import algo3.motherloadV2.VistaJuego;
 import jugador.Jugador;
-import tp.Main;
 
 public class MejoraTeleport extends Usable {
 	public static int VALOR = 2000;
@@ -15,7 +15,7 @@ public class MejoraTeleport extends Usable {
 	}
 	
 	public void utilizar(Jugador jugador) {
-		jugador.setX(new Random().nextInt(Main.ANCHO));
+		jugador.setX(new Random().nextInt((int)VistaJuego.COLUMNAS));
 		jugador.setY(0); //Siempre es a la superficie.
 	}
 }
