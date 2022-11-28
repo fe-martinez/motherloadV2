@@ -2,6 +2,8 @@ package tiendas;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import algo3.motherloadV2.VistaTiendaDeConsumibles;
 import jugador.Jugador;
 import jugador.Posicion;
 import mejoras.MejoraDinamita;
@@ -17,12 +19,14 @@ public class TiendaDeConsumibles extends Entidad {
 	private static final char LETRA = '*';
 	private static final TipoEntidad TIPO = TipoEntidad.TIENDA;
 	Map<Character, Usable> usables;
+	private VistaTiendaDeConsumibles vista;
 	
-	public TiendaDeConsumibles(Posicion posicion) {
+	public TiendaDeConsumibles(Posicion posicion, VistaTiendaDeConsumibles vistaConsumibles) {
 		super(posicion, TIPO, LETRA);
 		this.posicion = posicion;
 		this.usables = new HashMap<>();
 		inicializarConsumibles();
+		this.vista = vistaConsumibles;
 	}
 	
 	//Inicializa las mejoras en el map.
@@ -50,7 +54,9 @@ public class TiendaDeConsumibles extends Entidad {
 	@Override
 	//Permite al Jugador dado interactuar con la Tienda actual.
 	public void interactuar(Jugador jugador) {
-		char opcion = VistaTiendasConsola.consumibles();
-		vender(jugador, opcion);
+		vista.mostrar();
+		
+//		char opcion = VistaTiendasConsola.consumibles();
+//		vender(jugador, opcion);
 	}
 }

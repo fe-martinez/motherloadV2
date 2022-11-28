@@ -32,6 +32,7 @@ import jugador.Jugador;
 import jugador.Posicion;
 import minerales.Mineral;
 import terreno.Aire;
+import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.Tierra;
 import tp.Juego;
@@ -67,7 +68,9 @@ public class VistaJuego {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
         Jugador pj = new Jugador(5, 3, (int)FILAS, (int)COLUMNAS);
-        Juego juego = new Juego(suelo, null, pj);
+        VistaEstacionDeServicio vistaYPF = new VistaEstacionDeServicio(stage, root);
+        PisoSuperior tiendas = new PisoSuperior(stage, root);
+        Juego juego = new Juego(suelo, tiendas, pj);
         HUD hud = new HUD(context, WIDTH, HEIGHT, pj);
         dibujar(context, juego, hud, imagenes, imagenesJugador);
         hud.dibujarHUD();
@@ -115,7 +118,7 @@ public class VistaJuego {
 	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, ArrayList<Image> imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
     	dibujarFondo(context, imagenes, juego.getJugador());
-    	dibujarTerreno(context, juego.getSuelo(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
+    	dibujarTerreno(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
     	dibujarJugador(context, imagenesJugador, juego.getJugador());
     	hud.dibujarHUD();
     }
@@ -144,7 +147,7 @@ public class VistaJuego {
     //La idea principal de esto es hacer el famoso "zoom" al pj en vez de dibujar todo el mapa.
     //comienzoI, finI, comienzoJ y finJ sirven todas para chequear que no se traten de dibujar cosas que no existen.
     //Esto se ve cuando te acercas a algun borde con el pj y la camara deja de moverse con el personaje.
-	private static void dibujarTerreno(GraphicsContext context, Suelo suelo, ArrayList<Image> imagenes, double pjX, double pjY) {
+	private static void dibujarTerreno(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
     	double comienzoI = pjX - (COLUMNAS_DIBUJADAS/2) < 0 ? 0 : pjX - (COLUMNAS_DIBUJADAS/2);
     	double comienzoJ = pjY - (FILAS_DIBUJADAS/2) < 0 ? 0 : pjY - (FILAS_DIBUJADAS/2);
     	double finI = pjX + (COLUMNAS_DIBUJADAS/2) > COLUMNAS ? COLUMNAS : comienzoI + COLUMNAS_DIBUJADAS;
@@ -160,7 +163,12 @@ public class VistaJuego {
     	
     	for(double i = comienzoI; i < finI; i++) {
     		for(double j = comienzoJ; j < finJ; j++) {
-    			context.drawImage(tipoImagen(suelo, imagenes, i, j), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
+    			//8 es el nivel del suelo ahora, deberia ser un constante.
+    			if(j == 8 && tiendas.getTiendaPos((int) i) != null) {
+    				context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
+    			} else {
+    				context.drawImage(tipoImagen(suelo, imagenes, i, j), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
+    			}
     		}
     	}
     	
@@ -219,6 +227,7 @@ public class VistaJuego {
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Plata.png", GRILLA_ANCHO));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Oro.png", GRILLA_ANCHO));
 		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Background.jpg", 1920));
+		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO));
   
     	return imagenes;
     }

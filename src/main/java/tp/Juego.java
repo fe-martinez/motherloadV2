@@ -181,8 +181,9 @@ public class Juego {
 				actualizar();
 			} else {
 				//Habia un escenario donde el pj sigue taladrando un rato por mas de que no se apretaba nada
-				this.jugador.setVelX(0);
-				this.jugador.setVelY(0);
+				//Con 0 anda para mal, con esto no. Dudoso
+				this.jugador.setVelX(0.00001);
+				this.jugador.setVelY(0.00001);
 			}
 			
 			interacciones.chequearBloques();
@@ -201,6 +202,10 @@ public class Juego {
 
 	public Jugador getJugador() {
 		return this.jugador;
+	}
+	
+	public PisoSuperior getPisoSuperior() {
+		return tiendas;
 	}
 		
 }

@@ -45,7 +45,7 @@ public class Interacciones {
 	public boolean chequearBloques() {
 		taladrar(pj.getPosicion());
 		
-		if((int)pj.getY() == 0 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
+		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
 			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
 				tiendas.colisionEntidad(pj.getPosicion()).interactuar(pj);
 			}
@@ -116,6 +116,7 @@ public class Interacciones {
 					return true;
 				}
 				return false;
+				
 			} if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
 				if(ticks < MAX_TICKS) {
 					return true;
