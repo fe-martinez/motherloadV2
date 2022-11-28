@@ -6,7 +6,6 @@ import terreno.Suelo;
 import terreno.TipoEntidad;
 
 public class Interacciones {
-	public static final double MAX_TICKS = 15;
 	
 	private Jugador pj;
 	private Suelo suelo;
@@ -67,19 +66,15 @@ public class Interacciones {
 			return true;
 		}
 		
-		private boolean chocaDireccionVertical(int direccion) {
-			if(pj.getY() == 0) {
-				return false;
-			}
-			Posicion arriba = Posicion.redondear(new Posicion(pj.getX(), pj.getY() + direccion));
-			if(suelo.casilleroVacio(arriba)) {
+		public boolean chocaDireccionVertical(int direccion) {
+			Posicion casillero = Posicion.redondear(new Posicion(pj.getX(), pj.getY() + direccion));
+			if(suelo.casilleroVacio(casillero)) {
 					return false;
 			}
-
 			return true;
 		}
 		
-		private boolean chocaDireccionHorizontal(int direccion) {
+		public boolean chocaDireccionHorizontal(int direccion) {
 			Posicion casillero = Posicion.redondear(new Posicion(pj.getX() + direccion, pj.getY()));
 			if(suelo.casilleroVacio(casillero)) {
 					return false;
@@ -107,33 +102,20 @@ public class Interacciones {
 			return false;
 		}
 		
-		public boolean chequearColision(double ticks) {
-			if(chocaArriba() && pj.getVelY() < 0) {
+		public boolean chequearColision() {			
+			if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
+				System.out.println("CHOCA DERECHA");
+				return true;
+			} else if(pj.getVelX() < 0 && chocaDireccionHorizontal(-1)) {
+				System.out.println("CHOCA IZQUIERDA");
+				return true;
+			} else if(pj.getVelY() > 0 && chocaDireccionVertical(1)) {
+				System.out.println("CHOCA ABAJO");
+				return true;
+			} else if(pj.getVelY() < 0 && chocaDireccionVertical(-1)) {
+				System.out.println("CHOCA ARRIBA");
 				return true;
 			}
-			if(pj.getVelY() > 0 && chocaDireccionVertical(1)) {
-				if(ticks < MAX_TICKS) {
-					return true;
-				}
-				return false;
-				
-			} if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
-				if(ticks < MAX_TICKS) {
-					return true;
-				}
-				return false;
-			}
-			
-			if(pj.getVelX() < 0 && chocaDireccionHorizontal(-1)) {
-				if(ticks < MAX_TICKS) {
-					return true;
-				}
-				return false;
-			}
-			
-			
-			
-			
 			
 			return false;
 		}

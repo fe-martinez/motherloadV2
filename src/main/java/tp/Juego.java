@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import jugador.Accion;
 import jugador.AccionItem;
 import jugador.AccionMovimiento;
-import jugador.EstadoJugador;
+import jugador.EnumEstadoJugador;
 import jugador.Interacciones;
 import jugador.Jugador;
 import jugador.Posicion;
@@ -23,17 +23,17 @@ public class Juego {
 	public static final double VELOCITY = 150 / FPS;
 	private static final double COEF_REDUCCION = 0.002;
 	private static final double GRAVEDAD = 0.0045;
+	private static final double MAX_TICKS = 75;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
 	private Jugador jugador;
-	private Vista vista;
-	private Scanner input;
 	private Interacciones interacciones;
 	private Map<KeyCode, Accion> controles;
-	private double ticks;
 	private double direccionVertical;
 	private double direccionHorizontal;
+	private double ticks;
+	private double ticksVuelo;
 	
 	private long msSinceLastFrame = 0;
 	
@@ -41,9 +41,7 @@ public class Juego {
 		this.suelo = suelo;
 		this.jugador = jugador;
 		this.tiendas = tiendas;
-		this.input = null;
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
-		this.ticks = 0;
 		this.direccionVertical = 0;
 		this.direccionHorizontal = 0;
 		
@@ -85,79 +83,104 @@ public class Juego {
 		return null;
 	}
 	
+	//Si no tiene suelo abajo, le suma a la VelY. Uso VelY en vez de ponerselo a Y directamente para dar la sensacion de parabola.
 	private void caer() {
-		if(jugador.getY() < jugador.getLimiteAlto() && this.direccionVertical >= 0){
-			Posicion debajo = new Posicion(jugador.getX(), jugador.getY() + 1);
+		if(jugador.getY() < jugador.getLimiteAlto() && jugador.getVelY() >= 0){
+			Posicion debajo = Posicion.redondear(new Posicion(jugador.getX(), jugador.getY() + 1));
 			if(suelo.casilleroVacio(debajo) && jugador.getY() < jugador.getLimiteAlto() - 2) {
 				jugador.setVelY(jugador.getVelY() + GRAVEDAD);
 				jugador.setY(jugador.getY() + jugador.getVelY());
 				debajo.setY(debajo.getY() + 1);
+			} else {
+				jugador.setVelY(0);
 			}
 		}
 	}
 	
-	private void taladrar() {
-		if(direccionVertical > 0 && this.jugador.getVelY() > 0) {
-			ticks += 1;
-		} else if(direccionHorizontal > 0 && this.jugador.getVelX() > 0) {
-			ticks += 1;
-		} else if(direccionHorizontal < 0 && this.jugador.getVelX() < 0) {
-			ticks += 1;
-		} else {
-			ticks = 0;
+	//Si no esta taladrando, pasa a taladrar.
+	private void prenderTaladro(double direccionVertical, double direccionHorizontal) {
+		if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+			if(direccionHorizontal > 0) {
+				jugador.setEstado(EnumEstadoJugador.TALADRANDO_DERECHA_FULL);
+			} else if(direccionHorizontal< 0) {
+				jugador.setEstado(EnumEstadoJugador.TALADRANDO_IZQUIERDA_FULL);
+			} else if(direccionVertical > 0) {
+				jugador.setEstado(EnumEstadoJugador.TALADRANDO_ABAJO_FULL);
+			}
 		}
 		
-		if(this.jugador.getVelY() > 0) {
-			if(ticks > 0 && ticks < Interacciones.MAX_TICKS/4) {
-				jugador.setEstado(EstadoJugador.TALADRANDO_ABAJO_INICIO);
-			} else if(ticks >= Interacciones.MAX_TICKS/4 && ticks <= Interacciones.MAX_TICKS) {
-				jugador.setEstado(EstadoJugador.TALADRANDO_ABAJO_FULL);
-			} else {
-				jugador.setEstado(EstadoJugador.INICIAL);
+		ticks = 0;
+	}
+	
+	private double getDecimal(double numero) {
+		var decimal = Math.abs(numero - ((int)numero));
+		return decimal;
+	}
+	
+	private void volar() {
+		if(jugador.getVelY() < 0) {
+			if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+				jugador.setEstado(EnumEstadoJugador.VOLANDO1);
 			}
-		} else if(this.jugador.getVelX() > 0) {
-			if(ticks > 0 && ticks < Interacciones.MAX_TICKS/4) {
-				jugador.setEstado(EstadoJugador.TALADRANDO_DERECHA_INICIO);
-			} else if(ticks >= Interacciones.MAX_TICKS/4 && ticks <= Interacciones.MAX_TICKS) {
-				jugador.setEstado(EstadoJugador.TALADRANDO_DERECHA_FULL);
-			} else {
-				jugador.setEstado(EstadoJugador.INICIAL);
+			
+			if(jugador.getEstado() == EnumEstadoJugador.VOLANDO1 && ticksVuelo > FPS) {
+				jugador.setEstado(EnumEstadoJugador.VOLANDO2);
+				ticksVuelo = 0;
 			}
-		} else if(this.jugador.getVelX() < 0) {
-			if(ticks > 0 && ticks < Interacciones.MAX_TICKS/4) {
-				jugador.setEstado(EstadoJugador.TALADRANDO_IZQUIERDA_INICIO);
-			} else if(ticks >= Interacciones.MAX_TICKS/4 && ticks <= Interacciones.MAX_TICKS) {
-				jugador.setEstado(EstadoJugador.TALADRANDO_IZQUIERDA_FULL);
-			} else {
-				jugador.setEstado(EstadoJugador.INICIAL);
+			
+			if(jugador.getEstado() == EnumEstadoJugador.VOLANDO2 && ticksVuelo > FPS) {
+				jugador.setEstado(EnumEstadoJugador.VOLANDO1);
+				ticksVuelo = 0;
 			}
-		} else {
-			jugador.setEstado(EstadoJugador.INICIAL);
+		}
+		
+		if(jugador.getVelY() >= 0) {
+			jugador.setEstado(EnumEstadoJugador.INICIAL);
 		}
 	}
 	
+	//Taladra hasta que se cumplan los MAX_TICKS.
+	private void taladrar(double direccionVertical, double direccionHorizontal) {
+		jugador.setX(jugador.getX() + ((direccionHorizontal/MAX_TICKS) * 10));
+		jugador.setY(jugador.getY() + ((direccionVertical/MAX_TICKS) * 10));
+		ticks += 1;
+		
+		if(ticks > MAX_TICKS) {
+				interacciones.chequearBloques();
+				jugador.setEstado(EnumEstadoJugador.INICIAL);
+				jugador.setVelX(0);
+				jugador.setVelY(0);
+		}
+	}
+		
 	
+	private void frenar() {
+		this.jugador.setVelX(0);
+		this.jugador.setVelY(0);
+	}
+	
+	//Le suma la VelX y VelY al jugador. Si no se estan apretando las teclas, va bajando la velocidad en vez de pasar directamente a 0.
 	private void actualizar() {
 		if(this.jugador.getVelX() > 0) {
 			this.jugador.setVelX(this.jugador.getVelX() - COEF_REDUCCION);				
 		} else if(this.jugador.getVelX() < 0) {
 			this.jugador.setVelX(this.jugador.getVelX() + COEF_REDUCCION);
 		}
-			
+		
 		if(Math.abs(jugador.getVelX()) <= COEF_REDUCCION){
 			this.jugador.setVelX(0);
 		}
-		
+			
 		if(this.jugador.getVelY() > 0) {
 			this.jugador.setVelY(this.jugador.getVelY() - COEF_REDUCCION);
 		} else if(this.jugador.getVelY() < 0) {
 			this.jugador.setVelY(this.jugador.getVelY() + COEF_REDUCCION);
 		}
-			
+		
 		if(Math.abs(jugador.getVelY()) <= COEF_REDUCCION) {
 			this.jugador.setVelY(0);
 		}
-		
+			
 		this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
 		this.jugador.setY(this.jugador.getY() + this.jugador.getVelY());
 	}
@@ -174,24 +197,24 @@ public class Juego {
 		while (msSinceLastFrame >= MS_PER_FRAME) {
 			msSinceLastFrame -= MS_PER_FRAME;
 			
-			direccionVertical = jugador.getVelY();
-			direccionHorizontal = jugador.getVelX();
-			taladrar();
-			if(!interacciones.chequearColision(this.ticks)) {
-				actualizar();
+			
+			
+			if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+				direccionVertical = jugador.getVelY();
+				direccionHorizontal = jugador.getVelX();
+				
+				if(!interacciones.chequearColision()) {
+					actualizar();
+				} else {
+					frenar();
+					prenderTaladro(direccionVertical, direccionHorizontal);
+				}
+				
+				volar();
+				caer();
 			} else {
-				//Habia un escenario donde el pj sigue taladrando un rato por mas de que no se apretaba nada
-				//Con 0 anda para mal, con esto no. Dudoso
-				this.jugador.setVelX(0.00001);
-				this.jugador.setVelY(0.00001);
+				taladrar(direccionVertical, direccionHorizontal);
 			}
-			
-			interacciones.chequearBloques();
-			if(ticks > Interacciones.MAX_TICKS) {
-				ticks = 0;
-			}
-			
-			caer();
 		}
 	}
 	

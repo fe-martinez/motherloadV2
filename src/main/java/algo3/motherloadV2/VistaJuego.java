@@ -27,7 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jugador.Accion;
-import jugador.EstadoJugador;
+import jugador.EnumEstadoJugador;
 import jugador.Jugador;
 import jugador.Posicion;
 import minerales.Mineral;
@@ -75,10 +75,22 @@ public class VistaJuego {
         dibujar(context, juego, hud, imagenes, imagenesJugador);
         hud.dibujarHUD();
         
+        Text debug = new Text("X: " + pj.getX() + "Y: " + pj.getY());
+        debug.setFont(Font.font(20));
+        debug.setX(300);
+        debug.setY(20);
+        
+        Text debug2 = new Text("VelX: " + pj.getVelX() + "VelY: " + pj.getVelY());
+        debug2.setFont(Font.font(20));
+        debug2.setX(300);
+        debug2.setY(70);
+        
         
         AnchorPane apane = new AnchorPane();
         
         root.getChildren().add(canvas);
+        root.getChildren().add(debug);
+        root.getChildren().add(debug2);
 
         Scene escena = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(escena);
@@ -95,7 +107,8 @@ public class VistaJuego {
 			@Override
 			public void handle(long now) {
 				dibujar(context, juego, hud, imagenes, imagenesJugador);
-				
+				debug.setText("X: " + pj.getX() + "Y: " + pj.getY());
+				debug2.setText("VelX: " + pj.getVelX() + "Y: " + pj.getVelY());
 		    	//Convertir input y realizar accion son bastante diferentes a los de la Etapa 2. Estan integrados a esta version
 		    	// y no a la de consola.
 				var acciones = new ArrayList<Accion>();
@@ -118,8 +131,8 @@ public class VistaJuego {
 	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, ArrayList<Image> imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
     	dibujarFondo(context, imagenes, juego.getJugador());
-    	dibujarTerreno(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
-    	dibujarJugador(context, imagenesJugador, juego.getJugador());
+    	dibujarTerreno2(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
+    	dibujarJugador2(context, imagenesJugador, juego.getJugador());
     	hud.dibujarHUD();
     }
 	
@@ -174,6 +187,37 @@ public class VistaJuego {
     	
     }
 	
+		
+	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
+	private static void dibujarJugador2(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
+		context.drawImage(tipoImagenJugador(jugador, imagenes), ((WIDTH/2) - (GRILLA_ANCHO/2)), (HEIGHT/2) - (GRILLA_ALTO/8));
+	}
+	
+	public static void dibujarTerreno2(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
+		double playerScreenX = (WIDTH/2) - (GRILLA_ANCHO/2);
+		double playerScreenY = (HEIGHT/2) - (GRILLA_ALTO/2);
+		for(double i = 0; i < FILAS; i++) {
+			for(double j = 0; j < COLUMNAS; j++) {
+				double worldX = j * GRILLA_ANCHO;
+				double worldY = i * GRILLA_ALTO;
+				double screenX = worldX - (pjX * GRILLA_ANCHO) + playerScreenX;
+				double screenY = worldY - (pjY * GRILLA_ALTO) + playerScreenY;
+				
+				if (worldX + GRILLA_ANCHO > (pjX * GRILLA_ANCHO) - playerScreenX &&
+					worldX - GRILLA_ANCHO < (pjX * GRILLA_ANCHO) + playerScreenX &&
+					worldY + GRILLA_ALTO > (pjY * GRILLA_ALTO) - playerScreenY &&
+					worldY - GRILLA_ALTO < (pjY * GRILLA_ALTO) + playerScreenY) {
+					
+					if(i == 8 && tiendas.getTiendaPos((int) j) != null) {
+						context.drawImage(imagenes.get(9), screenX, screenY);
+	    			} else {
+	    				context.drawImage(tipoImagen(suelo, imagenes, j, i), screenX, screenY);
+	    			}
+				}
+			}
+		}
+	}
+	
 	  
     private static Image tipoImagen(Suelo suelo, ArrayList<Image> imagenes, double x, double y) {
     	var bloque = suelo.getBloque(new Posicion((int)x, (int)y));
@@ -196,22 +240,40 @@ public class VistaJuego {
     	return imagenes.get(1);
     }
     
+    private static Color tipoColor(Suelo suelo, ArrayList<Image> imagenes, double x, double y) {
+    	var bloque = suelo.getBloque(new Posicion((int)x, (int)y));
+    	if(bloque instanceof Tierra) {
+    		return Color.SADDLEBROWN;
+    	} else if(bloque instanceof Aire && y < 9) {
+    		return Color.LIGHTBLUE;
+    	} else if(bloque instanceof Aire && y >= 9) {
+    		return Color.SANDYBROWN;
+    	}
+    	
+    	return Color.SADDLEBROWN;
+    }
+    
     private static Image tipoImagenJugador(Jugador pj, ArrayList<Image> imagenesJugador) {
-    	if(pj.getEstado() == EstadoJugador.INICIAL) {
+    	if(pj.getEstado() == EnumEstadoJugador.INICIAL) {
     		return imagenesJugador.get(0);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_ABAJO_INICIO) {
+    	} else if(pj.getEstado() == EnumEstadoJugador.TALADRANDO_ABAJO_INICIO) {
     		return imagenesJugador.get(1);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_ABAJO_FULL) {
+    	} else if(pj.getEstado() == EnumEstadoJugador.TALADRANDO_ABAJO_FULL) {
     		return imagenesJugador.get(2);
-    	}  else if(pj.getEstado() == EstadoJugador.TALADRANDO_DERECHA_INICIO) {
+    	}  else if(pj.getEstado() == EnumEstadoJugador.TALADRANDO_DERECHA_INICIO) {
     		return imagenesJugador.get(3);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_DERECHA_FULL) {
+    	} else if(pj.getEstado() == EnumEstadoJugador.TALADRANDO_DERECHA_FULL) {
     		return imagenesJugador.get(4);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_IZQUIERDA_INICIO) {
+    	} else if(pj.getEstado() == EnumEstadoJugador.TALADRANDO_IZQUIERDA_INICIO) {
     		return imagenesJugador.get(5);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_IZQUIERDA_FULL) {
+    	} else if(pj.getEstado() == EnumEstadoJugador.TALADRANDO_IZQUIERDA_FULL) {
     		return imagenesJugador.get(6);
+    	} else if(pj.getEstado() == EnumEstadoJugador.VOLANDO1) {
+    		return imagenesJugador.get(7);
+    	} else if(pj.getEstado() == EnumEstadoJugador.VOLANDO2) {
+    		return imagenesJugador.get(8);
     	} 
+    	
     	return imagenesJugador.get(0);
     }
     
@@ -241,6 +303,8 @@ public class VistaJuego {
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Derecha2.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Izquierda1.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Izquierda2.png", GRILLA_PJ_ANCHO));
+    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Volando1.png", GRILLA_PJ_ANCHO));
+    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Volando2.png", GRILLA_PJ_ANCHO));
 		return imagenesJugador;
     }
     
