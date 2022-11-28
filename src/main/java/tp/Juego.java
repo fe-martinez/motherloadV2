@@ -210,11 +210,13 @@ public class Juego {
 					prenderTaladro(direccionVertical, direccionHorizontal);
 				}
 				
-				volar();
-				caer();
+				//volar();
+
 			} else {
 				taladrar(direccionVertical, direccionHorizontal);
 			}
+			interacciones.chequearTienda();
+			caer();
 		}
 	}
 	

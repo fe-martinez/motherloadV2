@@ -41,6 +41,16 @@ public class Interacciones {
 		suelo.destruirBloque(buscada);
 	}
 	
+	public boolean chequearTienda() {
+		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
+			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
+				tiendas.colisionEntidad(pj.getPosicion()).interactuar(pj);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean chequearBloques() {
 		taladrar(pj.getPosicion());
 		
