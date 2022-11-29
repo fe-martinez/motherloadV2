@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -23,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -74,19 +76,39 @@ public class App extends Application {
 		
 		spane.getChildren().add(vbox);
 		
-		vbox.setSpacing(20);
+		vbox.setSpacing(0);
 		
-		Button botonJugar = new Button("Nueva partida");
+		
+		Image imgBotonJugar = obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartida.png");
+		ImageView viewBotonJugar = new ImageView(imgBotonJugar);
+		ImageView viewBotonJugarSelected =  new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartidaSelected.png"));
+		viewBotonJugar.setFitWidth(WIDTH/2);
+		viewBotonJugar.setPreserveRatio(true);
+		Hyperlink botonJugar = new Hyperlink();
+		botonJugar.setGraphic(viewBotonJugar);
 		botonJugar.setPrefSize(WIDTH/2, 100);
+
 		
-		Button botonCargar = new Button("Cargar partida");
+		ImageView viewBotonCargar = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/CargarPartida.png"));
+		viewBotonCargar.setFitWidth(WIDTH/2);
+		viewBotonCargar.setPreserveRatio(true);
+		Hyperlink botonCargar = new Hyperlink();
 		botonCargar.setPrefSize(WIDTH/2, 100);
+		botonCargar.setGraphic(viewBotonCargar);
 		
-		Button botonConfig = new Button("Configuracion");
-		botonConfig.setPrefSize(WIDTH/2 , 100);
+		ImageView viewBotonConfiguracion = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Configuracion.png"));
+		viewBotonConfiguracion.setFitWidth(WIDTH/2);
+		viewBotonConfiguracion.setPreserveRatio(true);
+		Hyperlink botonConfig = new Hyperlink();
+		botonConfig.setPrefSize(WIDTH/2, 100);
+		botonConfig.setGraphic(viewBotonConfiguracion);
 		
-		Button botonSalir = new Button("Salir");
+		ImageView viewBotonSalir = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Salir.png"));
+		viewBotonSalir.setFitWidth(WIDTH/2);
+		viewBotonSalir.setPreserveRatio(true);
+		Hyperlink botonSalir = new Hyperlink();
 		botonSalir.setPrefSize(WIDTH/2, 100);
+		botonSalir.setGraphic(viewBotonSalir);
 		
 		Image fondo = obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png");
 		BackgroundImage bfondo = new BackgroundImage(fondo, null, null, null, null);

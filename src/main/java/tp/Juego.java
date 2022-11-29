@@ -197,8 +197,6 @@ public class Juego {
 		while (msSinceLastFrame >= MS_PER_FRAME) {
 			msSinceLastFrame -= MS_PER_FRAME;
 			
-			
-			
 			if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
 				direccionVertical = jugador.getVelY();
 				direccionHorizontal = jugador.getVelX();
@@ -209,8 +207,6 @@ public class Juego {
 					frenar();
 					prenderTaladro(direccionVertical, direccionHorizontal);
 				}
-				
-				//volar();
 
 			} else {
 				taladrar(direccionVertical, direccionHorizontal);
