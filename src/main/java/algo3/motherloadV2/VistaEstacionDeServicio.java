@@ -2,6 +2,11 @@ package algo3.motherloadV2;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -14,6 +19,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.image.*;
@@ -23,94 +29,198 @@ import javafx.event.*;
 import javafx.geometry.*;
 
 public class VistaEstacionDeServicio  {
+	final static String PATH_FONDO = "../motherloadV2/src/rsc/Fuel-512.png";
 	Group root;
 	Stage myStage;
 	boolean mostrando;
-
+	GridPane pane1, pane2, pane3;
+	VBox layout;
+	Image img;
+	BackgroundImage backgroundImg;
+	Background background;
+	Label labelInstrucciones, labelCombustible;
+	HashMap<String,Button> botones;
+	HashMap<String,Image> imagenes;
+	HashMap<String,BackgroundImage> buttonBackgroundImage;
+	HashMap<String,Background> buttonBackground;
+	List<String> keys = List.of("5","10","25","50","Fill","Close");
+	
+	//Esta lista es la que va
+	List<String> imagePath = List.of("../motherloadV2/src/rsc/Tiendas/Botones/button5.png",
+			"../motherloadV2/src/rsc/Tiendas/Botones/button10.png",
+			"../motherloadV2/src/rsc/Tiendas/Botones/button25.png",
+			"../motherloadV2/src/rsc/Tiendas/Botones/button50.png",
+			"../motherloadV2/src/rsc/Tiendas/Botones/fill.png",
+			"../motherloadV2/src/rsc/Tiendas/Botones/close.png");
+	
+//	//Esta lista hay que borrarla, es para que ande en mi pc :P
+//	List<String> imagePath2 = List.of("C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button5.png",
+//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button10.png",
+//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button25.png",
+//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button50.png",
+//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\fill.png",
+//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\close.png");
+			
 	public VistaEstacionDeServicio(Stage stage, Group root) {
 		this.myStage = stage;
 		this.root = root;
 		this.mostrando = false;
 	}
 	
-	//Todo lo que creo acá tiene que ser atributo de la clase, igual no se ve bien, mi idea era hacer:
-	//1 gridpane que tiene un label
-	//1 gridpane que tiene los 4 botones del medio digamos
-	//1 gridpane que tiene el botón de fill y otro label
-	//y meter todo eso en un vbox asi queda todo uno encima del otro xd
-
+	private void inicializarImagenesBotones() {
+		imagenes = new HashMap<>();
+		//Este es el que va, con el path genérico
+		
+		/*for(int i = 0; i < keys.size(); i++) {
+			imagenes.put(keys.get(i),new Image(imagePath.get(i)));
+		}*/
+		
+		for(int i = 0; i < 4; i++) {
+			imagenes.put(keys.get(i), obtenerImagen(imagePath.get(i), 100, 80));
+		}
+		
+		for(int i = 4; i < 6; i++) {
+			imagenes.put(keys.get(i), obtenerImagen(imagePath.get(i), 200, 100));
+		}
+		
+		/*Esta versión es más elegante pero no sé por qué no anda bien :P
+		buttonBackgroundImage = new HashMap<>();
+		for(int i = 0; i < keys.size(); i++) {
+			buttonBackgroundImage.put(keys.get(i),new BackgroundImage(imagenes.get(keys.get(i)),null,null,null,null));
+		}
+		buttonBackground = new HashMap<>();
+		for(int i = 0; i < keys.size(); i++) {
+			buttonBackground.put(keys.get(i),new Background(buttonBackgroundImage.get(keys.get(i))));
+		}
+		*/
+		
+		//Esta es la versión que anda, no está mal pero me gusta mucho más la versión anterior así que si la arreglás mejor :P
+		buttonBackgroundImage = new HashMap<>();
+		for(HashMap.Entry<String,Image> pair: imagenes.entrySet()) {
+		        buttonBackgroundImage.put(pair.getKey(),new BackgroundImage(pair.getValue(),null,null,null,null));
+		}
+		
+		buttonBackground = new HashMap<>();
+		for(HashMap.Entry<String,BackgroundImage> pair: buttonBackgroundImage.entrySet()) {
+		        buttonBackground.put(pair.getKey(),new Background(pair.getValue()));
+		}
+		
+	}
+	
+	private void inicializarFondoBotones() {
+		this.inicializarImagenesBotones();
+		for(HashMap.Entry<String,Button> pair: botones.entrySet()) {
+			pair.getValue().setBackground(buttonBackground.get(pair.getKey()));
+		}
+	}
+	
+	private void inicializarCaracteristicasBotones() {
+		for(HashMap.Entry<String,Button> pair: botones.entrySet()) {
+	        pair.getValue().setPrefSize(100,80);
+		}
+		botones.get("Fill").setPrefSize(200,100);
+		botones.get("Close").setPrefSize(200,100);
+	
+		this.inicializarFondoBotones();
+	}
+	
+	private void inicializarBotones() {
+		botones = new HashMap<>();
+		for(String key: keys) {
+			botones.put(key,new Button());
+		}
+		
+		this.inicializarCaracteristicasBotones();
+	
+	}
+	
+	private void inicializarGridPane() {
+		this.inicializarBotones();
+		
+		pane1 = new GridPane();
+		pane2 = new GridPane();
+		pane3 = new GridPane();
+		GridPane.setConstraints(labelInstrucciones,0,0);
+		GridPane.setConstraints(botones.get("5"),0,0);
+		GridPane.setConstraints(botones.get("10"),1,0);
+		GridPane.setConstraints(botones.get("25"),0,1);
+		GridPane.setConstraints(botones.get("50"),1,1);
+		GridPane.setConstraints(botones.get("Fill"),0,0);
+		GridPane.setConstraints(labelCombustible, 0, 1);
+		GridPane.setConstraints(botones.get("Close"),0,2);
+		
+		pane1.getChildren().add(labelInstrucciones);
+		pane2.getChildren().addAll(botones.get("5"),botones.get("10"),botones.get("25"),botones.get("50"));
+		pane3.getChildren().addAll(botones.get("Fill"),labelCombustible,botones.get("Close"));
+		
+		
+	}
+	
+	private void inicializarLabels() {
+		labelInstrucciones = new Label("Elija la cantidad de combustible que desea cargar: ");
+		labelInstrucciones.setPrefSize(400,60);
+		labelInstrucciones.setFont(new Font(16));
+		
+		int variable = 5;
+		labelCombustible = new Label("Nivel de combustible: " + variable);
+		labelCombustible.setBackground(Background.fill(Paint.valueOf("White")));
+		labelCombustible.setPrefSize(500,60);
+		labelCombustible.setTextAlignment(TextAlignment.CENTER);
+		labelCombustible.setPrefSize(200,60);
+		labelCombustible.setFont(new Font(16));
+	}
+	
+	private void inicializarLayout() throws FileNotFoundException {
+		layout = new VBox();
+		img = new Image(new FileInputStream(VistaEstacionDeServicio.PATH_FONDO), 800, 600, false, true);
+		backgroundImg = new BackgroundImage(img, null, null, null, null);
+		background = new Background(backgroundImg);
+		
+		layout.setAlignment(Pos.CENTER);
+		layout.setSpacing(0);
+		
+		this.inicializarLabels();
+		this.inicializarGridPane();
+		
+		VBox.setMargin(pane1,new Insets(100,0,0,400));
+		VBox.setMargin(pane2,new Insets(0,0,0,400));
+		VBox.setMargin(pane3,new Insets(0,200,100,400));
+		layout.setBackground(background);
+		layout.getChildren().addAll(pane1,pane2,pane3);
+		layout.setLayoutX((VistaJuego.WIDTH - 900) / 2);
+		layout.setLayoutY((VistaJuego.HEIGHT - 600) / 2);
+		
+	}
+	
 	public void inicializar() throws FileNotFoundException {
-	    GridPane pane1, pane2, pane3;
-	    VBox layout = new VBox();
-	    pane1 = new GridPane();
-	    pane2 = new GridPane();
-	    pane3 = new GridPane();
-	    Image img = new Image(new FileInputStream("../motherloadV2/src/rsc/Fuel-512.png"), 800, 600, false, true);
-	    BackgroundImage backgroundImg = new BackgroundImage(img, null, null, null, null);
-	    Background background = new Background(backgroundImg);
-	    //pane2.setBackground(background);
-	    Label label1 = new Label("Elija la cantidad de combustible que desea cargar: ");
-	    label1.setPrefSize(200,60);
-	    label1.setBackground(Background.fill(Paint.valueOf("White")));
-	    //label1.setStyle(STYLESHEET_CASPIAN);
-	    int variable = 5;
-	    Label label2 = new Label("Nivel de combustible: " + variable);
-	    label2.setBackground(Background.fill(Paint.valueOf("White")));
-	    label2.setPrefSize(500,60);
-	    label2.setTextAlignment(TextAlignment.CENTER);
-	    Button button5 = new Button("5");
-	    button5.setPrefSize(100,60);
-	    Button button10 = new Button("10");
-	    button10.setPrefSize(100,60);
-	    Button button25 = new Button("25");
-	    button25.setPrefSize(100,60);
-	    Button button50 = new Button("50");
-	    button50.setPrefSize(100,60);
-	    Button buttonFill = new Button("Fill");
-	    buttonFill.setPrefSize(200,60);
-	   
-	    GridPane.setConstraints(label1,0,0);
-	    GridPane.setConstraints(button5,0,0);
-	    GridPane.setConstraints(button10,1,0);
-	    GridPane.setConstraints(button25,0,1);
-	    GridPane.setConstraints(button50,1,1);
-	    GridPane.setConstraints(buttonFill,0,0);
-	    GridPane.setConstraints(label2, 0, 1);
-	   
-	    pane1.getChildren().add(label1);
-	    pane2.getChildren().addAll(button5,button10,button25,button50);
-	    pane3.getChildren().addAll(buttonFill,label2);
-	    pane1.setPrefSize(200,100);
-	    pane2.setPrefSize(200,100);
-	    pane3.setPrefSize(200,100);
-	    
-	    layout.setAlignment(Pos.CENTER);
-	    layout.setSpacing(20);
-	    VBox.setMargin(pane1,new Insets(100,100,0,200));
-	    VBox.setMargin(pane2,new Insets(0,200,0,200));
-	    VBox.setMargin(pane3,new Insets(0,200,100,200));
-	    layout.setBackground(background);
-	    layout.getChildren().addAll(pane1,pane2,pane3);
-	    layout.setLayoutX((VistaJuego.WIDTH - 900) / 2);
-    	layout.setLayoutY((VistaJuego.HEIGHT - 600) / 2);
-	    
-    	root.getChildren().add(layout);
-    	this.mostrando = true;
-    	
-    	button5.setOnAction(e -> root.getChildren().remove(root.getChildren().size() - 1));
-    }
-
-    public void mostrar() {
-    	//Lo de mostando era porque se apilaban las ventanas mientras el jugador estaba parado encima de la tienda
-    	//Hay que encontrar una solucion mejor!
-    	if(!this.mostrando) {
-	    	try {
-				this.inicializar();
+		this.inicializarLayout();   
+		botones.get("Close").setOnAction(e -> { root.getChildren().remove(root.getChildren().size() - 1); mostrando = false;});
+	    root.getChildren().add(layout);
+	    this.mostrando = true;
+	 }
+	
+	 public void mostrar() {
+	    //Lo de mostando era porque se apilaban las ventanas mientras el jugador estaba parado encima de la tienda
+	    //Hay que encontrar una solucion mejor!
+	    if(!this.mostrando) {
+		    try {
+		    	this.inicializar();
+		    } catch (FileNotFoundException e) {
+		    	// TODO Auto-generated catch block
+		    	e.printStackTrace();
+		    }
+	    }
+	 }
+	 
+	 private static Image obtenerImagen(String nombre, double width, double height) {
+			Image image1 = null;
+			try {
+				image1 = new Image(new FileInputStream(nombre), width, height, false, false);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    	}
-    }
+			return image1;
+		}
 
 }

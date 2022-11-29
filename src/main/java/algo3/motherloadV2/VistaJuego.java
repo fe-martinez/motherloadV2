@@ -64,6 +64,8 @@ public class VistaJuego {
         var imagenes = cargarImagenes();
         var imagenesJugador = cargarImagenesJugador();
         
+        
+        
         Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
@@ -75,25 +77,26 @@ public class VistaJuego {
         dibujar(context, juego, hud, imagenes, imagenesJugador);
         hud.dibujarHUD();
         
-        Text debug = new Text("X: " + pj.getX() + "Y: " + pj.getY());
-        debug.setFont(Font.font(20));
-        debug.setX(300);
-        debug.setY(20);
-        
-        Text debug2 = new Text("VelX: " + pj.getVelX() + "VelY: " + pj.getVelY());
-        debug2.setFont(Font.font(20));
-        debug2.setX(300);
-        debug2.setY(70);
+//        Text debug = new Text("X: " + pj.getX() + "Y: " + pj.getY());
+//        debug.setFont(Font.font(20));
+//        debug.setX(300);
+//        debug.setY(20);
+//        
+//        Text debug2 = new Text("VelX: " + pj.getVelX() + "VelY: " + pj.getVelY());
+//        debug2.setFont(Font.font(20));
+//        debug2.setX(300);
+//        debug2.setY(70);
         
         
         AnchorPane apane = new AnchorPane();
         
         root.getChildren().add(canvas);
-        root.getChildren().add(debug);
-        root.getChildren().add(debug2);
+//        root.getChildren().add(debug);
+//        root.getChildren().add(debug2);
 
         Scene escena = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(escena);
+       
         
         var keysPressed = new HashSet<KeyCode>();
         
@@ -107,8 +110,8 @@ public class VistaJuego {
 			@Override
 			public void handle(long now) {
 				dibujar(context, juego, hud, imagenes, imagenesJugador);
-				debug.setText("X: " + pj.getX() + "Y: " + pj.getY());
-				debug2.setText("VelX: " + pj.getVelX() + "Y: " + pj.getVelY());
+//				debug.setText("X: " + pj.getX() + "Y: " + pj.getY());
+//				debug2.setText("VelX: " + pj.getVelX() + "Y: " + pj.getVelY());
 		    	//Convertir input y realizar accion son bastante diferentes a los de la Etapa 2. Estan integrados a esta version
 		    	// y no a la de consola.
 				var acciones = new ArrayList<Accion>();
@@ -124,6 +127,7 @@ public class VistaJuego {
 				last = now;
 			}
         }.start();
+
         stage.show();
 	}
 	
@@ -131,8 +135,8 @@ public class VistaJuego {
 	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, ArrayList<Image> imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
     	dibujarFondo(context, imagenes, juego.getJugador());
-    	dibujarTerreno2(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
-    	dibujarJugador2(context, imagenesJugador, juego.getJugador());
+    	dibujarTerreno(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
+    	dibujarJugador(context, imagenesJugador, juego.getJugador());
     	hud.dibujarHUD();
     }
 	

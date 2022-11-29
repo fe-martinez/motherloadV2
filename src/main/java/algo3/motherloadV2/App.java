@@ -24,7 +24,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -65,55 +64,76 @@ public class App extends Application {
 	private static final double FILAS = 32;
 	private static final double COLUMNAS = 32;
 	
+	//Esto hay que ver cómo ordenarlo pero lo pongo acá por el principio de las dependencias explícitas/implícitas o cómo culo se llame :P
+	VistaJuego juego;
+	Group root;
+	VBox vbox;
+	VBox vbox2;
+	StackPane spane;
+	Scene escena;
+	//Los botones se pueden meter en un Hash o algo :P
+	Image fondo;
+	BackgroundImage bfondo;
+	Text texto;
+	Stage myStage;
+	StackPane pane;
+	Rectangle rect;
+	Color colorcito;
+	Button botonOK;
+	Label label;
+	Image imgBotonJugar;
+	ImageView viewBotonJugar, viewBotonJugarSelected, viewBotonCargar,viewBotonConfiguracion,viewBotonSalir;
+	Hyperlink botonJugar, botonCargar, botonConfig, botonSalir;
+	
     @Override
     public void start(Stage stage) {
-        VistaJuego juego = new VistaJuego(stage);
-        
-        Group root = new Group();
-		VBox vbox = new VBox();
-		StackPane spane = new StackPane();
-		Scene escena = new Scene(spane, WIDTH, HEIGHT);
+    	juego = new VistaJuego(stage);
+        myStage = stage;
+    	
+    	root = new Group();
+		vbox = new VBox();
+		spane = new StackPane();
+		escena = new Scene(spane, WIDTH, HEIGHT);
 		
 		spane.getChildren().add(vbox);
 		
 		vbox.setSpacing(0);
 		
-		
-		Image imgBotonJugar = obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartida.png");
-		ImageView viewBotonJugar = new ImageView(imgBotonJugar);
-		ImageView viewBotonJugarSelected =  new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartidaSelected.png"));
+		imgBotonJugar = obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartida.png");
+		viewBotonJugar = new ImageView(imgBotonJugar);
+		viewBotonJugarSelected =  new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartidaSelected.png"));
 		viewBotonJugar.setFitWidth(WIDTH/2);
 		viewBotonJugar.setPreserveRatio(true);
-		Hyperlink botonJugar = new Hyperlink();
+		botonJugar = new Hyperlink();
 		botonJugar.setGraphic(viewBotonJugar);
 		botonJugar.setPrefSize(WIDTH/2, 100);
 
 		
-		ImageView viewBotonCargar = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/CargarPartida.png"));
+		viewBotonCargar = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/CargarPartida.png"));
 		viewBotonCargar.setFitWidth(WIDTH/2);
 		viewBotonCargar.setPreserveRatio(true);
-		Hyperlink botonCargar = new Hyperlink();
+		botonCargar = new Hyperlink();
 		botonCargar.setPrefSize(WIDTH/2, 100);
 		botonCargar.setGraphic(viewBotonCargar);
 		
-		ImageView viewBotonConfiguracion = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Configuracion.png"));
+		viewBotonConfiguracion = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Configuracion.png"));
 		viewBotonConfiguracion.setFitWidth(WIDTH/2);
 		viewBotonConfiguracion.setPreserveRatio(true);
-		Hyperlink botonConfig = new Hyperlink();
+		botonConfig = new Hyperlink();
 		botonConfig.setPrefSize(WIDTH/2, 100);
 		botonConfig.setGraphic(viewBotonConfiguracion);
 		
-		ImageView viewBotonSalir = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Salir.png"));
+		viewBotonSalir = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Salir.png"));
 		viewBotonSalir.setFitWidth(WIDTH/2);
 		viewBotonSalir.setPreserveRatio(true);
-		Hyperlink botonSalir = new Hyperlink();
+		botonSalir = new Hyperlink();
 		botonSalir.setPrefSize(WIDTH/2, 100);
 		botonSalir.setGraphic(viewBotonSalir);
 		
-		Image fondo = obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png");
-		BackgroundImage bfondo = new BackgroundImage(fondo, null, null, null, null);
+		fondo = obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png");
+		bfondo = new BackgroundImage(fondo, null, null, null, null);
 		
-		Text texto = new Text("Las aventuras de\n miguelito la excavadora");
+		texto = new Text("Las aventuras de\n miguelito la excavadora");
 		texto.setFont(Font.font("FreeMono", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
 		texto.setFill(Color.CYAN);
 		
@@ -124,32 +144,32 @@ public class App extends Application {
 		vbox.getChildren().add(botonConfig);
 		vbox.getChildren().add(botonSalir);
 		vbox.setAlignment(Pos.CENTER);
-		stage.setScene(escena);
-		stage.show();
+		myStage.setScene(escena);
+		myStage.show();
 		
 		botonJugar.setOnAction(e -> juego.start());
 		botonSalir.setOnAction(e -> System.exit(0));
-		botonCargar.setOnAction(e -> workInProgress(spane));
-		botonConfig.setOnAction(e -> workInProgress(spane));
+		botonCargar.setOnAction(e -> workInProgress());
+		botonConfig.setOnAction(e -> workInProgress());
     }
 
-    private void workInProgress(StackPane spane) {
-    	StackPane pane = new StackPane();
-    	VBox vbox = new VBox();
-    	Rectangle rect = new Rectangle(0, 0, 600, 300);
-    	Color colorcito = new Color(0.7, 0.7, 0.7, 0.3);
+    private void workInProgress() {
+    	pane = new StackPane();
+    	vbox2 = new VBox();
+    	rect = new Rectangle(0, 0, 600, 300);
+    	colorcito = new Color(0.7, 0.7, 0.7, 0.3);
     	rect.setFill(colorcito);
     	
-    	Label label = new Label("Work in progress :p");
+    	label = new Label("Work in progress :p");
 		label.setFont(Font.font(50));
 		
-		Button botonOK = new Button("Ok");
+		botonOK = new Button("OK");
 		botonOK.setPrefWidth(100);
 		
-		vbox.setSpacing(20);
-		vbox.getChildren().add(label);
-		vbox.getChildren().add(botonOK);
-		vbox.setAlignment(Pos.CENTER);
+		vbox2.setSpacing(20);
+		vbox2.getChildren().add(label);
+		vbox2.getChildren().add(botonOK);
+		vbox2.setAlignment(Pos.CENTER);
 		
     	pane.getChildren().add(rect);
     	pane.getChildren().add(vbox);
