@@ -1,5 +1,15 @@
-# Falta
-* Sonido
-* Configuraciones? Algo así, no sé
-* Acomodar el código de las Tiendas [Clari]
-* Movimiento [Fran]
+- Movimiento.
+- Acomodar el código de las Tiendas [Clari]
+- Animación correcta del taladro.
+- Sonido al taladrar (va de la mano con la animacion creo).
+- Musica.
+- Pausa (ya tenemos el menu igual, creo que con eso alcanza).
+- Darle historia al juego.
+- Darle estado al juego.
+- Dar una manera de ganar el juego.
+- Agregar la mecanica de daño.
+- Apartado configuracion:
+    - Resolución de la ventana.
+    - Volumen de la musica y sonidos.
+    - Dificultad (yo pensaba en que la dificultad sea el tamaño del mapa, maybe cantidad de minerales).
+- Save y Load.
