@@ -53,14 +53,6 @@ public class VistaEstacionDeServicio  {
 			"../motherloadV2/src/rsc/Tiendas/Botones/fill.png",
 			"../motherloadV2/src/rsc/Tiendas/Botones/close.png");
 	
-//	//Esta lista hay que borrarla, es para que ande en mi pc :P
-//	List<String> imagePath2 = List.of("C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button5.png",
-//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button10.png",
-//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button25.png",
-//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\button50.png",
-//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\fill.png",
-//		"C:\\Users\\Clari\\Documents\\Eclipse-Workspace\\motherloadV2\\src\\rsc\\Tiendas\\Botones\\close.png");
-			
 	public VistaEstacionDeServicio(Stage stage, Group root) {
 		this.myStage = stage;
 		this.root = root;
@@ -69,18 +61,13 @@ public class VistaEstacionDeServicio  {
 	
 	private void inicializarImagenesBotones() {
 		imagenes = new HashMap<>();
-		//Este es el que va, con el path genérico
-		
-		/*for(int i = 0; i < keys.size(); i++) {
-			imagenes.put(keys.get(i),new Image(imagePath.get(i)));
-		}*/
 		
 		for(int i = 0; i < 4; i++) {
-			imagenes.put(keys.get(i), obtenerImagen(imagePath.get(i), 100, 80));
+			imagenes.put(keys.get(i), CreadorDeImagenes.obtenerImagen(imagePath.get(i), 100, 80));
 		}
 		
 		for(int i = 4; i < 6; i++) {
-			imagenes.put(keys.get(i), obtenerImagen(imagePath.get(i), 200, 100));
+			imagenes.put(keys.get(i), CreadorDeImagenes.obtenerImagen(imagePath.get(i), 200, 100));
 		}
 		
 		/*Esta versión es más elegante pero no sé por qué no anda bien :P
@@ -206,21 +193,8 @@ public class VistaEstacionDeServicio  {
 		    try {
 		    	this.inicializar();
 		    } catch (FileNotFoundException e) {
-		    	// TODO Auto-generated catch block
 		    	e.printStackTrace();
 		    }
 	    }
 	 }
-	 
-	 private static Image obtenerImagen(String nombre, double width, double height) {
-			Image image1 = null;
-			try {
-				image1 = new Image(new FileInputStream(nombre), width, height, false, false);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return image1;
-		}
-
 }
