@@ -99,9 +99,9 @@ public class App extends Application {
 		
 		vbox.setSpacing(0);
 		
-		imgBotonJugar = obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartida.png");
+		imgBotonJugar = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartida.png",WIDTH,HEIGHT);
 		viewBotonJugar = new ImageView(imgBotonJugar);
-		viewBotonJugarSelected =  new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartidaSelected.png"));
+		viewBotonJugarSelected =  new ImageView(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartidaSelected.png",WIDTH,HEIGHT));
 		viewBotonJugar.setFitWidth(WIDTH/2);
 		viewBotonJugar.setPreserveRatio(true);
 		botonJugar = new Hyperlink();
@@ -109,28 +109,28 @@ public class App extends Application {
 		botonJugar.setPrefSize(WIDTH/2, 100);
 
 		
-		viewBotonCargar = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/CargarPartida.png"));
+		viewBotonCargar = new ImageView(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/CargarPartida.png",WIDTH,HEIGHT));
 		viewBotonCargar.setFitWidth(WIDTH/2);
 		viewBotonCargar.setPreserveRatio(true);
 		botonCargar = new Hyperlink();
 		botonCargar.setPrefSize(WIDTH/2, 100);
 		botonCargar.setGraphic(viewBotonCargar);
 		
-		viewBotonConfiguracion = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Configuracion.png"));
+		viewBotonConfiguracion = new ImageView(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/Configuracion.png",WIDTH,HEIGHT));
 		viewBotonConfiguracion.setFitWidth(WIDTH/2);
 		viewBotonConfiguracion.setPreserveRatio(true);
 		botonConfig = new Hyperlink();
 		botonConfig.setPrefSize(WIDTH/2, 100);
 		botonConfig.setGraphic(viewBotonConfiguracion);
 		
-		viewBotonSalir = new ImageView(obtenerImagen("../motherloadV2/src/rsc/Menu/Salir.png"));
+		viewBotonSalir = new ImageView(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/Salir.png",WIDTH,HEIGHT));
 		viewBotonSalir.setFitWidth(WIDTH/2);
 		viewBotonSalir.setPreserveRatio(true);
 		botonSalir = new Hyperlink();
 		botonSalir.setPrefSize(WIDTH/2, 100);
 		botonSalir.setGraphic(viewBotonSalir);
 		
-		fondo = obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png");
+		fondo = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png",WIDTH,HEIGHT);
 		bfondo = new BackgroundImage(fondo, null, null, null, null);
 		
 		texto = new Text("Las aventuras de\n miguelito la excavadora");
@@ -174,30 +174,13 @@ public class App extends Application {
     	pane.getChildren().add(rect);
     	pane.getChildren().add(vbox);
     	spane.getChildren().add(pane);
-    	
-//    	Popup popup = new Popup();
-//    	
-//    	popup.setAnchorLocation(AnchorLocation.CONTENT_TOP_LEFT);
-//    	popup.getContent().add(pane);
-//    	
+
     	botonOK.setOnAction(e -> spane.getChildren().remove(pane));
-    	//popup.show(stage);
+
 	}
 
 	public static void main(String[] args) {
         launch();
     }
-    
-    private static Image obtenerImagen(String nombre) {
-		Image image = null;
-		try {
-			image = new Image(new FileInputStream(nombre), WIDTH, HEIGHT, true, false);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return image;
-	}
-	
 
 }
