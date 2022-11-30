@@ -22,11 +22,12 @@ public class Suelo {
 	
 	
 	//Destruye el bloque de la posicion dada
-	public void destruirBloque(Posicion pos) {
+	public boolean destruirBloque(Posicion pos) {
 		if(bloques[(int)pos.getY()][(int)pos.getX()].getBloqueID() != ' ') {
 			bloques[(int)pos.getY()][(int)pos.getX()] = new Aire();
-			System.out.println("Se destruye el bloque de " + pos.getX() + "; " + pos.getY());
+			return true;
 		}
+		return false;
 	}
 	
 	//Devuelve true si el casillero de la posicion dada está vacío y false en caso contrario.

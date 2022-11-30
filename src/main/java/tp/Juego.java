@@ -1,6 +1,7 @@
 package tp;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -21,7 +22,8 @@ public class Juego {
 	public static final int FPS = 90;
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
-	private static final double COEF_REDUCCION = 0.002;
+	private static final double COEF_REDUCCION_X = 0.005;
+	private static final double COEF_REDUCCION_Y = 0.002;
 	private static final double GRAVEDAD = 0.0045;
 	private static final double MAX_TICKS = 75;
 	
@@ -85,7 +87,7 @@ public class Juego {
 	
 	//Si no tiene suelo abajo, le suma a la VelY. Uso VelY en vez de ponerselo a Y directamente para dar la sensacion de parabola.
 	private void caer() {
-		if(jugador.getY() < jugador.getLimiteAlto() && jugador.getVelY() >= 0){
+		if(jugador.getY() < jugador.getLimiteAlto() && direccionVertical >= 0){
 			Posicion debajo = Posicion.redondear(new Posicion(jugador.getX(), jugador.getY() + 1));
 			if(suelo.casilleroVacio(debajo) && jugador.getY() < jugador.getLimiteAlto() - 2) {
 				jugador.setVelY(jugador.getVelY() + GRAVEDAD);
@@ -98,17 +100,34 @@ public class Juego {
 	}
 	
 	//Si no esta taladrando, pasa a taladrar.
-	private void prenderTaladro(double direccionVertical, double direccionHorizontal) {
+	private void prenderTaladroCostado(double direccionHorizontal) {
 		if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
 			if(direccionHorizontal > 0) {
 				jugador.setEstado(EnumEstadoJugador.TALADRANDO_DERECHA_FULL);
 			} else if(direccionHorizontal< 0) {
 				jugador.setEstado(EnumEstadoJugador.TALADRANDO_IZQUIERDA_FULL);
-			} else if(direccionVertical > 0) {
-				jugador.setEstado(EnumEstadoJugador.TALADRANDO_ABAJO_FULL);
 			}
+			
+			//Se ponia rara la protoanimacion :p
+			if(direccionHorizontal >= 0) {
+				jugador.setX((int)jugador.getX());	
+			} else {
+				jugador.setX(jugador.getX() + 0.2);
+			}
+			
 		}
 		
+		ticks = 0;
+	}
+	
+	private void prenderTaladroAbajo() {
+		if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+			jugador.setEstado(EnumEstadoJugador.TALADRANDO_ABAJO_FULL);
+		}
+		
+		jugador.setX((int)jugador.getX());
+		jugador.setY((int)jugador.getY());
+			
 		ticks = 0;
 	}
 	
@@ -141,15 +160,16 @@ public class Juego {
 	
 	//Taladra hasta que se cumplan los MAX_TICKS.
 	private void taladrar(double direccionVertical, double direccionHorizontal) {
-		jugador.setX(jugador.getX() + ((direccionHorizontal/MAX_TICKS) * 10));
-		jugador.setY(jugador.getY() + ((direccionVertical/MAX_TICKS) * 10));
+		jugador.setX(jugador.getX() + ((direccionHorizontal * 10) / MAX_TICKS));
+		jugador.setY(jugador.getY() + ((direccionVertical * 10) / MAX_TICKS));
 		ticks += 1;
 		
 		if(ticks > MAX_TICKS) {
-				interacciones.chequearBloques();
-				jugador.setEstado(EnumEstadoJugador.INICIAL);
-				jugador.setVelX(0);
-				jugador.setVelY(0);
+				if(interacciones.chequearBloques()) {
+					jugador.setEstado(EnumEstadoJugador.INICIAL);
+					jugador.setVelX(0);
+					jugador.setVelY(0);					
+				}
 		}
 	}
 		
@@ -159,39 +179,43 @@ public class Juego {
 		this.jugador.setVelY(0);
 	}
 	
-	//Le suma la VelX y VelY al jugador. Si no se estan apretando las teclas, va bajando la velocidad en vez de pasar directamente a 0.
-	private void actualizar() {
+	private void actualizarX() {
 		if(this.jugador.getVelX() > 0) {
-			this.jugador.setVelX(this.jugador.getVelX() - COEF_REDUCCION);				
+			this.jugador.setVelX(this.jugador.getVelX() - COEF_REDUCCION_X);				
 		} else if(this.jugador.getVelX() < 0) {
-			this.jugador.setVelX(this.jugador.getVelX() + COEF_REDUCCION);
+			this.jugador.setVelX(this.jugador.getVelX() + COEF_REDUCCION_X);
 		}
 		
-		if(Math.abs(jugador.getVelX()) <= COEF_REDUCCION){
+		if(Math.abs(jugador.getVelX()) <= COEF_REDUCCION_X){
 			this.jugador.setVelX(0);
 		}
-			
+		
+		this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
+	}
+	
+	private void actualizarY() {
 		if(this.jugador.getVelY() > 0) {
-			this.jugador.setVelY(this.jugador.getVelY() - COEF_REDUCCION);
+			this.jugador.setVelY(this.jugador.getVelY() - COEF_REDUCCION_Y);
 		} else if(this.jugador.getVelY() < 0) {
-			this.jugador.setVelY(this.jugador.getVelY() + COEF_REDUCCION);
+			this.jugador.setVelY(this.jugador.getVelY() + COEF_REDUCCION_Y);
 		}
 		
-		if(Math.abs(jugador.getVelY()) <= COEF_REDUCCION) {
+		if(Math.abs(jugador.getVelY()) <= COEF_REDUCCION_Y) {
 			this.jugador.setVelY(0);
 		}
-			
-		this.jugador.setX(this.jugador.getX() + this.jugador.getVelX());
 		this.jugador.setY(this.jugador.getY() + this.jugador.getVelY());
 	}
 	
 	//Realiza las acciones que encuentra en la lista de acciones y las remueve de la misma.
 	//De momento, para ser utilizada por consola funciona de esta manera, pero la idea es que sea un loop que ejecute todas las acciones,
 	//una por cada una de las teclas que estan siendo presionadas de momento.
-	public void realizarAccion(ArrayList<Accion> acciones, long dt) {
+	public void realizarAccion(ArrayList<Accion> acciones, HashSet<KeyCode> keysPressed, long dt) {
 		for(var accion: acciones) {
 			accion.aplicar();
 		}
+		
+		direccionVertical = jugador.getVelY();
+		direccionHorizontal = jugador.getVelX();
 		
 		msSinceLastFrame += dt / 1_000_000;
 		while (msSinceLastFrame >= MS_PER_FRAME) {
@@ -201,21 +225,37 @@ public class Juego {
 				direccionVertical = jugador.getVelY();
 				direccionHorizontal = jugador.getVelX();
 				
-				if(!interacciones.chequearColision()) {
-					actualizar();
-				} else {
-					frenar();
-					prenderTaladro(direccionVertical, direccionHorizontal);
+				if(!interacciones.chequearColisionVertical()) {
+					actualizarY();
 				}
-
+				
+				if(!interacciones.chequearColisionHorizontal()) {
+					actualizarX();
+				}
+				
+				if(!keysPressed.contains(KeyCode.UP)) {
+					if(keysPressed.contains(KeyCode.DOWN)) {
+						if(interacciones.chequearColisionVertical()) {
+							prenderTaladroAbajo();
+						}
+					} else if(keysPressed.contains(KeyCode.LEFT) || keysPressed.contains(KeyCode.RIGHT)) {
+						if(interacciones.chequearColisionHorizontal()) {
+							prenderTaladroCostado(direccionHorizontal);
+						}
+					}
+				}
 			} else {
-				taladrar(direccionVertical, direccionHorizontal);
+				if(!keysPressed.contains(KeyCode.UP)) {
+					taladrar(direccionVertical, direccionHorizontal);
+				}
 			}
+			
 			interacciones.chequearTienda();
-			caer();
+			if(!keysPressed.contains(KeyCode.UP) && jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+				caer();
+			}
 		}
 	}
-	
 	
 	public Suelo getSuelo() {
 		return this.suelo;

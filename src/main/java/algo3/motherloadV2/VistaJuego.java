@@ -50,7 +50,7 @@ public class VistaJuego {
 	private static final double COLUMNAS_DIBUJADAS = (WIDTH/GRILLA_ANCHO);
 	private static final double FILAS_DIBUJADAS = (HEIGHT/GRILLA_ALTO);
 	
-	public static final double FILAS = 64;
+	public static final double FILAS = 256;
 	public static final double COLUMNAS = 64;
 	
 	Stage stage;
@@ -60,7 +60,7 @@ public class VistaJuego {
 	}
 	
 	public void start() {
-		Suelo suelo = new Suelo((int)FILAS, (int)COLUMNAS);
+		Suelo suelo = new Suelo((int)COLUMNAS, (int)FILAS);
         var imagenes = cargarImagenes();
         var imagenesJugador = cargarImagenesJugador();
         
@@ -123,7 +123,7 @@ public class VistaJuego {
 				}
 				
 				long dt = last == 0 ? 0 : now - last;
-				juego.realizarAccion(acciones, dt);
+				juego.realizarAccion(acciones, keysPressed, dt);
 				last = now;
 			}
         }.start();
@@ -135,8 +135,8 @@ public class VistaJuego {
 	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, ArrayList<Image> imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
     	dibujarFondo(context, imagenes, juego.getJugador());
-    	dibujarTerreno(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
-    	dibujarJugador(context, imagenesJugador, juego.getJugador());
+    	dibujarTerreno2(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
+    	dibujarJugador2(context, imagenesJugador, juego.getJugador());
     	hud.dibujarHUD();
     }
 	
@@ -194,7 +194,7 @@ public class VistaJuego {
 		
 	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
 	private static void dibujarJugador2(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
-		context.drawImage(tipoImagenJugador(jugador, imagenes), ((WIDTH/2) - (GRILLA_ANCHO/2)), (HEIGHT/2) - (GRILLA_ALTO/8));
+		context.drawImage(tipoImagenJugador(jugador, imagenes), ((WIDTH/2)) - (GRILLA_PJ_ANCHO/2), (HEIGHT/2));
 	}
 	
 	public static void dibujarTerreno2(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
