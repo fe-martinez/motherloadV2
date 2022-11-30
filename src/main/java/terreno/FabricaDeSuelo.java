@@ -20,8 +20,7 @@ public class FabricaDeSuelo {
 			return FabricaDeMinerales.crear("Oro");
 		}
 	}
-	
-	
+		
 	public static Bloque[][] crear(int alto, int ancho) {
 		var bloques = new Bloque[alto][ancho];
 		for(int k = 0; k < ancho; k++) {
@@ -42,4 +41,37 @@ public class FabricaDeSuelo {
 		}
 		return bloques;
 	}
+	
+	private static Bloque convertirChar(char id) {
+		if(id == 'T') {
+			return new Tierra();
+		} else if(id == ' ') {
+			return new Aire();
+		} else if(id == 'B') {
+			return FabricaDeMinerales.crear("Bronce");
+		} else if(id == 'H') {
+			return FabricaDeMinerales.crear("Hierro");
+		} else if(id == 'P') {
+			return FabricaDeMinerales.crear("Plata");
+		} else if(id == 'O') {
+			return FabricaDeMinerales.crear("Oro");
+		}
+		return new Tierra();
+	}
+	
+	
+	public static Bloque[][] crearDesdeChars(int alto, int ancho, char[][] mapa){
+		var bloques = new Bloque[alto][ancho];
+		
+		for(int i = 0; i < alto; i++) {
+			for(int j = 0; j < ancho; j++) {
+				bloques[i][j] = convertirChar(mapa[i][j]);
+			}
+		}
+
+		return bloques;
+	}
+	
+	
+	
 }

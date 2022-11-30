@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import jugador.Jugador;
+import tp.GuardarPartida;
 
 public class HUD {
 	private GraphicsContext context;
@@ -68,7 +69,7 @@ public class HUD {
 		context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Menu/InGameMenu.png", 64), 950, 10);
 	}
 	
-	public static void checkMenu(MouseEvent e, Group root) {
+	public static void checkMenu(MouseEvent e, Group root, GuardarPartida guardar) {
 		var x = e.getSceneX();
 		var y = e.getSceneY();
 		
@@ -112,6 +113,7 @@ public class HUD {
 	    	root.getChildren().add(pane);
 	    	botonOK.setOnAction(t -> root.getChildren().remove(pane));
 	    	botonSalir.setOnAction(t -> System.exit(0));
+	    	saveGame.setOnAction(t -> guardar.guardarPartida());
 		}
 	}
 	

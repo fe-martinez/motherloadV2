@@ -87,7 +87,7 @@ public class Juego {
 	
 	//Si no tiene suelo abajo, le suma a la VelY. Uso VelY en vez de ponerselo a Y directamente para dar la sensacion de parabola.
 	private void caer() {
-		if(jugador.getY() < jugador.getLimiteAlto() && direccionVertical >= 0){
+		if(jugador.getY() < jugador.getLimiteAlto()){
 			Posicion debajo = Posicion.redondear(new Posicion(jugador.getX(), jugador.getY() + 1));
 			if(suelo.casilleroVacio(debajo) && jugador.getY() < jugador.getLimiteAlto() - 2) {
 				jugador.setVelY(jugador.getVelY() + GRAVEDAD);

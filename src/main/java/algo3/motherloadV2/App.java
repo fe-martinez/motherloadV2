@@ -25,15 +25,6 @@ public class App extends Application {
 	static final double WIDTH = 1024;
 	static final double HEIGHT = 768;
 	
-	private static final double FILAS_DIBUJADAS = 12;
-	private static final double COLUMNAS_DIBUJADAS = 12;
-	
-	private static final double GRILLA_ANCHO = WIDTH/COLUMNAS_DIBUJADAS;
-	private static final double GRILLA_ALTO = WIDTH/FILAS_DIBUJADAS;
-	
-	private static final double FILAS = 32;
-	private static final double COLUMNAS = 32;
-	
 	//Esto hay que ver cómo ordenarlo pero lo pongo acá por el principio de las dependencias explícitas/implícitas o cómo culo se llame :P
 	VistaJuego juego;
 	Group root;
@@ -117,9 +108,9 @@ public class App extends Application {
 		myStage.setScene(escena);
 		myStage.show();
 		
-		botonJugar.setOnAction(e -> juego.start());
+		botonJugar.setOnAction(e -> juego.start(false));
 		botonSalir.setOnAction(e -> System.exit(0));
-		botonCargar.setOnAction(e -> workInProgress());
+		botonCargar.setOnAction(e ->  juego.start(true));
 		botonConfig.setOnAction(e -> workInProgress());
     }
 

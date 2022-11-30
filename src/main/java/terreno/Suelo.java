@@ -42,4 +42,14 @@ public class Suelo {
 	public int getAlto() {
 		return this.alto;
 	}
+
+	public int getAncho() {
+		return this.ancho;
+	}
+	
+	public void cargarCharMap(int alto, int ancho, char[][] mapa) {
+		this.alto = alto;
+		this.ancho = ancho;
+		this.bloques = FabricaDeSuelo.crearDesdeChars(alto, ancho, mapa);
+	}
 }

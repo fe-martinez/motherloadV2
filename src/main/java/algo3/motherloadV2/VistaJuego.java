@@ -35,6 +35,7 @@ import terreno.Aire;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.Tierra;
+import tp.GuardarPartida;
 import tp.Juego;
 
 public class VistaJuego {
@@ -59,7 +60,7 @@ public class VistaJuego {
 		this.stage = stage;
 	}
 	
-	public void start() {
+	public void start(boolean loadGame) {
 		Suelo suelo = new Suelo((int)COLUMNAS, (int)FILAS);
         var imagenes = cargarImagenes();
         var imagenesJugador = cargarImagenesJugador();
@@ -74,6 +75,12 @@ public class VistaJuego {
         PisoSuperior tiendas = new PisoSuperior(stage, root);
         Juego juego = new Juego(suelo, tiendas, pj);
         HUD hud = new HUD(context, WIDTH, HEIGHT, pj);
+        GuardarPartida guardar = new GuardarPartida(pj, suelo);
+        
+        if(loadGame) {
+        	guardar.cargarPartida(pj, suelo);
+        }
+        
         dibujar(context, juego, hud, imagenes, imagenesJugador);
         hud.dibujarHUD();
         
@@ -100,7 +107,7 @@ public class VistaJuego {
         
         var keysPressed = new HashSet<KeyCode>();
         
-        escena.setOnMouseClicked(e -> hud.checkMenu(e, root));
+        escena.setOnMouseClicked(e -> hud.checkMenu(e, root, guardar));
         
         escena.setOnKeyPressed(e -> {keysPressed.add(e.getCode()); });
         escena.setOnKeyReleased(e -> {keysPressed.remove(e.getCode()); });
