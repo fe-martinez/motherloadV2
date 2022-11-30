@@ -18,16 +18,18 @@ if(posicionJugador.posicionesIguales(posicionTienda)){
 - Estación de Reparación: hay que armarla, es igual a la de servicio, mi idea era que hagamos una superclase y dos subclases pero no sé.
 - Tienda de Mejoras: hay que ponerle fondo (no me toma el fondo), los botones van bien donde están, pero hay que ponerles los setOnAction(...).
 
-
+# IMPORTANTE
 - Movimiento.
 - Animación correcta del taladro.
 - Sonido al taladrar (va de la mano con la animacion creo).
 - Musica.
+- Dar una manera de ganar el juego.
+- Darle estado al juego.
+- Agregar la mecanica de daño. (hay una función, ver qué onda con eso :P)
+- 
+# EXTRA 
 - Pausa (ya tenemos el menu igual, creo que con eso alcanza).
 - Darle historia al juego.
-- Darle estado al juego.
-- Dar una manera de ganar el juego.
-- Agregar la mecanica de daño.
 - Apartado configuracion:
     - Resolución de la ventana.
     - Volumen de la musica y sonidos.
