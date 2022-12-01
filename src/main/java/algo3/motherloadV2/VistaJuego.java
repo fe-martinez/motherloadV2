@@ -71,6 +71,8 @@ public class VistaJuego {
         dibujar(context, juego, hud, imagenes, imagenesJugador);
         hud.dibujarHUD();
         
+        VistasTiendas vistasTiendas = new VistasTiendas(juego.getPisoSuperior(), juego.getJugador(), stage, root);
+        
         if(loadGame) juego.cargarPartida();
         
         root.getChildren().add(canvas);

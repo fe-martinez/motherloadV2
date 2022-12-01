@@ -29,7 +29,6 @@ public class VistaEstacionDeVenta implements VistaEntidad{
     List<Integer> contador = new ArrayList<>();
     Popup popup = new Popup();
     Jugador jugador;
-    boolean isShowing = false;
     Image img;
     BackgroundImage backgroundImg;
     Background background;
@@ -86,7 +85,6 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 		    
 		botonCerrar.setOnAction(e -> {
 		   	this.popup.hide();
-		   	this.isShowing = false;
 		});
 	}
 	
@@ -129,10 +127,7 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	}
 	
 	public void mostrar() {
-		if(!this.isShowing) {
-			this.actualizarVista();
-			this.popup.show(this.stage);
-			this.isShowing = true;
-		}
+		this.actualizarVista();
+		this.popup.show(this.stage);
 	}
 }
