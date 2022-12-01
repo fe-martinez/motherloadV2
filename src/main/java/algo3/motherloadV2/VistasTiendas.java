@@ -33,7 +33,7 @@ public class VistasTiendas {
 		var mecanico = new VistaEstacionDeReparacion();
 		vistasTiendas.put(tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.6)), mecanico);
 		
-		var mejoras = new VistaTiendaDeMejoras(stage, (TiendaDeMejoras) tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.9)), pj);
+		var mejoras = new VistaTiendaDeMejoras(stage, root, (TiendaDeMejoras) tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.9)), pj);
 		vistasTiendas.put(tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.9)), mejoras);
 		
 		var consumibles = new VistaTiendaDeConsumibles(stage, root, pj, (TiendaDeConsumibles) tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.7)));

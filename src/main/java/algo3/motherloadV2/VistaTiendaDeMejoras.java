@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -27,12 +28,13 @@ import javafx.stage.Popup;
 
 public class VistaTiendaDeMejoras implements VistaEntidad{
 	//Tanque
-	List<String> descripcionesTanque = List.of("Tanque mediano\r\n" + "15 Litros\r\n" + "$750\r\n", 
-			"Tanque grande\r\n" + "25 Litros\r\n" + "$2.000\r\n", 
-			"Tanque gigante\r\n" + "40 Litros\r\n" + "$5.000\r\n",
-			"Tanque titánico\r\n" + "60 Litros\r\n" + "$20.000\r\n",
-			"Tanque nahuelito\r\n" + "100 Litros\r\n" + "$20.000\r\n",
-			"Mega tanque\r\n" + "150 Litros\r\n" + "$500.000\r\n");
+	List<String> descripcionesTanque = List.of(
+				"Tanque mediano\r\n" + "15 Litros\r\n" + "$750\r\n", 
+				"Tanque grande\r\n" + "25 Litros\r\n" + "$2.000\r\n", 
+				"Tanque gigante\r\n" + "40 Litros\r\n" + "$5.000\r\n",
+				"Tanque titánico\r\n" + "60 Litros\r\n" + "$20.000\r\n",
+				"Tanque nahuelito\r\n" + "100 Litros\r\n" + "$20.000\r\n",
+				"Mega tanque\r\n" + "150 Litros\r\n" + "$500.000\r\n");
 	List<Label> labelsTanque = new ArrayList<Label>();
 	List<Button> botonesTanque = new ArrayList<>();
 	List<Image> imgsTanque = new ArrayList<>();
@@ -42,6 +44,13 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	Tab tanque = new Tab("Tanque");
 	
 	//Inventario
+	List<String> descripcionesInventario = List.of(
+				"Inventario intermedio\r\n" + "15 elementos máximo\r\n" + "$750\r\n",
+				"Inventario grande\r\n" + "25 elementos máximo\r\n" + "$2.000\r\n",
+				"Inventario gigante\r\n" + "40 elementos máximo\r\n" + "$5.000\r\n",
+				"Inventario titánico\r\n" + "70 elementos máximo\r\n" + "$20.000\r\n",
+				"Inventario nahuelito\r\n" + "80 elementos máximo\r\n" + "$20.000\r\n");
+	
 	List<Label> labelsInventario = new ArrayList<>();
 	List<Button> botonesInventario = new ArrayList<>();
 	List<Image> imgsInventario = new ArrayList<>();
@@ -51,6 +60,15 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	Tab inventario = new Tab("Inventario");
 	
 	//MaxHealth
+	List<String> descripcionesMaxHealth = List.of(
+				"Caso de Hierro\r\n" + "17 de vida\r\n" + "$750\r\n",
+				"Caso de Bronce\r\n" + "30 de vida\r\n" + "$2.000\r\n",
+				"Caso de Acero\r\n" + "50 de vida\r\n" + "$5.000\r\n",
+				"Caso de Platino\r\n" + "80 de vida\r\n" + "$20.000\r\n",
+				"Casco de Einstenio\r\n" + "120 de vida\r\n" + "$20.000\r\n",
+				"Caso Supremo lml\r\n" + "180 de vida\r\n" + "$500.000\r\n"
+			);
+	
 	List<Label> labelsMaxHealth = new ArrayList<>();
 	List<Button> botonesMaxHealth = new ArrayList<>();
 	List<Image> imgsMaxHealth = new ArrayList<>();
@@ -97,24 +115,26 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	String mejoraSeleccionada;
 	private TiendaDeMejoras tienda;
 	private Jugador pj;
+	private Group root;
+	private AnchorPane ventana;
+	private boolean mostrando;
+	private VBox vboxInventario;
+	private VBox vboxMaxHealth;
 	
 	private void inicializarLabelsInventario() {
-		labelsInventario.add(new Label("Inventario intermedio\r\n" + "15 elementos máximo\r\n" + "$750\r\n"));
-		labelsInventario.add(new Label("Inventario grande\r\n" + "25 elementos máximo\r\n" + "$2.000\r\n"));
-		labelsInventario.add(new Label("Inventario gigante\r\n" + "40 elementos máximo\r\n" + "$5.000\r\n"));
-		labelsInventario.add(new Label("Inventario titánico\r\n" + "70 elementos máximo\r\n" + "$20.000\r\n"));
-		labelsInventario.add(new Label("Inventario nahuelito\r\n" + "80 elementos máximo\r\n" + "$20.000\r\n"));
-		labelsInventario.add(new Label());
+		for(int i = 0; i < 5; i++) {
+			Label label = new Label(descripcionesInventario.get(i));
+			label.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 30));
+			labelsInventario.add(label);
+		}
 	}
 	
 	private void inicializarLabelsMaxHealth() {
-		labelsMaxHealth.add(new Label("Caso de Hierro\r\n" + "17 de vida\r\n" + "$750\r\n"));
-		labelsMaxHealth.add(new Label("Caso de Bronce\r\n" + "30 de vida\r\n" + "$2.000\r\n"));
-		labelsMaxHealth.add(new Label("Caso de Acero\r\n" + "50 de vida\r\n" + "$5.000\r\n"));
-		labelsMaxHealth.add(new Label("Caso de Platino\r\n" + "80 de vida\r\n" + "$20.000\r\n"));
-		labelsMaxHealth.add(new Label("Casco de Einstenio\r\n" + "120 de vida\r\n" + "$20.000\r\n"));
-		labelsMaxHealth.add(new Label("Caso Supremo lml\r\n" + "180 de vida\r\n" + "$500.000\r\n"));
-		labelsMaxHealth.add(new Label());
+		for(int i = 0; i < 6; i++) {
+			Label label = new Label(descripcionesMaxHealth.get(i));
+			label.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 30));
+			labelsMaxHealth.add(label);
+		}
 	}
 	
 	private void inicializarLabelsTanque() {
@@ -123,13 +143,6 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 			label.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 30));
 			labelsTanque.add(label);
 		}
-		
-//		labelsTanque.add(new Label("Tanque grande\r\n" + "25 Litros\r\n" + "$2.000\r\n"));
-//		labelsTanque.add(new Label("Tanque gigante\r\n" + "40 Litros\r\n" + "$5.000\r\n"));
-//		labelsTanque.add(new Label("Tanque titánico\r\n" + "60 Litros\r\n" + "$20.000\r\n"));
-//		labelsTanque.add(new Label("Tanque nahuelito\r\n" + "100 Litros\r\n" + "$20.000\r\n"));
-//		labelsTanque.add(new Label("Mega tanque\r\n" + "150 Litros\r\n" + "$500.000\r\n"));
-//		labelsTanque.add(new Label());
 	}
 		
 	private void inicializarImagenesTanque() {
@@ -142,21 +155,23 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	}
 	
 	private void inicializarImagenesInventario() {
-		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario1.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario2.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario3.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario4.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario5.png", 150, 150));
 		
 	}
 	
 	private void inicializarImagenesMaxHealth() {
-		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth1.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth2.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth3.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth4.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth5.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth6.png", 150, 150));
+		
+
 		
 	}
 	
@@ -213,9 +228,9 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.inicializarBackgroundInventario();
 		for(int i = 0; i < 5; i++) {
 			this.botonesInventario.add(new Button());
-			this.botonesInventario.get(i).setBackground(this.backInventario.get(0));
+			this.botonesInventario.get(i).setBackground(this.backInventario.get(i));
 			this.botonesInventario.get(i).setBorder(Border.stroke(Paint.valueOf("Black")));
-			this.botonesInventario.get(i).setPrefSize(150,150);
+			this.botonesInventario.get(i).setPrefSize(200,200);
 		}
 		
 	    GridPane.setConstraints(this.botonesInventario.get(0),0,0);
@@ -229,9 +244,9 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.inicializarBackgroundMaxHealth();
 		for(int i = 0; i < 6; i++) {
 			this.botonesMaxHealth.add(new Button());
-			this.botonesMaxHealth.get(i).setBackground(this.backMaxHealth.get(0));
+			this.botonesMaxHealth.get(i).setBackground(this.backMaxHealth.get(i));
 			this.botonesMaxHealth.get(i).setBorder(Border.stroke(Paint.valueOf("Black")));
-			this.botonesMaxHealth.get(i).setPrefSize(150,150);
+			this.botonesMaxHealth.get(i).setPrefSize(200,200);
 		}
 		
 	    GridPane.setConstraints(this.botonesMaxHealth.get(0),0,0);
@@ -251,6 +266,27 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.botonesTanque.get(4).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(4)); mejoraSeleccionada = "T5";});
 		this.botonesTanque.get(5).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(5)); mejoraSeleccionada = "T6";});
 	}
+	
+	private void inicializarAccionesBotonesInventario() {
+		this.inicializarLabelsInventario();
+		this.botonesInventario.get(0).setOnAction(e -> {vboxInventario.getChildren().set(0, labelsInventario.get(0)); mejoraSeleccionada = "I1";});
+		this.botonesInventario.get(1).setOnAction(e -> {vboxInventario.getChildren().set(0, labelsInventario.get(1)); mejoraSeleccionada = "I2";});
+		this.botonesInventario.get(2).setOnAction(e -> {vboxInventario.getChildren().set(0, labelsInventario.get(2)); mejoraSeleccionada = "I3";});
+		this.botonesInventario.get(3).setOnAction(e -> {vboxInventario.getChildren().set(0, labelsInventario.get(3)); mejoraSeleccionada = "I4";});
+		this.botonesInventario.get(4).setOnAction(e -> {vboxInventario.getChildren().set(0, labelsInventario.get(4)); mejoraSeleccionada = "I5";});
+	}
+	
+	private void inicializarAccionesBotonesMaxHealth() {
+		this.inicializarLabelsMaxHealth();
+		this.botonesMaxHealth.get(0).setOnAction(e -> {vboxMaxHealth.getChildren().set(0, labelsMaxHealth.get(0)); mejoraSeleccionada = "V1";});
+		this.botonesMaxHealth.get(1).setOnAction(e -> {vboxMaxHealth.getChildren().set(0, labelsMaxHealth.get(1)); mejoraSeleccionada = "V2";});
+		this.botonesMaxHealth.get(2).setOnAction(e -> {vboxMaxHealth.getChildren().set(0, labelsMaxHealth.get(2)); mejoraSeleccionada = "V3";});
+		this.botonesMaxHealth.get(3).setOnAction(e -> {vboxMaxHealth.getChildren().set(0, labelsMaxHealth.get(3)); mejoraSeleccionada = "V4";});
+		this.botonesMaxHealth.get(4).setOnAction(e -> {vboxMaxHealth.getChildren().set(0, labelsMaxHealth.get(4)); mejoraSeleccionada = "V5";});
+		this.botonesMaxHealth.get(5).setOnAction(e -> {vboxMaxHealth.getChildren().set(0, labelsMaxHealth.get(5)); mejoraSeleccionada = "V6";});
+	}
+	
+	
 	
 	private void configGridPane(GridPane gridPane) {
 		gridPane.setPrefSize(600,600);
@@ -316,8 +352,8 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		configGridPane(gridPaneMaxHealth);
 		gridPaneMaxHealth.getChildren().addAll(botonesMaxHealth);
 		HBox hbox = new HBox();
-		VBox vbox = new VBox();
-		maxHealth.setContent(inicializarVistaCompra(gridPaneMaxHealth, hbox, vbox));
+		vboxMaxHealth = new VBox();
+		maxHealth.setContent(inicializarVistaCompra(gridPaneMaxHealth, hbox, vboxMaxHealth));
 		maxHealth.setClosable(false);
 	}
 	
@@ -326,8 +362,8 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		configGridPane(gridPaneInventario);
 		gridPaneInventario.getChildren().addAll(botonesInventario);
 		HBox hbox = new HBox();
-		VBox vbox = new VBox();
-		inventario.setContent(inicializarVistaCompra(gridPaneInventario, hbox, vbox));
+		vboxInventario = new VBox();
+		inventario.setContent(inicializarVistaCompra(gridPaneInventario, hbox, vboxInventario));
 		inventario.setClosable(false);
 	}
 	
@@ -352,45 +388,58 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.tabPane.getTabs().addAll(this.inicio,this.tanque,this.maxHealth,this.inventario);
 	}
 	
-	private void inicializarPopup() {
-		this.vbox.getChildren().add(this.tabPane);
-		this.popup.setWidth(1000);
-		this.popup.setHeight(600);
-		this.popup.getContent().add(this.vbox);
+	private void inicializarPopup(Group root) {
+		this.ventana = new AnchorPane();
+		ventana.setLayoutY(768/2 - 300);
+		ventana.setLayoutX(1024/2 - 500); //WIDTH / 2 - TAMAÑO VENTANA / 2;
+		ventana.setMaxSize(1000, 600);
+		ventana.getChildren().add(this.tabPane);
+		
+		AnchorPane.setTopAnchor(tabPane, 1.0);
+        AnchorPane.setRightAnchor(tabPane, 1.0);
+        AnchorPane.setLeftAnchor(tabPane, 1.0);
+        AnchorPane.setBottomAnchor(tabPane, 1.0);
+
+		
+        Button botonClose = new Button("X");
+        ventana.getChildren().add(botonClose);
+		AnchorPane.setTopAnchor(botonClose, 3.0);
+		AnchorPane.setRightAnchor(botonClose, 5.0);
+		
+		botonClose.setOnAction(e -> {this.root.getChildren().remove(this.root.getChildren().size() - 1); this.mostrando = false;});
+		
 	}
 
 	
 	private void interaccionesTabs() {
 		this.inicializarAccionesBotonesTanque();
+		this.inicializarAccionesBotonesInventario();
+		inicializarAccionesBotonesMaxHealth();
 	}
 	
-	private void inicializarVistaTiendaDeMejoras(Stage stage) {
+	private void inicializarVistaTiendaDeMejoras(Group root) {
 		mejoraSeleccionada = null;
-		this.myStage = stage;
 		this.inicializarTabPane();
-    	this.inicializarPopup();
+    	this.inicializarPopup(root);
     	this.interaccionesTabs();
     	//No me lo carga, ni idea :P
     	//this.tabPane.setBackground(new Background(new BackgroundImage(fondoBlanco,BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT, null, null)));
- 	    
-	    button = new Button("Holi");
-	    stackPane = new StackPane();
- 	    stackPane.getChildren().add(button);
- 	    button.setOnAction(e -> {popup.show(myStage);});
-	    myScene = new Scene(stackPane);
-	    myStage.setScene(myScene);
 	}
 	
-	public VistaTiendaDeMejoras(Stage stage, TiendaDeMejoras tienda, Jugador pj) {
-		inicializarVistaTiendaDeMejoras(stage);
+	public VistaTiendaDeMejoras(Stage stage, Group root, TiendaDeMejoras tienda, Jugador pj) {
+		inicializarVistaTiendaDeMejoras(root);
 		this.tienda = tienda;
 		this.pj = pj;
+		this.root = root;
+		this.mostrando = false;
 	}
 	
 	//No sé si está bien así, cuando se crea recibe la referencia al Stage así que debería funcionar, sino bueno, la otra idea es que lo reciba por parámetro
 	//Pero si lo vamos a llamar desde otro lado no tiene sentido pasarlo por parámetro xdd
 	public void mostrar() {
-		this.popup.show(myStage);
+		if(!this.mostrando) {
+			this.root.getChildren().add(this.ventana);			
+		}
 	}
 
 }
