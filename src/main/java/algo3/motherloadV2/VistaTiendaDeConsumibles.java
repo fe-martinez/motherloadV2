@@ -18,12 +18,11 @@ import javafx.stage.Popup;
 import javafx.geometry.*;
 
 public class VistaTiendaDeConsumibles implements VistaEntidad {
+	private static double SIZE_BOTON = 100;
 	List<Label> labels = new ArrayList<>();
 	List<Background> background = new ArrayList<>();
 	List<Image> images = new ArrayList<>();
 	List<BackgroundImage> backImg = new ArrayList<>();
-	private Stage stage;
-	private Popup popup = new Popup();
 	private StackPane sPane;
 	Group root;
 	GridPane gridPane;
@@ -38,9 +37,8 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	Jugador jugador;
 	TiendaDeConsumibles tienda;
 	
-	public VistaTiendaDeConsumibles(Stage stage,Group root,Jugador jugador,TiendaDeConsumibles tienda) {
+	public VistaTiendaDeConsumibles(Stage stage, Group root, Jugador jugador, TiendaDeConsumibles tienda) {
 		this.jugador = jugador;
-		this.stage = stage;
 		this.root = root;
 		this.mostrando = false;
 		this.tienda = tienda;
@@ -72,6 +70,7 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 		for(Label label: labels) {
 			label.setFont(new Font(14));
 			label.setTextAlignment(TextAlignment.RIGHT);
+			label.setAlignment(Pos.BASELINE_RIGHT);
 		}
 	}
 	
@@ -79,18 +78,11 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 		
 		//Esta es la que va pero a mí no me funciona ????????? :P
 		//Escribilo vos de 0 que ahí sí me funca xddd
-		/*this.images.add(CreadorDeImagenes.CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendasDeConsumibles/tanqueExtra.png", 150, 150));
-		this.images.add(CreadorDeImagenes.CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendasDeConsumibles/nanobots.png", 150, 150));
-		this.images.add(CreadorDeImagenes.CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendasDeConsumibles/dinamita.png", 150, 150));
-		this.images.add(CreadorDeImagenes.CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendasDeConsumibles/explosivos.png", 150, 150));
-		this.images.add(CreadorDeImagenes.CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendasDeConsumibles/teleport.png", 150, 150));
-		*/
-		
-		this.images.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.images.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.images.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.images.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
-		this.images.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.images.add(CreadorDeImagenes.obtenerImagen("..\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeConsumibles\\tanqueExtra.png", SIZE_BOTON, SIZE_BOTON));
+		this.images.add(CreadorDeImagenes.obtenerImagen("..\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeConsumibles\\nanobots.png", SIZE_BOTON, SIZE_BOTON));
+		this.images.add(CreadorDeImagenes.obtenerImagen("..\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeConsumibles\\dinamita.png", SIZE_BOTON, SIZE_BOTON));
+		this.images.add(CreadorDeImagenes.obtenerImagen("..\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeConsumibles\\explosivos.png", SIZE_BOTON, SIZE_BOTON));
+		this.images.add(CreadorDeImagenes.obtenerImagen("..\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeConsumibles\\teleport.png", SIZE_BOTON, SIZE_BOTON));
 	}
 	
 	private void inicializarBackground() {
@@ -110,31 +102,31 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
     	
 		//Creo los botones con el tamaño, el fondo, el borde y esas giladas
 	    tanqueExtra = new Button();
-	    tanqueExtra.setPrefSize(150,150);
+	    tanqueExtra.setPrefSize(SIZE_BOTON, SIZE_BOTON);
 	    tanqueExtra.setBackground(this.background.get(0));
 	    tanqueExtra.setBorder(Border.stroke(Paint.valueOf("Black")));
 	    tanqueExtra.setAlignment(Pos.CENTER);
 	    
 	    nanobots = new Button();
-	    nanobots.setPrefSize(150,150);
+	    nanobots.setPrefSize(SIZE_BOTON, SIZE_BOTON);
 	    nanobots.setBackground(this.background.get(1));
 	    nanobots.setBorder(Border.stroke(Paint.valueOf("Black")));
 	    nanobots.setAlignment(Pos.CENTER);
 	    
 	    dinamita = new Button();
-	    dinamita.setPrefSize(150,150);
+	    dinamita.setPrefSize(SIZE_BOTON, SIZE_BOTON);
 	    dinamita.setBackground(this.background.get(2));
 	    dinamita.setBorder(Border.stroke(Paint.valueOf("Black")));
 	    dinamita.setAlignment(Pos.CENTER);
 	    
 	    explosivos = new Button();
-	    explosivos.setPrefSize(150,150);
+	    explosivos.setPrefSize(SIZE_BOTON, SIZE_BOTON);
 	    explosivos.setBackground(this.background.get(3));
 	    explosivos.setBorder(Border.stroke(Paint.valueOf("Black")));
 	    explosivos.setAlignment(Pos.CENTER);
 	    
 	    teleport = new Button();
-	    teleport.setPrefSize(150,150);
+	    teleport.setPrefSize(SIZE_BOTON, SIZE_BOTON);
 	    teleport.setBackground(this.background.get(4));
 	    teleport.setBorder(Border.stroke(Paint.valueOf("Black")));
 	    teleport.setAlignment(Pos.CENTER);
@@ -150,19 +142,16 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	private void inicializarGridPane() {
 		gridPane = new GridPane();
 	    //Este es el que iría :P
-	    //Image img = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendaDeConsumibles/FondoTiendaConsumibles.jpg", 1000, 600);
-	   
-		//Image img = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/FondoTiendaConsumibles.jpg", 1000, 600);
-	    Image img = CreadorDeImagenes.obtenerImagen("C:\\Users\\Clari\\Documents\\MotherloadV2\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeConsumibles\\FondoTiendaDeConsumibles.png", 1000, 600);
+	    Image img = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendaDeConsumibles/FondoTiendaDeConsumibles.png", 800, 600);
 	    
 	    BackgroundImage backgroundImg = new BackgroundImage(img,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
 	    Background background = new Background(backgroundImg);
 	    gridPane.setBackground(background);
-	    
+	    gridPane.setMaxSize(800, 600);
+	    gridPane.setPadding(new Insets(100));
 	    this.inicializarBotones();
 	    //Agrego todo al pane
-	    gridPane.getChildren().addAll(tanqueExtra,nanobots,dinamita,explosivos,teleport);
-	    gridPane.setPrefSize(1000,600);
+	    gridPane.getChildren().addAll(tanqueExtra, nanobots, dinamita, explosivos, teleport);
 	}
 	
 	private void inicializarAccionesBotones() {
@@ -248,29 +237,20 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 		this.inicializarGridPane();
 		sPane = new StackPane();
 	    sPane.getChildren().addAll(gridPane,labels.get(5));
-	    sPane.setPrefSize(1000,600);
+	    sPane.setPrefSize(1024 , 768); // WIDTH Y HEIGHT
 	    this.inicializarAccionesBotones();
 		
 	    close = new Button("X");
 	    close.setFont(new Font(30));
 	    close.setTextFill(Paint.valueOf("White"));
-	    close.setBackground(Background.EMPTY);
-	    StackPane.setMargin(close,new Insets(0,650,500,0));
-	    close.setOnAction(e -> { root.getChildren().remove(root.getChildren().size() - 1); mostrando = false;});
-	    sPane.getChildren().add(close);
-	    
+	    //close.setBackground(Background.EMPTY);
+	    close.setLayoutX(100);
+	    close.setLayoutY(100);
+	    //StackPane.setMargin(close, new Insets(0,650,500,0));
+	    root.getChildren().add(close);
 	    root.getChildren().add(sPane);
-	    this.mostrando = true;
-	    
-	    
-	    
-	    
-	    
-	    //StackPane.setMargin(gridPane,new Insets(300,300,0,0));
-	    //popup.getContent().add(sPane);
-	    //popup.setHeight(600);
-	    //popup.setWidth(1000);
-	    
+	    this.mostrando = true;   
+	    close.setOnAction(e -> { root.getChildren().remove(root.getChildren().size() - 1); mostrando = false;});
 	}
 	  
 	public void mostrar() {

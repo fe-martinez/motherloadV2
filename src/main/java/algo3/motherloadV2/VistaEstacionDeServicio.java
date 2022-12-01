@@ -113,7 +113,12 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 		}
 		
 		this.inicializarCaracteristicasBotones();
-	
+		
+	    botones.get("5").setOnAction(e -> this.tienda.vender(this.pj, 5));
+	    botones.get("10").setOnAction(e -> this.tienda.vender(this.pj, 10));
+	    botones.get("25").setOnAction(e -> this.tienda.vender(this.pj, 25));
+	    botones.get("50").setOnAction(e -> this.tienda.vender(this.pj, 50));
+	    botones.get("Fill").setOnAction(e -> this.tienda.vender(this.pj, 100));
 	}
 	
 	private void inicializarGridPane() {
@@ -143,8 +148,7 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 		labelInstrucciones.setPrefSize(400,60);
 		labelInstrucciones.setFont(new Font(16));
 		
-		int variable = 5;
-		labelCombustible = new Label("Nivel de combustible: " + variable);
+		labelCombustible = new Label("Nivel de combustible: " + pj.getNave().getNivelDeCombustible());
 		labelCombustible.setBackground(Background.fill(Paint.valueOf("White")));
 		labelCombustible.setPrefSize(500,60);
 		labelCombustible.setTextAlignment(TextAlignment.CENTER);
@@ -154,7 +158,7 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 	
 	private void inicializarLayout() throws FileNotFoundException {
 		layout = new VBox();
-		img = new Image(new FileInputStream(VistaEstacionDeServicio.PATH_FONDO), 800, 600, false, true);
+		img = new Image(new FileInputStream(VistaEstacionDeServicio.PATH_FONDO), 800, 600, false, false);
 		backgroundImg = new BackgroundImage(img, null, null, null, null);
 		background = new Background(backgroundImg);
 		
@@ -168,8 +172,8 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 		VBox.setMargin(pane3,new Insets(0,200,100,400));
 		layout.setBackground(background);
 		layout.getChildren().addAll(pane1,pane2,pane3);
-		layout.setLayoutX((VistaJuego.WIDTH - 900) / 2);
-		layout.setLayoutY((VistaJuego.HEIGHT - 600) / 2);
+		layout.setLayoutX((VistaJuego.WIDTH / 2) - 400);
+		layout.setLayoutY((VistaJuego.HEIGHT / 2) - 350);
 		
 	}
 	
@@ -178,7 +182,6 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 		botones.get("Close").setOnAction(e -> { root.getChildren().remove(root.getChildren().size() - 1); mostrando = false;});
 	    root.getChildren().add(layout);
 	    this.mostrando = true;
-
 	 }
 	
 	 public void mostrar() {
@@ -187,7 +190,6 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 	    if(!this.mostrando) {
 		    try {
 		    	this.inicializar();
-			    botones.get("5").setOnAction(e -> this.tienda.interactuar(pj, 5));
 		    } catch (FileNotFoundException e) {
 		    	e.printStackTrace();
 		    }

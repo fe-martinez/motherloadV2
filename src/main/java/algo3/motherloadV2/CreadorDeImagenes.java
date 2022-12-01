@@ -7,10 +7,10 @@ import javafx.scene.image.Image;
 
 public class CreadorDeImagenes {
 	
-	public static Image obtenerImagen(String nombre,double widht, double height) {
+	public static Image obtenerImagen(String nombre,double width, double height) {
 		Image image = null;
 		try {
-			image = new Image(new FileInputStream(nombre), widht, height, true, false);
+			image = new Image(new FileInputStream(nombre), width, height, true, false);
 			return image;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

@@ -27,6 +27,7 @@ public class EstacionDeServicio extends Entidad implements EstacionDeMantenimien
 			return -1;
 
 		}
+		
 		int i = LITROS_DISPONIBLES.indexOf((int)cantidadCombustible);
 		if(LITROS_DISPONIBLES.get(i) == 100) {
 			return (capacidadTanque - cantidadActual) * EstacionDeServicio.PRECIO_COMBUSTIBLE;

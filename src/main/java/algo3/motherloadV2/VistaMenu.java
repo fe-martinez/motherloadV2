@@ -95,7 +95,7 @@ public class VistaMenu {
 		botonSalir.setPrefSize(WIDTH/2, 100);
 		botonSalir.setGraphic(viewBotonSalir);
 		
-		fondo = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png",WIDTH,HEIGHT);
+		fondo = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png", WIDTH, HEIGHT);
 		bfondo = new BackgroundImage(fondo, null, null, null, null);
 		
 		texto = new Text("Las aventuras de\n miguelito la excavadora");

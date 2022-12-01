@@ -110,8 +110,8 @@ public class VistaJuego {
 	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, ArrayList<Image> imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
     	dibujarFondo(context, imagenes, juego.getJugador());
-    	dibujarTerreno2(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
-    	dibujarJugador2(context, imagenesJugador, juego.getJugador());
+    	dibujarTerreno(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
+    	dibujarJugador(context, imagenesJugador, juego.getJugador());
     	hud.dibujarHUD();
     }
 	
@@ -239,51 +239,51 @@ public class VistaJuego {
 		return image1;
 	}
 	
-//    //La idea de comienzoI y comienzoJ es no dibujar al jugador antes del 0 o despues del max, probablemente haya maneras mejores
-//    //este es copypaste de la de abajo.
-//    private static void dibujarJugador(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
-//    	double comienzoI = jugador.getX() - (COLUMNAS_DIBUJADAS/2) <= 0 ? 0 : jugador.getX() - (COLUMNAS_DIBUJADAS/2);
-//    	double comienzoJ = jugador.getY() - (FILAS_DIBUJADAS/2) <= 0 ? 0 : jugador.getY() - (FILAS_DIBUJADAS/2);
-//    	double finI = jugador.getX() + (COLUMNAS_DIBUJADAS/2) > COLUMNAS ? COLUMNAS : comienzoI + COLUMNAS_DIBUJADAS;
-//    	
-//    	if(finI - comienzoI != COLUMNAS_DIBUJADAS) {
-//    		comienzoI = finI - COLUMNAS_DIBUJADAS;
-//    	}
-//    	
-//    	context.drawImage(tipoImagenJugador(jugador, imagenes), ((jugador.getX() - comienzoI) * GRILLA_ANCHO), ((jugador.getY() - comienzoJ) * GRILLA_ALTO) + 24);
-//	}
-//
-//    
-//    //La idea principal de esto es hacer el famoso "zoom" al pj en vez de dibujar todo el mapa.
-//    //comienzoI, finI, comienzoJ y finJ sirven todas para chequear que no se traten de dibujar cosas que no existen.
-//    //Esto se ve cuando te acercas a algun borde con el pj y la camara deja de moverse con el personaje.
-//	private static void dibujarTerreno(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
-//    	double comienzoI = pjX - (COLUMNAS_DIBUJADAS/2) < 0 ? 0 : pjX - (COLUMNAS_DIBUJADAS/2);
-//    	double comienzoJ = pjY - (FILAS_DIBUJADAS/2) < 0 ? 0 : pjY - (FILAS_DIBUJADAS/2);
-//    	double finI = pjX + (COLUMNAS_DIBUJADAS/2) > COLUMNAS ? COLUMNAS : comienzoI + COLUMNAS_DIBUJADAS;
-//    	double finJ = pjY + (FILAS_DIBUJADAS/2) > FILAS ? FILAS : comienzoJ + FILAS_DIBUJADAS;
-//    	
-//    	if(finI - comienzoI != COLUMNAS_DIBUJADAS) {
-//    		comienzoI = finI - COLUMNAS_DIBUJADAS;
-//    	}
-//    	
-//    	if(finJ - comienzoJ != FILAS_DIBUJADAS) {
-//    		comienzoJ = finJ - FILAS_DIBUJADAS;
-//    	}
-//    	
-//    	for(double i = comienzoI; i < finI; i++) {
-//    		for(double j = comienzoJ; j < finJ; j++) {
-//    			//8 es el nivel del suelo ahora, deberia ser un constante.
-//    			if(j == 8 && tiendas.getTiendaPos((int) i) != null) {
-//    				context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
-//    			} else {
-//    				context.drawImage(tipoImagen(suelo, imagenes, i, j), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
-//    			}
-//    		}
-//    	}
-//    	
-//    }
-//	
+    //La idea de comienzoI y comienzoJ es no dibujar al jugador antes del 0 o despues del max, probablemente haya maneras mejores
+    //este es copypaste de la de abajo.
+    private static void dibujarJugador(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
+    	double comienzoI = jugador.getX() - (COLUMNAS_DIBUJADAS/2) <= 0 ? 0 : jugador.getX() - (COLUMNAS_DIBUJADAS/2);
+    	double comienzoJ = jugador.getY() - (FILAS_DIBUJADAS/2) <= 0 ? 0 : jugador.getY() - (FILAS_DIBUJADAS/2);
+    	double finI = jugador.getX() + (COLUMNAS_DIBUJADAS/2) > COLUMNAS ? COLUMNAS : comienzoI + COLUMNAS_DIBUJADAS;
+    	
+    	if(finI - comienzoI != COLUMNAS_DIBUJADAS) {
+    		comienzoI = finI - COLUMNAS_DIBUJADAS;
+    	}
+    	
+    	context.drawImage(tipoImagenJugador(jugador, imagenes), ((jugador.getX() - comienzoI) * GRILLA_ANCHO), ((jugador.getY() - comienzoJ) * GRILLA_ALTO) + 24);
+	}
+
+    
+    //La idea principal de esto es hacer el famoso "zoom" al pj en vez de dibujar todo el mapa.
+    //comienzoI, finI, comienzoJ y finJ sirven todas para chequear que no se traten de dibujar cosas que no existen.
+    //Esto se ve cuando te acercas a algun borde con el pj y la camara deja de moverse con el personaje.
+	private static void dibujarTerreno(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
+    	double comienzoI = pjX - (COLUMNAS_DIBUJADAS/2) < 0 ? 0 : pjX - (COLUMNAS_DIBUJADAS/2);
+    	double comienzoJ = pjY - (FILAS_DIBUJADAS/2) < 0 ? 0 : pjY - (FILAS_DIBUJADAS/2);
+    	double finI = pjX + (COLUMNAS_DIBUJADAS/2) > COLUMNAS ? COLUMNAS : comienzoI + COLUMNAS_DIBUJADAS;
+    	double finJ = pjY + (FILAS_DIBUJADAS/2) > FILAS ? FILAS : comienzoJ + FILAS_DIBUJADAS;
+    	
+    	if(finI - comienzoI != COLUMNAS_DIBUJADAS) {
+    		comienzoI = finI - COLUMNAS_DIBUJADAS;
+    	}
+    	
+    	if(finJ - comienzoJ != FILAS_DIBUJADAS) {
+    		comienzoJ = finJ - FILAS_DIBUJADAS;
+    	}
+    	
+    	for(double i = comienzoI; i < finI; i++) {
+    		for(double j = comienzoJ; j < finJ; j++) {
+    			//8 es el nivel del suelo ahora, deberia ser un constante.
+    			if(j == 8 && tiendas.getTiendaPos((int) i) != null) {
+    				context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
+    			} else {
+    				context.drawImage(tipoImagen(suelo, imagenes, i, j), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
+    			}
+    		}
+    	}
+    	
+    }
+	
 	
 	
 }
