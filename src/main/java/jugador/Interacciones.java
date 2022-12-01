@@ -48,6 +48,7 @@ public class Interacciones {
 		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
 			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
 				VistasTiendas.buscarPisada(tiendas.colisionEntidad(pj.getPosicion()));
+				pj.setX(pj.getX() + 1);
 				return true;
 			}
 		}

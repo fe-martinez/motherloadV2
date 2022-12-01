@@ -43,7 +43,7 @@ public class Juego {
 	
 	public Juego(int ancho, int alto) {
 		this.suelo = new Suelo(ancho, alto);
-		this.jugador =new Jugador(5, 3, alto, ancho);
+		this.jugador =new Jugador(63, 3, alto, ancho);
 		this.tiendas = new PisoSuperior(jugador);
 		this.gameSaver = new GuardarPartida(jugador, suelo);
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
@@ -124,9 +124,7 @@ public class Juego {
 	}
 	
 	private void prenderTaladroAbajo() {
-		if(jugador.getEstado() == EstadoJugador.INICIAL) {
-			jugador.setEstado(EstadoJugador.TALADRANDO_ABAJO_FULL);
-		}
+		jugador.setEstado(EstadoJugador.TALADRANDO_ABAJO_FULL);
 		
 		jugador.setX((int)jugador.getX());
 		jugador.setY((int)jugador.getY());

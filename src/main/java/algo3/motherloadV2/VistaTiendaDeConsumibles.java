@@ -130,6 +130,12 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	    teleport.setBackground(this.background.get(4));
 	    teleport.setBorder(Border.stroke(Paint.valueOf("Black")));
 	    teleport.setAlignment(Pos.CENTER);
+	    
+	    close = new Button("X");
+	    close.setPrefSize(SIZE_BOTON, SIZE_BOTON);
+	    close.setBackground(Background.EMPTY);
+	    close.setBorder(Border.stroke(Paint.valueOf("Black")));
+	    close.setAlignment(Pos.CENTER);
 	   
 	    //Les pongo la posición en el gridpane
 	    GridPane.setConstraints(tanqueExtra,0,0);
@@ -137,6 +143,7 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	    GridPane.setConstraints(dinamita,2,0);
 	    GridPane.setConstraints(explosivos,0,1);
 	    GridPane.setConstraints(teleport,1,1);
+	    GridPane.setConstraints(close, 1, 2);
 	}
 	
 	private void inicializarGridPane() {
@@ -151,7 +158,7 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	    gridPane.setPadding(new Insets(100));
 	    this.inicializarBotones();
 	    //Agrego todo al pane
-	    gridPane.getChildren().addAll(tanqueExtra, nanobots, dinamita, explosivos, teleport);
+	    gridPane.getChildren().addAll(tanqueExtra, nanobots, dinamita, explosivos, teleport, close);
 	}
 	
 	private void inicializarAccionesBotones() {
@@ -230,6 +237,11 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	    teleport.setOnAction(e -> {
 	    	tienda.interactuar(jugador,'T');
 	    });
+	    
+	    close.setOnAction(e -> {
+	    	root.getChildren().remove(root.getChildren().size() - 1);
+	    	mostrando = false;
+	    	});
 	      
     }
 	
@@ -240,17 +252,16 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	    sPane.setPrefSize(1024 , 768); // WIDTH Y HEIGHT
 	    this.inicializarAccionesBotones();
 		
-	    close = new Button("X");
-	    close.setFont(new Font(30));
-	    close.setTextFill(Paint.valueOf("White"));
-	    //close.setBackground(Background.EMPTY);
-	    close.setLayoutX(100);
-	    close.setLayoutY(100);
-	    //StackPane.setMargin(close, new Insets(0,650,500,0));
-	    root.getChildren().add(close);
+//	    close = new Button("X");
+//	    close.setFont(new Font(30));
+//	    close.setTextFill(Paint.valueOf("White"));
+//	    //close.setBackground(Background.EMPTY);
+//	    close.setLayoutX(100);
+//	    close.setLayoutY(100);
+//	    //StackPane.setMargin(close, new Insets(0,650,500,0));
+//	    root.getChildren().add(close);
 	    root.getChildren().add(sPane);
 	    this.mostrando = true;   
-	    close.setOnAction(e -> { root.getChildren().remove(root.getChildren().size() - 1); mostrando = false;});
 	}
 	  
 	public void mostrar() {

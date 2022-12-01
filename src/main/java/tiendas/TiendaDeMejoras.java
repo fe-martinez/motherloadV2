@@ -67,9 +67,12 @@ public class TiendaDeMejoras extends Entidad{
 	}
 	
 	//Permite vender la Mejora dada al Jugador dado.
-	public void vender(Jugador jugador, MejoraInstantanea mejora) {
-		mejora.utilizar(jugador);
-		jugador.hacerCompra(mejora.getValor());	
+	public boolean vender(Jugador jugador, MejoraInstantanea mejora) {
+		if(jugador.hacerCompra(mejora.getValor())){
+			mejora.utilizar(jugador);		
+			return true;
+		}
+		return false;
 	}
 
 	//Permite al Jugador dado interactuar con la Tienda actual.
@@ -79,7 +82,8 @@ public class TiendaDeMejoras extends Entidad{
 			System.out.println("No tenemos esa mejora o ya la vendimos :(");
 			return;
 		}
-		vender(jugador, mejora);
-		eliminarMejora(codigo);
+		if(vender(jugador, mejora)) {
+			eliminarMejora(codigo);			
+		}
 	}
 }
