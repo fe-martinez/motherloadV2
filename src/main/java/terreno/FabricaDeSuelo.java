@@ -20,7 +20,8 @@ public class FabricaDeSuelo {
 			return FabricaDeMinerales.crear("Oro");
 		}
 	}
-		
+	
+	
 	public static Bloque[][] crear(int alto, int ancho) {
 		var bloques = new Bloque[alto][ancho];
 		for(int k = 0; k < ancho; k++) {
@@ -41,7 +42,8 @@ public class FabricaDeSuelo {
 		}
 		return bloques;
 	}
-	
+
+
 	private static Bloque convertirChar(char id) {
 		if(id == 'T') {
 			return new Tierra();
@@ -58,11 +60,11 @@ public class FabricaDeSuelo {
 		}
 		return new Tierra();
 	}
-	
-	
+
+
 	public static Bloque[][] crearDesdeChars(int alto, int ancho, char[][] mapa){
 		var bloques = new Bloque[alto][ancho];
-		
+
 		for(int i = 0; i < alto; i++) {
 			for(int j = 0; j < ancho; j++) {
 				bloques[i][j] = convertirChar(mapa[i][j]);
@@ -71,7 +73,4 @@ public class FabricaDeSuelo {
 
 		return bloques;
 	}
-	
-	
-	
 }

@@ -1,12 +1,10 @@
 package algo3.motherloadV2;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
+import java.io.FileNotFoundException;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,20 +15,22 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import jugador.Jugador;
 import tp.GuardarPartida;
 
 public class HUD {
 	private GraphicsContext context;
-	private double screenWidth;
-	private double screenHeight;
+	//Fijate si los vas a usar, sino borralos.
+	//private double screenWidth;
+	//private double screenHeight;
 	private Jugador pj;
 	
-	public HUD(GraphicsContext context, double screenWidth, double screenHeight, Jugador pj) {
+	
+	
+	public HUD(GraphicsContext context, double screenWidth, double screenHeight,Jugador pj) {
 		this.context = context;
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
+		//this.screenWidth = screenWidth;
+		//this.screenHeight = screenHeight;
 		this.pj = pj;
 	}
 	

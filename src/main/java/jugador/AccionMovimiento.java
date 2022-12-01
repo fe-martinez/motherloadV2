@@ -1,10 +1,5 @@
 package jugador;
 
-import terreno.PisoSuperior;
-import terreno.Suelo;
-import terreno.Tierra;
-import terreno.TipoEntidad;
-
 public class AccionMovimiento implements Accion{
 	private static final double GASTO_COMBUSTIBLE_MOVIMIENTO = 0.002;
 	private Jugador pj;

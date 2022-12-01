@@ -5,11 +5,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 
+import algo3.motherloadV2.VistasTiendas;
 import javafx.scene.input.KeyCode;
 import jugador.Accion;
 import jugador.AccionItem;
 import jugador.AccionMovimiento;
-import jugador.EnumEstadoJugador;
+import jugador.EstadoJugador;
 import jugador.Interacciones;
 import jugador.Jugador;
 import jugador.Posicion;
@@ -19,7 +20,7 @@ import terreno.Suelo;
 import terreno.Vista;
 
 public class Juego {	
-	public static final int FPS = 90;
+	public static final int FPS = 60;
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
 	private static final double COEF_REDUCCION_X = 0.005;
@@ -31,6 +32,7 @@ public class Juego {
 	private PisoSuperior tiendas;
 	private Jugador jugador;
 	private Interacciones interacciones;
+	private GuardarPartida gameSaver;
 	private Map<KeyCode, Accion> controles;
 	private double direccionVertical;
 	private double direccionHorizontal;
@@ -39,10 +41,11 @@ public class Juego {
 	
 	private long msSinceLastFrame = 0;
 	
-	public Juego(Suelo suelo, PisoSuperior tiendas, Jugador jugador) {
-		this.suelo = suelo;
-		this.jugador = jugador;
-		this.tiendas = tiendas;
+	public Juego(int ancho, int alto) {
+		this.suelo = new Suelo(ancho, alto);
+		this.jugador =new Jugador(5, 3, alto, ancho);
+		this.tiendas = new PisoSuperior(jugador);
+		this.gameSaver = new GuardarPartida(jugador, suelo);
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
 		this.direccionVertical = 0;
 		this.direccionHorizontal = 0;
@@ -101,11 +104,11 @@ public class Juego {
 	
 	//Si no esta taladrando, pasa a taladrar.
 	private void prenderTaladroCostado(double direccionHorizontal) {
-		if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+		if(jugador.getEstado() == EstadoJugador.INICIAL) {
 			if(direccionHorizontal > 0) {
-				jugador.setEstado(EnumEstadoJugador.TALADRANDO_DERECHA_FULL);
+				jugador.setEstado(EstadoJugador.TALADRANDO_DERECHA_FULL);
 			} else if(direccionHorizontal< 0) {
-				jugador.setEstado(EnumEstadoJugador.TALADRANDO_IZQUIERDA_FULL);
+				jugador.setEstado(EstadoJugador.TALADRANDO_IZQUIERDA_FULL);
 			}
 			
 			//Se ponia rara la protoanimacion :p
@@ -121,8 +124,8 @@ public class Juego {
 	}
 	
 	private void prenderTaladroAbajo() {
-		if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
-			jugador.setEstado(EnumEstadoJugador.TALADRANDO_ABAJO_FULL);
+		if(jugador.getEstado() == EstadoJugador.INICIAL) {
+			jugador.setEstado(EstadoJugador.TALADRANDO_ABAJO_FULL);
 		}
 		
 		jugador.setX((int)jugador.getX());
@@ -138,23 +141,23 @@ public class Juego {
 	
 	private void volar() {
 		if(jugador.getVelY() < 0) {
-			if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
-				jugador.setEstado(EnumEstadoJugador.VOLANDO1);
+			if(jugador.getEstado() == EstadoJugador.INICIAL) {
+				jugador.setEstado(EstadoJugador.VOLANDO1);
 			}
 			
-			if(jugador.getEstado() == EnumEstadoJugador.VOLANDO1 && ticksVuelo > FPS) {
-				jugador.setEstado(EnumEstadoJugador.VOLANDO2);
+			if(jugador.getEstado() == EstadoJugador.VOLANDO1 && ticksVuelo > FPS) {
+				jugador.setEstado(EstadoJugador.VOLANDO2);
 				ticksVuelo = 0;
 			}
 			
-			if(jugador.getEstado() == EnumEstadoJugador.VOLANDO2 && ticksVuelo > FPS) {
-				jugador.setEstado(EnumEstadoJugador.VOLANDO1);
+			if(jugador.getEstado() == EstadoJugador.VOLANDO2 && ticksVuelo > FPS) {
+				jugador.setEstado(EstadoJugador.VOLANDO1);
 				ticksVuelo = 0;
 			}
 		}
 		
 		if(jugador.getVelY() >= 0) {
-			jugador.setEstado(EnumEstadoJugador.INICIAL);
+			jugador.setEstado(EstadoJugador.INICIAL);
 		}
 	}
 	
@@ -166,7 +169,7 @@ public class Juego {
 		
 		if(ticks > MAX_TICKS) {
 				if(interacciones.chequearBloques()) {
-					jugador.setEstado(EnumEstadoJugador.INICIAL);
+					jugador.setEstado(EstadoJugador.INICIAL);
 					jugador.setVelX(0);
 					jugador.setVelY(0);					
 				}
@@ -221,7 +224,7 @@ public class Juego {
 		while (msSinceLastFrame >= MS_PER_FRAME) {
 			msSinceLastFrame -= MS_PER_FRAME;
 			
-			if(jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+			if(jugador.getEstado() == EstadoJugador.INICIAL) {
 				direccionVertical = jugador.getVelY();
 				direccionHorizontal = jugador.getVelX();
 				
@@ -251,7 +254,7 @@ public class Juego {
 			}
 			
 			interacciones.chequearTienda();
-			if(!keysPressed.contains(KeyCode.UP) && jugador.getEstado() == EnumEstadoJugador.INICIAL) {
+			if(!keysPressed.contains(KeyCode.UP) && jugador.getEstado() == EstadoJugador.INICIAL) {
 				caer();
 			}
 		}
@@ -267,6 +270,18 @@ public class Juego {
 	
 	public PisoSuperior getPisoSuperior() {
 		return tiendas;
+	}
+
+	public void cargarPartida() {
+		gameSaver.cargarPartida(this.jugador, this.suelo);
+	}
+
+	public void guardarJuego() {
+		gameSaver.guardarPartida();
+	}
+	
+	public GuardarPartida getGuardarPartida() {
+		return this.gameSaver;
 	}
 		
 }

@@ -15,7 +15,7 @@ public class Jugador implements Bloque {
 	private int anchoTerreno;
 	private double velY;
 	private double velX;
-	EnumEstadoJugador estado;
+	EstadoJugador estado;
 	
 	//Cuidado con los limites a las pos, las pruebas usan y != 0
 	//Entonces cambiá las pruebas xD
@@ -36,7 +36,7 @@ public class Jugador implements Bloque {
 		this.anchoTerreno = anchoTerreno;
 		this.velY = 0;
 		this.velX = 0;
-		this.estado = EnumEstadoJugador.INICIAL;
+		this.estado = EstadoJugador.INICIAL;
 	}	
 
 	//------------------------------------------------
@@ -176,12 +176,16 @@ public class Jugador implements Bloque {
 	}
 	
 	
-	public EnumEstadoJugador getEstado() {
+	public EstadoJugador getEstado() {
 		return estado;
 	}
 
-	public void setEstado(EnumEstadoJugador estado) {
+	public void setEstado(EstadoJugador estado) {
 		this.estado = estado;
+	}
+	
+	public boolean inventarioVacio() {
+		return this.inventario.inventarioVacio();
 	}
 
 }

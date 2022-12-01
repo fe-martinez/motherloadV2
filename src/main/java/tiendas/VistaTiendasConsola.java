@@ -13,6 +13,7 @@ public class VistaTiendasConsola {
 		
 		Scanner scanner = new Scanner(System.in);
 		int cantidad = scanner.nextInt();
+		scanner.close();
 		return cantidad;
 	}
 	
@@ -25,6 +26,7 @@ public class VistaTiendasConsola {
 		
 		Scanner scanner = new Scanner(System.in);
 		int cantidadPlata = scanner.nextInt();
+		scanner.close();
 		
 		return cantidadPlata;
 	}
@@ -34,6 +36,7 @@ public class VistaTiendasConsola {
 		System.out.println("Desea vender?");
 		Scanner scanner = new Scanner(System.in);
 		char respuesta = scanner.next().charAt(0);
+		scanner.close();
 		if(respuesta == RESPUESTA_AFIRMATIVA) return true;
 		
 		return false;
@@ -47,6 +50,7 @@ public class VistaTiendasConsola {
 		
 		Scanner sc = new Scanner(System.in);
 		char opcion = sc.next().charAt(0);
+		sc.close();
 		return opcion;
 	}
 	
@@ -65,6 +69,7 @@ public class VistaTiendasConsola {
 		
 		Scanner scanner = new Scanner(System.in);
 		char opcion = scanner.next().charAt(0);
+		scanner.close();
 		
 		if(opcion == 'I') {
 			System.out.println("Seleccione el tier de mejora: ");

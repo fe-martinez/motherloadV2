@@ -27,14 +27,12 @@ public class TiendaDeMejoras extends Entidad{
 	Posicion posicion;
 	Map<String, MejoraInstantanea> mejoras;
 	Map<String, Usable> usables;
-	private VistaTiendaDeMejoras vista;
 	
-	public TiendaDeMejoras(Posicion posicion, VistaTiendaDeMejoras vista) {
+	public TiendaDeMejoras(Posicion posicion) {
 		super(posicion, TIPO, LETRA);
 		this.posicion = posicion;
 		this.mejoras = new HashMap<>();
 		this.inicializarMejoras();
-		this.vista = vista;
 	}
 
 	//Inicializa las mejoras que se pueden comprar junto con sus precios.
@@ -63,6 +61,7 @@ public class TiendaDeMejoras extends Entidad{
 	}
 	
 	//Elimina la mejora según el código especificado.
+	//Si no se usa borra este método xfi :P
 	private void eliminarMejora(String codigo) {
 		this.mejoras.remove(codigo);
 	}
@@ -74,17 +73,13 @@ public class TiendaDeMejoras extends Entidad{
 	}
 
 	//Permite al Jugador dado interactuar con la Tienda actual.
-	@Override
-	public void interactuar(Jugador jugador) {
-		vista.mostrar();
-		
-//		String codigo = VistaTiendasConsola.mejoras();
-//		MejoraInstantanea mejora = this.mejoras.get(codigo);
-//		if(mejora == null) {
-//			System.out.println("No tenemos esa mejora o ya la vendimos :(");
-//			return;
-//		}
-//		vender(jugador, mejora);
-//		eliminarMejora(codigo);
+	public void interactuar(Jugador jugador, String codigo) {
+		MejoraInstantanea mejora = this.mejoras.get(codigo);
+		if(mejora == null) {
+			System.out.println("No tenemos esa mejora o ya la vendimos :(");
+			return;
+		}
+		vender(jugador, mejora);
+		eliminarMejora(codigo);
 	}
 }

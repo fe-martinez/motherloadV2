@@ -11,13 +11,9 @@ public class EstacionDeReparacion extends Entidad implements EstacionDeMantenimi
 	private static final int PRECIO_REPARACION = 10;
 	private static final char LETRA = '!';
 	private static final TipoEntidad TIPO = TipoEntidad.TIENDA;
-	private VistaEstacionDeReparacion vista;
 
-	
-	
-	public EstacionDeReparacion(Posicion posicion, VistaEstacionDeReparacion vistaMecanico) {
+	public EstacionDeReparacion(Posicion posicion) {
 		super(posicion, TIPO, LETRA);
-		this.vista = vistaMecanico;
 	}
 
 	//Repara la nave del Jugador elegido según la opción de gasto elegido.
@@ -32,12 +28,8 @@ public class EstacionDeReparacion extends Entidad implements EstacionDeMantenimi
 		}
 	}
 
-	@Override
 	//Realiza la interacción entre el Jugador y la Tienda.
-	public void interactuar(Jugador jugador) {
-		vista.mostrar();
-		
-		//int cantidad = VistaTiendasConsola.repair(jugador.getNave().getHP());
-		//vender(jugador, cantidad);
+	public void interactuar(Jugador jugador, int cantidad) {
+		vender(jugador, cantidad);
 	}
 }

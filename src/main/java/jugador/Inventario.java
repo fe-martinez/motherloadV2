@@ -2,9 +2,10 @@ package jugador;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import mejoras.Usable;
 import minerales.Mineral;
+import minerales.TipoDeBloque;
 
 public class Inventario{
 	private static final int MAX_INVENTARIO_INICIAL = 7;
@@ -32,11 +33,16 @@ public class Inventario{
 		return total;
 	}
 	
+	private void ordenarMinerales() {
+		mineralesRecolectados = mineralesRecolectados.stream().sorted((x,y) -> x.getPrecio()-y.getPrecio()).collect(Collectors.toList());
+	}
+	
 	//Permite agregar un Mineral dado al Inventario.
 	public void agregarInventario(Mineral mineral) {
 		if(mineralesRecolectados.size() < this.maxInventario) {
 			mineralesRecolectados.add(mineral);
 		}
+		this.ordenarMinerales();
 	}
 	
 	//Devuelve la lista de minerales recolectados.
@@ -97,6 +103,14 @@ public class Inventario{
 				return;
 			}
 		}
+	}
+	
+	public TipoDeBloque getTipoDeMineral(int posicion) {
+		return this.mineralesRecolectados.get(posicion).getTipoDeBloque();
+	}
+	
+	public boolean inventarioVacio() {
+		return this.mineralesRecolectados.size() == 0;
 	}
 
 }

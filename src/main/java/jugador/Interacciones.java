@@ -1,12 +1,12 @@
 package jugador;
 
 import algo3.motherloadV2.VistaJuego;
+import algo3.motherloadV2.VistasTiendas;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.TipoEntidad;
 
 public class Interacciones {
-	
 	private Jugador pj;
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -18,6 +18,7 @@ public class Interacciones {
 	}
 	
 	//Calcula el daño según la altura desde la que cae.
+	//Si no se usa borrala :P
 	private int calcularDanio(int altura) {
 		return (int)(altura * 0.2);
 	}
@@ -46,7 +47,7 @@ public class Interacciones {
 	public boolean chequearTienda() {
 		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
 			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
-				tiendas.colisionEntidad(pj.getPosicion()).interactuar(pj);
+				VistasTiendas.buscarPisada(tiendas.colisionEntidad(pj.getPosicion()));
 				return true;
 			}
 		}

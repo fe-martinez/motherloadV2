@@ -1,34 +1,25 @@
 package algo3.motherloadV2;
 
 import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-
-import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import jugador.Jugador;
+import tiendas.EstacionDeServicio;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.stage.Popup;
-import javafx.event.*;
 import javafx.geometry.*;
 
-public class VistaEstacionDeServicio  {
+public class VistaEstacionDeServicio implements VistaEntidad {
 	final static String PATH_FONDO = "../motherloadV2/src/rsc/Fuel-512.png";
 	Group root;
 	Stage myStage;
@@ -44,6 +35,8 @@ public class VistaEstacionDeServicio  {
 	HashMap<String,BackgroundImage> buttonBackgroundImage;
 	HashMap<String,Background> buttonBackground;
 	List<String> keys = List.of("5","10","25","50","Fill","Close");
+	EstacionDeServicio tienda;
+	Jugador pj;
 	
 	//Esta lista es la que va
 	List<String> imagePath = List.of("../motherloadV2/src/rsc/Tiendas/Botones/button5.png",
@@ -53,10 +46,12 @@ public class VistaEstacionDeServicio  {
 			"../motherloadV2/src/rsc/Tiendas/Botones/fill.png",
 			"../motherloadV2/src/rsc/Tiendas/Botones/close.png");
 	
-	public VistaEstacionDeServicio(Stage stage, Group root) {
+	public VistaEstacionDeServicio(Stage stage, Group root, EstacionDeServicio tienda, Jugador pj) {
 		this.myStage = stage;
 		this.root = root;
 		this.mostrando = false;
+		this.tienda = tienda;
+		this.pj = pj;
 	}
 	
 	private void inicializarImagenesBotones() {
@@ -164,7 +159,6 @@ public class VistaEstacionDeServicio  {
 		background = new Background(backgroundImg);
 		
 		layout.setAlignment(Pos.CENTER);
-		layout.setSpacing(0);
 		
 		this.inicializarLabels();
 		this.inicializarGridPane();
@@ -184,6 +178,7 @@ public class VistaEstacionDeServicio  {
 		botones.get("Close").setOnAction(e -> { root.getChildren().remove(root.getChildren().size() - 1); mostrando = false;});
 	    root.getChildren().add(layout);
 	    this.mostrando = true;
+
 	 }
 	
 	 public void mostrar() {
@@ -192,6 +187,7 @@ public class VistaEstacionDeServicio  {
 	    if(!this.mostrando) {
 		    try {
 		    	this.inicializar();
+			    botones.get("5").setOnAction(e -> this.tienda.interactuar(pj, 5));
 		    } catch (FileNotFoundException e) {
 		    	e.printStackTrace();
 		    }

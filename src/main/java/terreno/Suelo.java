@@ -4,6 +4,7 @@ import jugador.Posicion;
 public class Suelo {
 	private Bloque[][] bloques;
 	private int alto;
+	//Si no se usa hay que borrarlo
 	private int ancho;
 
 	public Suelo(int ancho, int alto) {
@@ -46,7 +47,7 @@ public class Suelo {
 	public int getAncho() {
 		return this.ancho;
 	}
-	
+
 	public void cargarCharMap(int alto, int ancho, char[][] mapa) {
 		this.alto = alto;
 		this.ancho = ancho;
