@@ -12,9 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -76,7 +73,8 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	//VBox
 	VBox vbox = new VBox();
 	
-	VBox pantalla;
+	VBox vboxTanque;
+	HBox hboxActual;
 	
 	//Popup
 
@@ -246,12 +244,12 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 
 	private void inicializarAccionesBotonesTanque() {
 		this.inicializarLabelsTanque();
-		this.botonesTanque.get(0).setOnAction(e -> {pantalla.getChildren().set(0, labelsTanque.get(0)); mejoraSeleccionada = "T1";});
-		this.botonesTanque.get(1).setOnAction(e -> {pantalla.getChildren().set(0, labelsTanque.get(1)); mejoraSeleccionada = "T2";});
-		this.botonesTanque.get(2).setOnAction(e -> {pantalla.getChildren().set(0, labelsTanque.get(2)); mejoraSeleccionada = "T3";});
-		this.botonesTanque.get(3).setOnAction(e -> {pantalla.getChildren().set(0, labelsTanque.get(3)); mejoraSeleccionada = "T4";});
-		this.botonesTanque.get(4).setOnAction(e -> {pantalla.getChildren().set(0, labelsTanque.get(4)); mejoraSeleccionada = "T5";});
-		this.botonesTanque.get(5).setOnAction(e -> {pantalla.getChildren().set(0, labelsTanque.get(5)); mejoraSeleccionada = "T6";});
+		this.botonesTanque.get(0).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(0)); mejoraSeleccionada = "T1";});
+		this.botonesTanque.get(1).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(1)); mejoraSeleccionada = "T2";});
+		this.botonesTanque.get(2).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(2)); mejoraSeleccionada = "T3";});
+		this.botonesTanque.get(3).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(3)); mejoraSeleccionada = "T4";});
+		this.botonesTanque.get(4).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(4)); mejoraSeleccionada = "T5";});
+		this.botonesTanque.get(5).setOnAction(e -> {vboxTanque.getChildren().set(0, labelsTanque.get(5)); mejoraSeleccionada = "T6";});
 	}
 	
 	private void configGridPane(GridPane gridPane) {
@@ -262,25 +260,27 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		gridPane.setBackground(Background.fill(verdeMasOscuro));
 	}
 	
+	//LO DE VBOXTANQUE no se si es estrictamente necesario pasa que para poner los labels necesitaba la referencia.
+	//Pero creo que se puede utilizar un unico vbox para los 3.
 	private void inicializarTabTanque() {
 		this.inicializarBotonesTanque();
 		configGridPane(gridPaneTanque);
 		gridPaneTanque.getChildren().addAll(botonesTanque);
-		tanque.setContent(inicializarVistaCompra(gridPaneTanque));
+		HBox hbox = new HBox();
+		vboxTanque = new VBox();
+		tanque.setContent(inicializarVistaCompra(gridPaneTanque, hbox, vboxTanque));
 		tanque.setClosable(false);
 	 }
 	
 	
-	private HBox inicializarVistaCompra(GridPane opciones) {
-		HBox hbox = new HBox();
+	private HBox inicializarVistaCompra(GridPane opciones, HBox hbox, VBox vbox) {
 		hbox.setPrefSize(1000, 600);
 		hbox.getChildren().add(opciones);
 		hbox.setSpacing(20);
 		hbox.setBackground(Background.fill(verdeMasOscuro));
-		pantalla = new VBox();
-		pantalla.setBackground(Background.fill(verdeTransparente));
+		vbox.setBackground(Background.fill(verdeTransparente));
 
-		pantalla.setPrefSize(400, 600);
+		vbox.setPrefSize(400, 600);
 		Label esperando = new Label("ELIJA SU OPCION");
 		esperando.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 30));
 		
@@ -292,11 +292,11 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		boton.setBackground(botonBG);
 		boton.setLayoutY(500);
 		
-		pantalla.setAlignment(Pos.BOTTOM_CENTER);
+		vbox.setAlignment(Pos.BOTTOM_CENTER);
 		
-		pantalla.getChildren().add(esperando);
-		pantalla.getChildren().add(boton);
-		hbox.getChildren().add(pantalla);
+		vbox.getChildren().add(esperando);
+		vbox.getChildren().add(boton);
+		hbox.getChildren().add(vbox);
 		
 		boton.setOnAction(e-> {if (mejoraSeleccionada == null) {
 									Alert a = new Alert(AlertType.ERROR);
@@ -315,7 +315,9 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.inicializarBotonesMaxHealth();
 		configGridPane(gridPaneMaxHealth);
 		gridPaneMaxHealth.getChildren().addAll(botonesMaxHealth);
-		maxHealth.setContent(inicializarVistaCompra(gridPaneMaxHealth));
+		HBox hbox = new HBox();
+		VBox vbox = new VBox();
+		maxHealth.setContent(inicializarVistaCompra(gridPaneMaxHealth, hbox, vbox));
 		maxHealth.setClosable(false);
 	}
 	
@@ -323,7 +325,9 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.inicializarBotonesInventario();
 		configGridPane(gridPaneInventario);
 		gridPaneInventario.getChildren().addAll(botonesInventario);
-		inventario.setContent(inicializarVistaCompra(gridPaneInventario));
+		HBox hbox = new HBox();
+		VBox vbox = new VBox();
+		inventario.setContent(inicializarVistaCompra(gridPaneInventario, hbox, vbox));
 		inventario.setClosable(false);
 	}
 	
@@ -373,7 +377,6 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	    stackPane = new StackPane();
  	    stackPane.getChildren().add(button);
  	    button.setOnAction(e -> {popup.show(myStage);});
- 	    
 	    myScene = new Scene(stackPane);
 	    myStage.setScene(myScene);
 	}
