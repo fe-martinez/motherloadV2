@@ -1,12 +1,12 @@
 package jugador;
 
 import algo3.motherloadV2.VistaJuego;
+import algo3.motherloadV2.VistasTiendas;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.TipoEntidad;
 
 public class Interacciones {
-	
 	private Jugador pj;
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -18,33 +18,36 @@ public class Interacciones {
 	}
 	
 	//Calcula el daño según la altura desde la que cae.
+	//Si no se usa borrala :P
 	private int calcularDanio(int altura) {
 		return (int)(altura * 0.2);
 	}
 	
 	//Permite al Jugador taladrar y ver si debe recolectar un Mineral o no.
-	private void taladrar(Posicion pos) {
+	private boolean taladrar(Posicion pos) {
+		boolean destruido = false;
 		var buscada = Posicion.redondear(new Posicion(pj.getX(), pj.getY()));
 		
 		if(suelo.casilleroVacio(buscada) || suelo.getBloque(buscada).getBloqueID() == 'T') {
-			suelo.destruirBloque(buscada);
-			return;
+			destruido = suelo.destruirBloque(buscada);
+			return destruido;
 		}
 		
 		if(this.tiendas != null) {
 			if(pj.getY() == 0 && tiendas.colisionEntidad(buscada).getTipoEntidad() == TipoEntidad.TIENDA) {
-				return;
+				return false;
 			}
 		}
 		
 		pj.observarBloque(suelo.getBloque(buscada));
-		suelo.destruirBloque(buscada);
+		destruido = suelo.destruirBloque(buscada);
+		return destruido;
 	}
 	
 	public boolean chequearTienda() {
 		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
 			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
-				tiendas.colisionEntidad(pj.getPosicion()).interactuar(pj);
+				VistasTiendas.buscarPisada(tiendas.colisionEntidad(pj.getPosicion()));
 				return true;
 			}
 		}
@@ -52,7 +55,7 @@ public class Interacciones {
 	}
 	
 	public boolean chequearBloques() {
-		taladrar(pj.getPosicion());
+		boolean destruido = taladrar(pj.getPosicion());
 		
 		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
 			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
@@ -60,7 +63,7 @@ public class Interacciones {
 			}
 		}
 		
-		return false;
+		return destruido;
 	}
 	
 	//Devuelve true si choca con algo arriba o false si no se choca con nada.
@@ -124,6 +127,30 @@ public class Interacciones {
 				return true;
 			} else if(pj.getVelY() < 0 && chocaDireccionVertical(-1)) {
 				System.out.println("CHOCA ARRIBA");
+				return true;
+			}
+			
+			return false;
+		}
+
+		public boolean chequearColisionVertical() {
+			if(pj.getVelY() > 0 && chocaDireccionVertical(1)) {
+				System.out.println("CHOCA ABAJO");
+				return true;
+			} else if(pj.getVelY() < 0 && chocaDireccionVertical(-1)) {
+				System.out.println("CHOCA ARRIBA");
+				return true;
+			}
+			
+			return false;
+		}
+
+		public boolean chequearColisionHorizontal() {
+			if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
+				System.out.println("CHOCA DERECHA");
+				return true;
+			} else if(pj.getVelX() < 0 && chocaDireccionHorizontal(-1)) {
+				System.out.println("CHOCA IZQUIERDA");
 				return true;
 			}
 			

@@ -4,6 +4,7 @@ import jugador.Posicion;
 public class Suelo {
 	private Bloque[][] bloques;
 	private int alto;
+	//Si no se usa hay que borrarlo
 	private int ancho;
 
 	public Suelo(int ancho, int alto) {
@@ -22,11 +23,12 @@ public class Suelo {
 	
 	
 	//Destruye el bloque de la posicion dada
-	public void destruirBloque(Posicion pos) {
+	public boolean destruirBloque(Posicion pos) {
 		if(bloques[(int)pos.getY()][(int)pos.getX()].getBloqueID() != ' ') {
 			bloques[(int)pos.getY()][(int)pos.getX()] = new Aire();
-			System.out.println("Se destruye el bloque de " + pos.getX() + "; " + pos.getY());
+			return true;
 		}
+		return false;
 	}
 	
 	//Devuelve true si el casillero de la posicion dada está vacío y false en caso contrario.
@@ -40,5 +42,15 @@ public class Suelo {
 
 	public int getAlto() {
 		return this.alto;
+	}
+
+	public int getAncho() {
+		return this.ancho;
+	}
+
+	public void cargarCharMap(int alto, int ancho, char[][] mapa) {
+		this.alto = alto;
+		this.ancho = ancho;
+		this.bloques = FabricaDeSuelo.crearDesdeChars(alto, ancho, mapa);
 	}
 }

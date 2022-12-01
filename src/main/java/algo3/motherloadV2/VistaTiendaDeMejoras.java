@@ -1,12 +1,7 @@
 package algo3.motherloadV2;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,18 +9,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.Popup;
-import javafx.event.*;
-import javafx.geometry.*;
 
-public class VistaTiendaDeMejoras {
+public class VistaTiendaDeMejoras implements VistaEntidad{
 	//Tanque
 	List<Label> labelsTanque = new ArrayList<>();
 	List<Button> botonesTanque = new ArrayList<>();
@@ -59,7 +51,7 @@ public class VistaTiendaDeMejoras {
 	Tab inicio = new Tab("Inicio");
 	
 	//Fondo Blanco
-	Image fondoBlanco = new Image("https://fondosmil.com/fondo/17538.jpg",1000,600,true,true);
+	//Image fondoBlanco = new Image("C:\\Users\\Clari\\Documents\\MotherloadV2\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeMejoras\\arena.jpg",1000,600,true,true);
 
 	//Tabpane
 	TabPane tabPane = new TabPane();
@@ -111,42 +103,31 @@ public class VistaTiendaDeMejoras {
 	}
 		
 	private void inicializarImagenesTanque() {
-		this.imgsTanque.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsTanque.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque2.png",150));
-		this.imgsTanque.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque3.png",150));
-		this.imgsTanque.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque4.png",150));
-		this.imgsTanque.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque5.png",150));
-		this.imgsTanque.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque6.png",150));
+		this.imgsTanque.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsTanque.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque2.png",150, 150));
+		this.imgsTanque.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque3.png",150, 150));
+		this.imgsTanque.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque4.png",150, 150));
+		this.imgsTanque.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque5.png",150, 150));
+		this.imgsTanque.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque6.png",150, 150));
 	}
 	
 	private void inicializarImagenesInventario() {
-		this.imgsInventario.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsInventario.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsInventario.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsInventario.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsInventario.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
 		
 	}
 	
 	private void inicializarImagenesMaxHealth() {
-		this.imgsMaxHealth.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsMaxHealth.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsMaxHealth.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsMaxHealth.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsMaxHealth.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
-		this.imgsMaxHealth.add(obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tanques/tanque.png", 150, 150));
 		
-	}
-	
-	private static Image obtenerImagen(String nombre, double size) {
-		Image image1 = null;
-		try {
-			image1 = new Image(new FileInputStream(nombre), size, size, true, false);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return image1;
 	}
 	
 	private void inicializarBackgroundTanque() {
@@ -310,6 +291,7 @@ public class VistaTiendaDeMejoras {
 		this.labelInicio = new Label("¡Bienvenido a la tienda de actualizaciones!\r\n"
 				+ "Si estás buscando mejorar tu máquina excavadora, ¡has venido al lugar correcto!\r\n"
 				+ "Podés navegar por las diferentes categorías de actualización usando los botones de arriba.");
+		labelInicio.setFont(new Font(20));
 		gridPaneInicio.setPrefSize(1000,600);
 		gridPaneInicio.setBackground(Background.fill(Paint.valueOf("White")));
 		gridPaneInicio.getChildren().add(labelInicio);
@@ -345,8 +327,9 @@ public class VistaTiendaDeMejoras {
 		this.inicializarTabPane();
     	this.inicializarPopup();
     	this.interaccionesTabs();
-    	
- 	      
+    	//No me lo carga, ni idea :P
+    	//this.tabPane.setBackground(new Background(new BackgroundImage(fondoBlanco,BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT, null, null)));
+ 	     	    
 	    button = new Button("Holi");
 	    stackPane = new StackPane();
  	    stackPane.getChildren().add(button);

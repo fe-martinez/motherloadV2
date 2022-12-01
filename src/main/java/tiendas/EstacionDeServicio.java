@@ -15,11 +15,9 @@ public class EstacionDeServicio extends Entidad implements EstacionDeMantenimien
 	private static final List<Integer> LITROS_DISPONIBLES = Arrays.asList(5, 10, 25, 50, 100);
 	private static final int PRECIO_COMBUSTIBLE = 1;
 	private int cantidad;
-	private VistaEstacionDeServicio vista;
-	
-	public EstacionDeServicio(Posicion posicion, VistaEstacionDeServicio vista) {
+
+	public EstacionDeServicio(Posicion posicion) {
 		super(posicion, TIPO, LETRA);
-		this.vista = vista;
 	}
 	
 	//Calcula la cantidad de combustible que se cargará efectivamente en base a
@@ -56,11 +54,8 @@ public class EstacionDeServicio extends Entidad implements EstacionDeMantenimien
 		}
 	}
 
-	@Override
 	//Realiza la interacción del Jugador dado con la Tienda actual.
-	public void interactuar(Jugador jugador) {
-		vista.mostrar();
-		
+	public void interactuar(Jugador jugador, int cantidad) {
 		if(EstacionDeServicio.LITROS_DISPONIBLES.contains(this.cantidad)){
 			vender(jugador,this.cantidad);
 		}

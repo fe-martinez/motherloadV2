@@ -12,15 +12,13 @@ public class EstacionDeVenta extends Entidad {
 	private static final TipoEntidad TIPO = TipoEntidad.TIENDA;
 	private VistaEstacionDeVenta vista;
 
-	public EstacionDeVenta(Posicion pos, VistaEstacionDeVenta vista) {
+	public EstacionDeVenta(Posicion pos) {
 		super(pos, TIPO, LETRA);
 		this.posicion = pos;
-		this.vista = vista;
 	}
 	
 	//Permite que la Tienda interactúe con el Jugador dado.
 	public void interactuar(Jugador jugador) {
-		vista.mostrar();
 	}
 	
 	//Devuelve la letra de la Tienda actual.
