@@ -1,16 +1,22 @@
+# Que cosas importantes faltan implementar! (Viernes 2/12)
+
+* Probar que la nueva implementacion de movimiento con los estados funcione correctamente.
+* Que estacion de venta funcione bien. Ahora lo hace pero tiene errores cuando entras y salis. El problema es la funcion que cuenta.
+* Que la estacion de reparacion funcione.
+* Hacer algo con los bordes del mapa. Poner otra imagen o no se.
+* Musica, sonidos. Para los sonidos, crear una nueva varia
+* Config file.
+* Afinar animaciones de pj.
+* Slots de guardados.
+* Dar una historia
+* Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos.
+
 # URGENTE
 
-* LAS TIENDAS TIENEN QUE MOSTRARSE EN OTRO LADO, LAS TIENDAS NO PUEDEN NI DEBEN TENER LAS VISTAS NI MOSTRAR LAS VISTAS.
-LAS TIENDAS SOLO LLAMAN AL MÉTODO INTERACTUAR, DONDE DESCUENTAN LA PLATA O VENDEN LOS MINERALES O LE SUMAN EL COMBUSTIBLE O LO QUE PINGO SEA.
-RECORDÁ QUE LA VISTA TIENE QUE SER INDEPENDIENTE DE SUS DATOS PARA PODER CAMBIAR LA VISTA CUANDO ASÍ SE REQUIERA.
-Hay que buscar en el movimiento del personaje de ubicar un
-if(posicionJugador.posicionesIguales(posicionTienda)){
-        //mostrar;;
-}
 * Pasar todas las tiendas a root en vez de popup (algunas ya están)
 * Leer todo el código, hay muchos cambios por todos lados y anotaciones.
 * Agregar la opción de Explosivos, existe la clase pero no está en el HashMap de la TiendaDeConsumibles y nos puede generar problemas!!
-* Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P
+* Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P.
 * Tiendas:
 - Estación de Venta: ya casi está, no más que no llama a interactuar JAJAJAJAJAJA está vendiendo ahí de una. Creo que está mal eso también, tendría que llamar a interactuar de su correspondiente tienda. Pero es eso no más :P
 - Estación de Consumibles: tiene seteados los botones para vender pero no se muestra (por el problema de que todavía no sabemos dónde mostrarla). Tiene el fondo, tiene la X para cerrar, pero le falta acomodar los botones y los label en la pantalla porque se corta la imagen del fondo cuando movés algo. 
@@ -35,3 +41,4 @@ if(posicionJugador.posicionesIguales(posicionTienda)){
     - Volumen de la musica y sonidos.
     - Dificultad (yo pensaba en que la dificultad sea el tamaño del mapa, maybe cantidad de minerales).
 - Save y Load.
+- Zoom in y Zoom out + Resize de la ventana
