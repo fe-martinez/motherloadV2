@@ -46,6 +46,7 @@ public class Inicial implements Estado{
 		if(Math.abs(pj.getVelY()) <= COEF_REDUCCION_Y) {
 			pj.setVelY(0);
 		}
+		
 		pj.setY(pj.getY() + pj.getVelY());
 	}
 	
@@ -65,7 +66,9 @@ public class Inicial implements Estado{
 		for(Accion actual: acciones) {
 			if(actual instanceof AccionMovimiento) {
 				if(((AccionMovimiento) actual).tipoMovimiento() == TipoMovimiento.ARRIBA) {
-					return new Volando();
+					if(!interacciones.chocaDireccionVertical(-1)) {
+						return new Volando();
+					}
 				}
 			}
 		}

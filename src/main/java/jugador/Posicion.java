@@ -69,9 +69,9 @@ public class Posicion {
 	//round lo lleva al entero mas cercano. Math.round(3.666) --> 4.0.
 	public static Posicion redondear(Posicion pos) {
 		//var decimalX = Math.abs(pos.getX() - ((int)pos.getX()));
-		var nuevaX = (int)pos.getX();
+		var nuevaX = pos.getX();
 		//var decimalY = Math.abs(pos.getY() - ((int)pos.getY()));
-		var nuevaY = (int)pos.getY();
+		var nuevaY = pos.getY();
 
 		Posicion nueva = new Posicion(nuevaX, nuevaY);
 		return nueva;

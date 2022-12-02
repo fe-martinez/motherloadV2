@@ -1,7 +1,5 @@
 package algo3.motherloadV2;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javafx.animation.AnimationTimer;
@@ -22,21 +20,23 @@ import terreno.Tierra;
 import tp.Juego;
 
 public class VistaJuego {
-	public static final double WIDTH = 1024;
-	public static final double HEIGHT = 768;
+	public static double WIDTH = 1024;
+	public static double HEIGHT = 768;
 
-	public static final double GRILLA_ANCHO = 64;
-	public static final double GRILLA_ALTO = 64;
+	public static final double GRILLA_ANCHO = 80;
+	public static final double GRILLA_ALTO = 80;
 	
-	public static final double GRILLA_PJ_ANCHO = 48;
-	public static final double GRILLA_PJ_ALTO = 48;
+	public static final double GRILLA_PJ_ANCHO = 64;
+	public static final double GRILLA_PJ_ALTO = 64;
 	
-	private static final double COLUMNAS_DIBUJADAS = (WIDTH/GRILLA_ANCHO);
-	private static final double FILAS_DIBUJADAS = (HEIGHT/GRILLA_ALTO);
-	
-	public static final double FILAS = 10000;
+	public static final double FILAS = 64;
 	public static final double COLUMNAS = 64;
 	
+	public static final double MID_X = WIDTH / 2;
+	public static final double MID_Y = HEIGHT / 2;
+	
+	public int ticksAnimacion;
+
 	Stage stage;
 
 	public VistaJuego(Stage stage) {
@@ -44,14 +44,20 @@ public class VistaJuego {
 	}
 	
 	public void start(boolean loadGame) {
+		//stage.setResizable(false);
+		
+		stage.setResizable(true);
+		WIDTH = stage.getWidth();
+		HEIGHT = stage.getHeight();
         Juego juego = new Juego((int)COLUMNAS, (int)FILAS);
         var imagenes = cargarImagenes();
-        var imagenesJugador = cargarImagenesJugador();
+        AnimacionJugador imagenesPJ = new AnimacionJugador(juego.getJugador(), GRILLA_PJ_ANCHO, GRILLA_PJ_ALTO);
+        //var imagenesJugador = cargarImagenesJugador();
         Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
         HUD hud = new HUD(context, WIDTH, HEIGHT, juego.getJugador());
-        dibujar(context, juego, hud, imagenes, imagenesJugador);
+        dibujar(context, juego, hud, imagenes, imagenesPJ);
         hud.dibujarHUD();
         
         VistasTiendas vistasTiendas = new VistasTiendas(juego.getPisoSuperior(), juego.getJugador(), stage, root);
@@ -66,12 +72,12 @@ public class VistaJuego {
         escena.setOnKeyPressed(e -> {keysPressed.add(e.getCode()); });
         escena.setOnKeyReleased(e -> {keysPressed.remove(e.getCode()); });
         escena.setOnMouseClicked(e -> hud.checkMenu(e, root, juego.getGuardarPartida()));
-        
+        stage.setFullScreen(true);
         new AnimationTimer() {
         	long last = 0;
 			@Override
 			public void handle(long now) {
-				dibujar(context, juego, hud, imagenes, imagenesJugador);
+				dibujar(context, juego, hud, imagenes, imagenesPJ);
 		    	//Convertir input y realizar accion son bastante diferentes a los de la Etapa 2. Estan integrados a esta version
 		    	// y no a la de consola.
 				var acciones = new ArrayList<Accion>();
@@ -90,7 +96,7 @@ public class VistaJuego {
 	}
 	
 	
-	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, ArrayList<Image> imagenesJugador) {
+	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, AnimacionJugador imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
     	dibujarFondo(context, imagenes, juego.getJugador());
     	dibujarTerreno2(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
@@ -105,8 +111,8 @@ public class VistaJuego {
 	}
     
 	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
-	private static void dibujarJugador2(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
-		context.drawImage(tipoImagenJugador(jugador, imagenes), ((WIDTH/2)) - (GRILLA_PJ_ANCHO/2), (HEIGHT/2));
+	private static void dibujarJugador2(GraphicsContext context, AnimacionJugador imagenes,  Jugador jugador) {
+		context.drawImage(imagenes.imagenADibujar(), ((WIDTH/2)) - (GRILLA_PJ_ANCHO/2), (HEIGHT/2));
 	}
 	
 	public static void dibujarTerreno2(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
@@ -114,15 +120,16 @@ public class VistaJuego {
 		double playerScreenY = (HEIGHT/2) - (GRILLA_ALTO/2);
 		for(double i = 0; i < FILAS; i++) {
 			for(double j = 0; j < COLUMNAS; j++) {
-				double worldX = j * GRILLA_ANCHO;
-				double worldY = i * GRILLA_ALTO;
-				double screenX = worldX - (pjX * GRILLA_ANCHO) + playerScreenX;
-				double screenY = worldY - (pjY * GRILLA_ALTO) + playerScreenY;
+				double objWorldX = j * GRILLA_ANCHO;
+				double objWorldY = i * GRILLA_ALTO;
+				double screenX = objWorldX - (pjX * GRILLA_ANCHO) + playerScreenX;
+				double screenY = objWorldY - (pjY * GRILLA_ALTO) + playerScreenY;
 				
-				if (worldX + GRILLA_ANCHO > (pjX * GRILLA_ANCHO) - playerScreenX &&
-					worldX - GRILLA_ANCHO < (pjX * GRILLA_ANCHO) + playerScreenX &&
-					worldY + GRILLA_ALTO > (pjY * GRILLA_ALTO) - playerScreenY &&
-					worldY - GRILLA_ALTO < (pjY * GRILLA_ALTO) + playerScreenY) {
+				//Para evitar renderear de mas.
+				if (	objWorldX + GRILLA_ANCHO > (pjX * GRILLA_ANCHO) - playerScreenX &&
+						objWorldX - GRILLA_ANCHO < (pjX * GRILLA_ANCHO) + playerScreenX &&
+						objWorldY + GRILLA_ALTO > (pjY * GRILLA_ALTO) - playerScreenY &&
+						objWorldY - GRILLA_ALTO < (pjY * GRILLA_ALTO) + playerScreenY) {
 					
 					if(i == 8 && tiendas.getTiendaPos((int) j) != null) {
 						context.drawImage(imagenes.get(9), screenX, screenY);
@@ -134,7 +141,6 @@ public class VistaJuego {
 		}
 	}
 	
-	  
     private static Image tipoImagen(Suelo suelo, ArrayList<Image> imagenes, double x, double y) {
     	var bloque = suelo.getBloque(new Posicion((int)x, (int)y));
     	if(bloque instanceof Tierra) {
@@ -155,94 +161,21 @@ public class VistaJuego {
     	
     	return imagenes.get(1);
     }
-        
-    private static Image tipoImagenJugador(Jugador pj, ArrayList<Image> imagenesJugador) {
-    	return imagenesJugador.get(pj.getTipoAnimacion());
-    }
     
     private ArrayList<Image> cargarImagenes(){
     	var imagenes = new ArrayList<Image>();
 		//imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Cielo.png", 64));
     	imagenes.add(null); //Aca va la del cielo, puse null para probar lo del fondo!
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Tierra.png", GRILLA_ANCHO));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Jugador.png", GRILLA_PJ_ANCHO));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Minado.png", GRILLA_ANCHO));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Bronce.png", GRILLA_ANCHO));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Hierro.png", GRILLA_ANCHO));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Plata.png", GRILLA_ANCHO));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Oro.png", GRILLA_ANCHO));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Background.jpg", 1920));
-		imagenes.add(obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tierra.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Jugador.png", GRILLA_PJ_ANCHO, GRILLA_PJ_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Minado.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Bronce.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Hierro.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Plata.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Oro.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Background.jpg", WIDTH * 2, 2000));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO, GRILLA_ALTO));
   
     	return imagenes;
     }
-    
-    private ArrayList<Image> cargarImagenesJugador(){
-    	var imagenesJugador = new ArrayList<Image>();
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Jugador.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Abajo2.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Derecha2.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Izquierda2.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Volando2.png", GRILLA_PJ_ANCHO));
-		return imagenesJugador;
-    }
-    
-	private static Image obtenerImagen(String nombre, double size) {
-		Image image1 = null;
-		try {
-			image1 = new Image(new FileInputStream(nombre), size, size, true, false);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return image1;
-	}
-	
-    //La idea de comienzoI y comienzoJ es no dibujar al jugador antes del 0 o despues del max, probablemente haya maneras mejores
-    //este es copypaste de la de abajo.
-    private static void dibujarJugador(GraphicsContext context, ArrayList<Image> imagenes,  Jugador jugador) {
-    	double comienzoI = jugador.getX() - (COLUMNAS_DIBUJADAS/2) <= 0 ? 0 : jugador.getX() - (COLUMNAS_DIBUJADAS/2);
-    	double comienzoJ = jugador.getY() - (FILAS_DIBUJADAS/2) <= 0 ? 0 : jugador.getY() - (FILAS_DIBUJADAS/2);
-    	double finI = jugador.getX() + (COLUMNAS_DIBUJADAS/2) > COLUMNAS ? COLUMNAS : comienzoI + COLUMNAS_DIBUJADAS;
-    	
-    	if(finI - comienzoI != COLUMNAS_DIBUJADAS) {
-    		comienzoI = finI - COLUMNAS_DIBUJADAS;
-    	}
-    	
-    	context.drawImage(tipoImagenJugador(jugador, imagenes), ((jugador.getX() - comienzoI) * GRILLA_ANCHO), ((jugador.getY() - comienzoJ) * GRILLA_ALTO) + 24);
-	}
-
-    
-    //La idea principal de esto es hacer el famoso "zoom" al pj en vez de dibujar todo el mapa.
-    //comienzoI, finI, comienzoJ y finJ sirven todas para chequear que no se traten de dibujar cosas que no existen.
-    //Esto se ve cuando te acercas a algun borde con el pj y la camara deja de moverse con el personaje.
-	private static void dibujarTerreno(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
-    	double comienzoI = pjX - (COLUMNAS_DIBUJADAS/2) < 0 ? 0 : pjX - (COLUMNAS_DIBUJADAS/2);
-    	double comienzoJ = pjY - (FILAS_DIBUJADAS/2) < 0 ? 0 : pjY - (FILAS_DIBUJADAS/2);
-    	double finI = pjX + (COLUMNAS_DIBUJADAS/2) > COLUMNAS ? COLUMNAS : comienzoI + COLUMNAS_DIBUJADAS;
-    	double finJ = pjY + (FILAS_DIBUJADAS/2) > FILAS ? FILAS : comienzoJ + FILAS_DIBUJADAS;
-    	
-    	if(finI - comienzoI != COLUMNAS_DIBUJADAS) {
-    		comienzoI = finI - COLUMNAS_DIBUJADAS;
-    	}
-    	
-    	if(finJ - comienzoJ != FILAS_DIBUJADAS) {
-    		comienzoJ = finJ - FILAS_DIBUJADAS;
-    	}
-    	
-    	for(double i = comienzoI; i < finI; i++) {
-    		for(double j = comienzoJ; j < finJ; j++) {
-    			//8 es el nivel del suelo ahora, deberia ser un constante.
-    			if(j == 8 && tiendas.getTiendaPos((int) i) != null) {
-    				context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
-    			} else {
-    				context.drawImage(tipoImagen(suelo, imagenes, i, j), (i - comienzoI) * GRILLA_ANCHO, (j - comienzoJ) * GRILLA_ALTO);
-    			}
-    		}
-    	}
-    	
-    }
-	
-	
-	
 }

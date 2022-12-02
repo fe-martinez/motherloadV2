@@ -51,8 +51,15 @@ public class Volando implements Estado {
 	@Override
 	public Estado update(ArrayList<Accion> acciones, Jugador pj, Interacciones interacciones) {
 		pj.setTipoAnimacion(4);
-		actualizarY(pj);
-		actualizarX(pj);
+		
+		if(!interacciones.chocaDireccionVertical(-1)) {
+				actualizarY(pj);
+		}
+		
+		if(!interacciones.chequearColisionHorizontal()) {
+			actualizarX(pj);
+		}
+		
 		if(!caer(pj, interacciones)) {
 			return new Inicial();
 		}

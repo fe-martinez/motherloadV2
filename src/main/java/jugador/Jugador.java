@@ -19,7 +19,7 @@ public class Jugador implements Bloque {
 	
 	//Cuidado con los limites a las pos, las pruebas usan y != 0
 	//Entonces cambiá las pruebas xD
-	public Jugador(int posX, int posY,int altoTerreno, int anchoTerreno) {
+	public Jugador(double posX, double posY,int altoTerreno, int anchoTerreno) {
 		if(posX < 0 || altoTerreno < 10 || anchoTerreno < 10) {
 			return;
 		}

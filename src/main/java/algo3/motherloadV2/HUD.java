@@ -3,6 +3,9 @@ package algo3.motherloadV2;
 import java.io.FileInputStream;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,17 +23,19 @@ import tp.GuardarPartida;
 
 public class HUD {
 	private GraphicsContext context;
-	//Fijate si los vas a usar, sino borralos.
-	//private double screenWidth;
-	//private double screenHeight;
+	private double screenWidth;
+	private double screenHeight;
 	private Jugador pj;
+	List<Image> imagenes;
 	
-	
-	
-	public HUD(GraphicsContext context, double screenWidth, double screenHeight,Jugador pj) {
+	public HUD(GraphicsContext context, double screenWidth, double screenHeight, Jugador pj) {
 		this.context = context;
-		//this.screenWidth = screenWidth;
-		//this.screenHeight = screenHeight;
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+		this.imagenes = new ArrayList<Image>();
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/Health.png", 40, 40));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/IconFuel.png", 40, 40));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/InGameMenu.png", 64, 64));
 		this.pj = pj;
 	}
 	
@@ -40,7 +45,7 @@ public class HUD {
 		Color amarillo = Color.rgb(181, 142, 83);
 		
 		double porcentajeHP = (pj.getNave().getHP() / pj.getNave().getMaxHP()) * 100;
-		context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Menu/Health.png", 40), 10, 10);
+		context.drawImage(imagenes.get(0), 10, 10);
 		context.setFill(sombra);
 		context.setStroke(Color.BLACK);
 		context.fillRect(60, 20, 2 * 100, 20);
@@ -53,7 +58,7 @@ public class HUD {
 		context.fillRect(60, 60, 2 * 100, 20);
 		context.setFill(amarillo);
 		context.fillRect(60, 60, 2 * porcentajeNafta, 20);
-		context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Menu/IconFuel.png", 40), 15, 50);
+		context.drawImage(imagenes.get(1), 15, 50);
 		
 		context.setFont(Font.font(30));
 		context.strokeText("$" + pj.getDinero(), 310, 40);
@@ -63,17 +68,15 @@ public class HUD {
 		context.strokeText(alturaPJ() + "mts", 410, 40);
 		context.setFill(Color.WHITE);
 		context.fillText(alturaPJ() + "mts", 410, 40);
-		
-		
 
-		context.drawImage(obtenerImagen("../motherloadV2/src/rsc/Menu/InGameMenu.png", 64), 950, 10);
+		context.drawImage(imagenes.get(2), screenWidth - 100, 10);
 	}
 	
-	public static void checkMenu(MouseEvent e, Group root, GuardarPartida guardar) {
+	public void checkMenu(MouseEvent e, Group root, GuardarPartida guardar) {
 		var x = e.getSceneX();
 		var y = e.getSceneY();
 		
-		if(x >= 950 && x <= 950+64 && y >= 10 && y <= 10+64) {
+		if(x >= this.screenWidth - 100 && x <= screenWidth - 100 +64 && y >= 10 && y <= 10+64) {
 	    	StackPane pane = new StackPane();
 	    	VBox vbox = new VBox();
 	    	Rectangle rect = new Rectangle(0, 0, 900, 600);
@@ -114,18 +117,8 @@ public class HUD {
 	    	botonOK.setOnAction(t -> root.getChildren().remove(pane));
 	    	botonSalir.setOnAction(t -> System.exit(0));
 	    	saveGame.setOnAction(t -> guardar.guardarPartida());
+	    	
 		}
-	}
-	
-	private static Image obtenerImagen(String nombre, double size) {
-		Image image1 = null;
-		try {
-			image1 = new Image(new FileInputStream(nombre), size, size, true, false);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return image1;
 	}
 	
 	private int alturaPJ() {
