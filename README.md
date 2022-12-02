@@ -1,3 +1,16 @@
+# Que cosas importantes faltan implementar! (Viernes 2/12)
+
+* Probar que la nueva implementacion de movimiento con los estados funcione correctamente.
+* Que estacion de venta funcione bien. Ahora lo hace pero tiene errores cuando entras y salis. El problema es la funcion que cuenta.
+* Que la estacion de reparacion funcione.
+* Hacer algo con los bordes del mapa. Poner otra imagen o no se.
+* Musica, sonidos. Para los sonidos, crear una nueva varia
+* Config file.
+* Afinar animaciones de pj.
+* Slots de guardados.
+* Dar una historia
+* Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos.
+
 # URGENTE
 
 * Pasar todas las tiendas a root en vez de popup (algunas ya están)
