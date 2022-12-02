@@ -35,4 +35,24 @@ public class AccionMovimiento implements Accion{
 		this.pj.getNave().gastarCombustible(GASTO_COMBUSTIBLE_MOVIMIENTO);
 		return true;
 	}
+	
+	public boolean esVolar() {
+		if(this.dy < 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	public TipoMovimiento tipoMovimiento() {
+		if(this.dy < 0) {
+			return TipoMovimiento.ARRIBA;
+		} else if(this.dy > 0) {
+			return TipoMovimiento.ABAJO;
+		} else if(this.dx < 0) {
+			return TipoMovimiento.IZQUIERDA;
+		} else {
+			return TipoMovimiento.DERECHA;
+		}
+	}
+	
 }

@@ -15,7 +15,7 @@ public class Jugador implements Bloque {
 	private int anchoTerreno;
 	private double velY;
 	private double velX;
-	EstadoJugador estado;
+	private int TipoAnimacion;
 	
 	//Cuidado con los limites a las pos, las pruebas usan y != 0
 	//Entonces cambiá las pruebas xD
@@ -36,7 +36,6 @@ public class Jugador implements Bloque {
 		this.anchoTerreno = anchoTerreno;
 		this.velY = 0;
 		this.velX = 0;
-		this.estado = EstadoJugador.INICIAL;
 	}	
 
 	//------------------------------------------------
@@ -67,7 +66,7 @@ public class Jugador implements Bloque {
 	
 	//Vende los minerales.
 	public void venderMinerales() {
-		this.dinero = inventario.venderMinerales();
+		this.dinero += inventario.venderMinerales();
 	}
 	
 	//------------------------------------------------
@@ -174,19 +173,19 @@ public class Jugador implements Bloque {
 	public boolean noPuedeContinuar() {
 		return (nave.seEstrello() || nave.seQuedoSinCombustible());
 	}
-	
-	
-	public EstadoJugador getEstado() {
-		return estado;
-	}
-
-	public void setEstado(EstadoJugador estado) {
-		this.estado = estado;
-	}
-	
+		
 	public boolean inventarioVacio() {
 		return this.inventario.inventarioVacio();
 	}
+	
+	public int getTipoAnimacion() {
+		return TipoAnimacion;
+	}
+
+	public void setTipoAnimacion(int tipoAnimacion) {
+		TipoAnimacion = tipoAnimacion;
+	}
+
 
 }
 

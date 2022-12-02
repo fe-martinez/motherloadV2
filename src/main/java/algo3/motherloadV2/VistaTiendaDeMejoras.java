@@ -405,9 +405,8 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
         ventana.getChildren().add(botonClose);
 		AnchorPane.setTopAnchor(botonClose, 3.0);
 		AnchorPane.setRightAnchor(botonClose, 5.0);
-		
+
 		botonClose.setOnAction(e -> {this.root.getChildren().remove(this.root.getChildren().size() - 1); this.mostrando = false;});
-		
 	}
 
 	

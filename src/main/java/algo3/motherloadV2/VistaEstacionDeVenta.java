@@ -1,18 +1,21 @@
 package algo3.motherloadV2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import javafx.geometry.Insets;
+import java.util.Map;
+
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Popup;
@@ -25,7 +28,7 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	List<String> listaDePrecios = List.of("30","50","60","150","300","650");
 	Stage stage;
 	List<Label> labels;
-    StackPane sPane = new StackPane();
+    AnchorPane anchorPane = new AnchorPane();
     List<Integer> contador = new ArrayList<>();
     Popup popup = new Popup();
     Jugador jugador;
@@ -34,6 +37,7 @@ public class VistaEstacionDeVenta implements VistaEntidad{
     Background background;
     Button botonCerrar;
     Button botonVender;
+	private VBox cajaLista;
     
 	public VistaEstacionDeVenta(Stage stage, Group root, Jugador jugador) {
 		this.stage = stage;
@@ -43,7 +47,9 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	
 	public void actualizarVista() {
 		//Por ahora no anda bien, quizás sí hay que inicializar todo de nuevo zzzzzzzzzzzz ni idea :P
-		this.labels.clear();
+		cajaLista = (VBox) anchorPane.getChildren().get(anchorPane.getChildren().size() - 1);
+		cajaLista.getChildren().clear();
+		labels.clear();
 		if(!this.jugador.inventarioVacio()) {
 			botonVender.setDisable(false);
 			int contador = 1;
@@ -70,11 +76,10 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 		}
 		
 	    for(Label label: labels) {
-	    	//Estos insets hay que verificarlos porque quedaron de antes :P
-	    	StackPane.setMargin(label,new Insets(0,100,0,100));
 	    	label.setFont(new Font(20));
 	    }
-	    StackPane.setMargin(labels.get(0),new Insets(0,425,400,0));
+	    
+	    cajaLista.getChildren().addAll(labels);
 	    this.inicializarAccionesBotones();
 	}
 
@@ -91,20 +96,17 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	private void inicializarCaracteristicas() {
 		labels = new ArrayList<>();
 		labels.add(new Label("Inventario vacío :("));
-		StackPane.setMargin(labels.get(0),new Insets(0,425,400,0));
 		labels.get(0).setFont(new Font(20));
 		
 	    botonCerrar = new Button("X");
 	    botonCerrar.setFont(new Font(30));
 	    botonCerrar.setTextFill(Paint.valueOf("White"));
 	    botonCerrar.setBackground(Background.EMPTY);
-	    StackPane.setMargin(botonCerrar,new Insets(0,650,500,0));
 	 
 	    botonVender = new Button("[Vender todo]");
 	    botonVender.setFont(new Font(20));
 	    //botonVender.setTextFill(Paint.valueOf("White"));
-	    botonVender.setBackground(Background.EMPTY);
-	    StackPane.setMargin(botonVender,new Insets(400,0,0,0));
+	    //botonVender.setBackground(Background.EMPTY);
 	    
 	    this.inicializarAccionesBotones();
 	}
@@ -113,17 +115,27 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 		img = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/EstacionVenta.png",800,600);
 	    backgroundImg = new BackgroundImage(img,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
 	    background = new Background(backgroundImg);
-		sPane.setBackground(background);
-	    sPane.setPrefSize(800,600);
+		anchorPane.setBackground(background);
+	    anchorPane.setPrefSize(800,600);
 	}
 	
 	public void inicializar() {
 		this.inicializarCaracteristicas();
 		botonVender.setDisable(true);
 	    this.inicializarStackPane();
-	    sPane.getChildren().addAll(labels);
-	    sPane.getChildren().addAll(botonVender,botonCerrar);
-	    popup.getContent().add(sPane);
+	    cajaLista = new VBox();
+	    cajaLista.getChildren().addAll(labels);
+	    cajaLista.setPrefSize(400, 400);
+	    anchorPane.getChildren().addAll(botonVender, botonCerrar);
+	    anchorPane.getChildren().add(cajaLista);
+	    popup.getContent().add(anchorPane);
+	    
+	    AnchorPane.setTopAnchor(cajaLista, 100.0);
+        AnchorPane.setLeftAnchor(cajaLista, 100.0);
+		AnchorPane.setBottomAnchor(botonVender, 100.0);
+		AnchorPane.setLeftAnchor(botonVender, 350.0);
+        AnchorPane.setTopAnchor(botonCerrar, 3.0);
+        AnchorPane.setRightAnchor(botonCerrar, 5.0);
 	}
 	
 	public void mostrar() {

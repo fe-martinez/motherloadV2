@@ -4,38 +4,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jugador.Accion;
-import jugador.EstadoJugador;
 import jugador.Jugador;
 import jugador.Posicion;
-import minerales.Mineral;
 import terreno.Aire;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.Tierra;
-import tp.GuardarPartida;
 import tp.Juego;
 
 public class VistaJuego {
@@ -174,27 +157,7 @@ public class VistaJuego {
     }
         
     private static Image tipoImagenJugador(Jugador pj, ArrayList<Image> imagenesJugador) {
-    	if(pj.getEstado() == EstadoJugador.INICIAL) {
-    		return imagenesJugador.get(0);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_ABAJO_INICIO) {
-    		return imagenesJugador.get(1);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_ABAJO_FULL) {
-    		return imagenesJugador.get(2);
-    	}  else if(pj.getEstado() == EstadoJugador.TALADRANDO_DERECHA_INICIO) {
-    		return imagenesJugador.get(3);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_DERECHA_FULL) {
-    		return imagenesJugador.get(4);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_IZQUIERDA_INICIO) {
-    		return imagenesJugador.get(5);
-    	} else if(pj.getEstado() == EstadoJugador.TALADRANDO_IZQUIERDA_FULL) {
-    		return imagenesJugador.get(6);
-    	} else if(pj.getEstado() == EstadoJugador.VOLANDO1) {
-    		return imagenesJugador.get(7);
-    	} else if(pj.getEstado() == EstadoJugador.VOLANDO2) {
-    		return imagenesJugador.get(8);
-    	} 
-    	
-    	return imagenesJugador.get(0);
+    	return imagenesJugador.get(pj.getTipoAnimacion());
     }
     
     private ArrayList<Image> cargarImagenes(){
@@ -217,13 +180,9 @@ public class VistaJuego {
     private ArrayList<Image> cargarImagenesJugador(){
     	var imagenesJugador = new ArrayList<Image>();
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Jugador.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Abajo1.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Abajo2.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Derecha1.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Derecha2.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Izquierda1.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Izquierda2.png", GRILLA_PJ_ANCHO));
-    	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Volando1.png", GRILLA_PJ_ANCHO));
     	imagenesJugador.add(obtenerImagen("../motherloadV2/src/rsc/Volando2.png", GRILLA_PJ_ANCHO));
 		return imagenesJugador;
     }
