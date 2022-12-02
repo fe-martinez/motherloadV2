@@ -2,13 +2,18 @@ package algo3.motherloadV2;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jugador.Accion;
 import jugador.Jugador;
@@ -34,10 +39,9 @@ public class VistaJuego {
 	
 	public static final double MID_X = WIDTH / 2;
 	public static final double MID_Y = HEIGHT / 2;
-	
-	public int ticksAnimacion;
-
 	Stage stage;
+	private List<Particulas> particulas = new ArrayList<>();
+	
 
 	public VistaJuego(Stage stage) {
 		this.stage = stage;
@@ -57,6 +61,7 @@ public class VistaJuego {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
         HUD hud = new HUD(context, WIDTH, HEIGHT, juego.getJugador());
+        
         dibujar(context, juego, hud, imagenes, imagenesPJ);
         hud.dibujarHUD();
         
@@ -72,7 +77,7 @@ public class VistaJuego {
         escena.setOnKeyPressed(e -> {keysPressed.add(e.getCode()); });
         escena.setOnKeyReleased(e -> {keysPressed.remove(e.getCode()); });
         escena.setOnMouseClicked(e -> hud.checkMenu(e, root, juego.getGuardarPartida()));
-        stage.setFullScreen(true);
+       //stage.setFullScreen(true);
         new AnimationTimer() {
         	long last = 0;
 			@Override
@@ -96,11 +101,23 @@ public class VistaJuego {
 	}
 	
 	
-	private static void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, AnimacionJugador imagenesJugador) {
+	private void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, AnimacionJugador imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);
     	dibujarFondo(context, imagenes, juego.getJugador());
     	dibujarTerreno2(context, juego.getSuelo(), juego.getPisoSuperior(), imagenes, (int)juego.getJugador().getX(), (int)juego.getJugador().getY());
     	dibujarJugador2(context, imagenesJugador, juego.getJugador());
+    	
+    	for(Iterator<Particulas> iterador = particulas.iterator(); iterador.hasNext(); ) {
+    		Particulas p = iterador.next();
+    		p.update();
+    		if(!p.visible()) {
+    			iterador.remove();
+    			continue;
+    		}
+    		
+    		p.dibujar(context);
+    	}
+    	
     	hud.dibujarHUD();
     }
 	
@@ -111,8 +128,13 @@ public class VistaJuego {
 	}
     
 	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
-	private static void dibujarJugador2(GraphicsContext context, AnimacionJugador imagenes,  Jugador jugador) {
+	private void dibujarJugador2(GraphicsContext context, AnimacionJugador imagenes,  Jugador jugador) {
 		context.drawImage(imagenes.imagenADibujar(), ((WIDTH/2)) - (GRILLA_PJ_ANCHO/2), (HEIGHT/2));
+		
+		if(jugador.getTipoAnimacion() == 1) {
+			particulas.addAll(dibujarParticulas(jugador));
+		}
+		
 	}
 	
 	public static void dibujarTerreno2(GraphicsContext context, Suelo suelo, PisoSuperior tiendas, ArrayList<Image> imagenes, double pjX, double pjY) {
@@ -143,7 +165,9 @@ public class VistaJuego {
 	
     private static Image tipoImagen(Suelo suelo, ArrayList<Image> imagenes, double x, double y) {
     	var bloque = suelo.getBloque(new Posicion((int)x, (int)y));
-    	if(bloque instanceof Tierra) {
+    	if(bloque instanceof Tierra && y == 9) {
+    		return imagenes.get(10);
+    	} else if(bloque instanceof Tierra) {
     		return imagenes.get(1);
     	} else if(bloque instanceof Aire && y < 9) {
     		return imagenes.get(0);
@@ -175,7 +199,21 @@ public class VistaJuego {
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Oro.png", GRILLA_ANCHO, GRILLA_ALTO));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Background.jpg", WIDTH * 2, 2000));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Pasto.png", GRILLA_ANCHO, GRILLA_ALTO));
   
     	return imagenes;
     }
+    
+    private List<Particulas> dibujarParticulas(Jugador pj) {
+    	var particulas = new ArrayList<Particulas>();
+    	
+    	for(int i = 0; i < 1; i++) {
+    		Particulas p = new Particulas((WIDTH/2), (HEIGHT/2) + 48, new Posicion((Math.random() - 0.5), Math.random()), Math.random() * 10, 1.0, Color.SANDYBROWN);
+    		particulas.add(p);
+    	}
+    	
+    	return particulas;
+    }
+    
+    
 }

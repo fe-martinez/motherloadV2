@@ -98,7 +98,7 @@ public class VistaMenu {
 		fondo = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/FondoMenu.png", WIDTH, HEIGHT);
 		bfondo = new BackgroundImage(fondo, null, null, null, null);
 		
-		texto = new Text("Las aventuras de\n miguelito la excavadora");
+		texto = new Text("Motherload");
 		texto.setFont(Font.font("FreeMono", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
 		texto.setFill(Color.CYAN);
 		

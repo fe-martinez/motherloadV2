@@ -5,11 +5,6 @@ public class Posicion {
 	private double posicionY;
 	
 	public Posicion(double posicionX, double posicionY) {
-		if(posicionX < 0 || posicionY < 0) {
-			this.posicionX = 0;
-			this.posicionY = 0;
-			return;
-		}
 		this.posicionX = posicionX;
 		this.posicionY = posicionY;
 	}

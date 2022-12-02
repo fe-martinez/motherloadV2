@@ -65,9 +65,9 @@ public class HUD {
 		context.setFill(Color.WHITE);
 		context.fillText("$" + pj.getDinero(), 310, 40);
 		
-		context.strokeText(alturaPJ() + "mts", 410, 40);
+		context.strokeText(alturaPJ() + "mts", screenWidth - 200, 40);
 		context.setFill(Color.WHITE);
-		context.fillText(alturaPJ() + "mts", 410, 40);
+		context.fillText(alturaPJ() + "mts", screenWidth - 200, 40);
 
 		context.drawImage(imagenes.get(2), screenWidth - 100, 10);
 	}
