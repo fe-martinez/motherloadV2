@@ -40,7 +40,7 @@ public class Particulas {
 	
 	public void dibujar(GraphicsContext context) {
 		context.setFill(color);
-		context.fillRect(x, y, radio, radio);
+		context.fillOval(x, y, radio, radio);
 	}
 	
 	

@@ -132,7 +132,11 @@ public class VistaJuego {
 		context.drawImage(imagenes.imagenADibujar(), ((WIDTH/2)) - (GRILLA_PJ_ANCHO/2), (HEIGHT/2));
 		
 		if(jugador.getTipoAnimacion() == 1) {
-			particulas.addAll(dibujarParticulas(jugador));
+			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2), (HEIGHT/2) + 56));
+		} else if(jugador.getTipoAnimacion() == 2) {
+			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) + 32, (HEIGHT/2) + 32));
+		} else if(jugador.getTipoAnimacion() == 3) {
+			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) - 32, (HEIGHT/2) + 32));
 		}
 		
 	}
@@ -204,11 +208,12 @@ public class VistaJuego {
     	return imagenes;
     }
     
-    private List<Particulas> dibujarParticulas(Jugador pj) {
+    private List<Particulas> dibujarParticulasTierra(Jugador pj, double posStartX, double posStartY) {
     	var particulas = new ArrayList<Particulas>();
     	
     	for(int i = 0; i < 1; i++) {
-    		Particulas p = new Particulas((WIDTH/2), (HEIGHT/2) + 48, new Posicion((Math.random() - 0.5), Math.random()), Math.random() * 10, 1.0, Color.SANDYBROWN);
+    		//En orden -> Posicion de inicio X, Posicion de inicio Y, vector con la velocidad, tamaño de la particula, duracion, color.
+    		Particulas p = new Particulas(posStartX, posStartY, new Posicion((Math.random() - 0.5) * 2, Math.random()), Math.random() * 10, 0.5, Color.SANDYBROWN);
     		particulas.add(p);
     	}
     	
