@@ -66,8 +66,10 @@ public class Inicial implements Estado{
 		for(Accion actual: acciones) {
 			if(actual instanceof AccionMovimiento) {
 				if(((AccionMovimiento) actual).tipoMovimiento() == TipoMovimiento.ARRIBA) {
-					if(!interacciones.chocaDireccionVertical(-1)) {
+					if(!interacciones.chequearColisionVertical()) {
 						return new Volando();
+					} else {
+						return null;
 					}
 				}
 			}

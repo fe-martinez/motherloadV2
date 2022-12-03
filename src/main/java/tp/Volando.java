@@ -52,8 +52,10 @@ public class Volando implements Estado {
 	public Estado update(ArrayList<Accion> acciones, Jugador pj, Interacciones interacciones) {
 		pj.setTipoAnimacion(4);
 		
-		if(!interacciones.chocaDireccionVertical(-1)) {
+		if(!interacciones.chequearColisionVertical()) {
 				actualizarY(pj);
+		} else {
+			return new Inicial();
 		}
 		
 		if(!interacciones.chequearColisionHorizontal()) {
