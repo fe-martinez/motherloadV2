@@ -16,7 +16,9 @@ public class Jugador implements Bloque {
 	private double velY;
 	private double velX;
 	private int TipoAnimacion;
+	private TipoMovimiento orientacion;
 	
+
 	//Cuidado con los limites a las pos, las pruebas usan y != 0
 	//Entonces cambiá las pruebas xD
 	public Jugador(double posX, double posY,int altoTerreno, int anchoTerreno) {
@@ -36,6 +38,7 @@ public class Jugador implements Bloque {
 		this.anchoTerreno = anchoTerreno;
 		this.velY = 0;
 		this.velX = 0;
+		this.orientacion = TipoMovimiento.DERECHA;
 	}	
 
 	//------------------------------------------------
@@ -185,7 +188,13 @@ public class Jugador implements Bloque {
 	public void setTipoAnimacion(int tipoAnimacion) {
 		TipoAnimacion = tipoAnimacion;
 	}
+	
+	public TipoMovimiento getOrientacion() {
+		return orientacion;
+	}
 
-
+	public void setOrientacion(TipoMovimiento orientacion) {
+		this.orientacion = orientacion;
+	}
 }
 

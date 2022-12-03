@@ -82,10 +82,12 @@ public class Inicial implements Estado{
 						return new TaladrandoAbajo();
 					}
 				} else if(((AccionMovimiento) actual).tipoMovimiento() == TipoMovimiento.IZQUIERDA) {
+					pj.setOrientacion(TipoMovimiento.IZQUIERDA);
 					if(interacciones.chequearColisionHorizontal()) {
 						return new TaladrandoIzquierda();
 					}
 				} else if(((AccionMovimiento) actual).tipoMovimiento() == TipoMovimiento.DERECHA) {
+					pj.setOrientacion(TipoMovimiento.DERECHA);
 					if(interacciones.chequearColisionHorizontal()) {
 						return new TaladrandoDerecha();
 					}
