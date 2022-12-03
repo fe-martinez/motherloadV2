@@ -402,6 +402,7 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 
 		
         Button botonClose = new Button("X");
+        botonClose.setCancelButton(true);
         ventana.getChildren().add(botonClose);
 		AnchorPane.setTopAnchor(botonClose, 3.0);
 		AnchorPane.setRightAnchor(botonClose, 5.0);
@@ -437,7 +438,12 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	//Pero si lo vamos a llamar desde otro lado no tiene sentido pasarlo por parámetro xdd
 	public void mostrar() {
 		if(!this.mostrando) {
-			this.root.getChildren().add(this.ventana);			
+			try{
+				this.root.getChildren().add(this.ventana);
+			}
+			catch(IllegalArgumentException e){
+				return;
+			}
 		}
 	}
 

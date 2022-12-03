@@ -136,6 +136,7 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	    close.setBackground(Background.EMPTY);
 	    close.setBorder(Border.stroke(Paint.valueOf("Black")));
 	    close.setAlignment(Pos.CENTER);
+	    close.setCancelButton(true);
 	   
 	    //Les pongo la posición en el gridpane
 	    GridPane.setConstraints(tanqueExtra,0,0);

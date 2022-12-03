@@ -193,6 +193,10 @@ public class VistaJuego {
     		return imagenes.get(4);
     	} else if(bloque.getBloqueID() == 'H') {
     		return imagenes.get(5);
+    	} else if(bloque.getBloqueID() == 'D') {
+    		return imagenes.get(11);
+    	} else if(bloque.getBloqueID() == 'C') {
+    		return imagenes.get(12);
     	}
     	
     	return imagenes.get(1);
@@ -212,6 +216,8 @@ public class VistaJuego {
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Background.jpg", WIDTH * 2, 2000));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tienda.png", GRILLA_ANCHO, GRILLA_ALTO));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Pasto.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Diamante.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Cobre.png", GRILLA_ANCHO, GRILLA_ALTO));
   
     	return imagenes;
     }

@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import jugador.Jugador;
 import terreno.Entidad;
 import terreno.PisoSuperior;
+import tiendas.EstacionDeReparacion;
 import tiendas.EstacionDeServicio;
 import tiendas.TiendaDeConsumibles;
 import tiendas.TiendaDeMejoras;
@@ -30,7 +31,7 @@ public class VistasTiendas {
 		var ypf = new VistaEstacionDeServicio(stage, root, (EstacionDeServicio) tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.3)), pj);
 		vistasTiendas.put(tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.3)), ypf);
 		
-		var mecanico = new VistaEstacionDeReparacion();
+		var mecanico = new VistaEstacionDeReparacion(stage, root, (EstacionDeReparacion) tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.6)), pj);
 		vistasTiendas.put(tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.6)), mecanico);
 		
 		var mejoras = new VistaTiendaDeMejoras(stage, root, (TiendaDeMejoras) tiendas.getTiendas().get((int)(VistaJuego.COLUMNAS * 0.9)), pj);

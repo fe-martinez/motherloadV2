@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -28,7 +30,7 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	List<String> listaDePrecios = List.of("30","50","60","150","300","650");
 	Stage stage;
 	List<Label> labels;
-    AnchorPane anchorPane = new AnchorPane();
+    AnchorPane anchorPane;
     List<Integer> contador = new ArrayList<>();
     Popup popup = new Popup();
     Jugador jugador;
@@ -42,16 +44,15 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	public VistaEstacionDeVenta(Stage stage, Group root, Jugador jugador) {
 		this.stage = stage;
 		this.jugador = jugador;
-		this.inicializar();
+		this.inicializarCaracteristicas();
+	    this.inicializarStackPane();
+	    this.inicializarAnchorPane();
 	}
 	
 	public void actualizarVista() {
-		//Por ahora no anda bien, quizás sí hay que inicializar todo de nuevo zzzzzzzzzzzz ni idea :P
-		cajaLista = (VBox) anchorPane.getChildren().get(anchorPane.getChildren().size() - 1);
-		cajaLista.getChildren().clear();
+		this.inicializarCaracteristicas();
 		labels.clear();
 		if(!this.jugador.inventarioVacio()) {
-			botonVender.setDisable(false);
 			int contador = 1;
 			for(int i = 0; i < this.jugador.getInventario().getCantidadDeMinerales()-1; i++) {
 				if(this.jugador.getInventario().getTipoDeMineral(i) == this.jugador.getInventario().getTipoDeMineral(i+1)) {
@@ -71,26 +72,15 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 		    }
 		}
 		else {
-			botonVender.setDisable(true);
 			labels.add(new Label("Inventario vacío :("));
 		}
 		
 	    for(Label label: labels) {
 	    	label.setFont(new Font(20));
 	    }
-	    
-	    cajaLista.getChildren().addAll(labels);
-	    this.inicializarAccionesBotones();
-	}
-
-	private void inicializarAccionesBotones() {		
-		botonVender.setOnAction(e -> {
-			jugador.venderMinerales();
-		});
-		    
-		botonCerrar.setOnAction(e -> {
-		   	this.popup.hide();
-		});
+	    this.inicializarStackPane();
+	    this.inicializarAnchorPane();
+	    this.contador.clear();
 	}
 	
 	private void inicializarCaracteristicas() {
@@ -105,13 +95,20 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	 
 	    botonVender = new Button("[Vender todo]");
 	    botonVender.setFont(new Font(20));
-	    //botonVender.setTextFill(Paint.valueOf("White"));
-	    //botonVender.setBackground(Background.EMPTY);
+	    botonVender.setTextFill(Paint.valueOf("White"));
+	    botonVender.setBackground(Background.EMPTY);
 	    
-	    this.inicializarAccionesBotones();
+	    botonCerrar.setOnAction(e -> {
+		   	this.popup.hide();
+		});
+	    
+	    botonVender.setOnAction(e -> {this.jugador.venderMinerales();
+	    		this.actualizarVista();
+	    });
 	}
 	
 	private void inicializarStackPane() {
+		anchorPane = new AnchorPane();
 		img = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/EstacionVenta.png",800,600);
 	    backgroundImg = new BackgroundImage(img,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
 	    background = new Background(backgroundImg);
@@ -119,20 +116,18 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	    anchorPane.setPrefSize(800,600);
 	}
 	
-	public void inicializar() {
-		this.inicializarCaracteristicas();
-		botonVender.setDisable(true);
-	    this.inicializarStackPane();
-	    cajaLista = new VBox();
+	public void inicializarAnchorPane() {
+		cajaLista = new VBox();
 	    cajaLista.getChildren().addAll(labels);
-	    cajaLista.setPrefSize(400, 400);
-	    anchorPane.getChildren().addAll(botonVender, botonCerrar);
+	    cajaLista.setPrefSize(400,400);
 	    anchorPane.getChildren().add(cajaLista);
+	    anchorPane.getChildren().addAll(botonCerrar,botonVender);
 	    popup.getContent().add(anchorPane);
-	    
+	
 	    AnchorPane.setTopAnchor(cajaLista, 100.0);
         AnchorPane.setLeftAnchor(cajaLista, 100.0);
-		AnchorPane.setBottomAnchor(botonVender, 100.0);
+        
+		AnchorPane.setBottomAnchor(botonVender,80.0);
 		AnchorPane.setLeftAnchor(botonVender, 350.0);
         AnchorPane.setTopAnchor(botonCerrar, 3.0);
         AnchorPane.setRightAnchor(botonCerrar, 5.0);
