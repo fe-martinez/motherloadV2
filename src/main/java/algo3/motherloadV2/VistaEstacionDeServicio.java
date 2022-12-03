@@ -9,8 +9,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import jugador.Jugador;
@@ -30,6 +33,7 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 	BackgroundImage backgroundImg;
 	Background background;
 	Label labelInstrucciones, labelCombustible;
+	Rectangle rectCombustible, sombra;
 	HashMap<String,Button> botones;
 	HashMap<String,Image> imagenes;
 	HashMap<String,BackgroundImage> buttonBackgroundImage;
@@ -133,12 +137,14 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 		GridPane.setConstraints(botones.get("25"),0,1);
 		GridPane.setConstraints(botones.get("50"),1,1);
 		GridPane.setConstraints(botones.get("Fill"),0,0);
+		GridPane.setConstraints(rectCombustible, 0, 1);
+		GridPane.setConstraints(sombra, 0, 1);
 		GridPane.setConstraints(labelCombustible, 0, 1);
 		GridPane.setConstraints(botones.get("Close"),0,2);
 		
 		pane1.getChildren().add(labelInstrucciones);
 		pane2.getChildren().addAll(botones.get("5"),botones.get("10"),botones.get("25"),botones.get("50"));
-		pane3.getChildren().addAll(botones.get("Fill"),labelCombustible,botones.get("Close"));
+		pane3.getChildren().addAll(botones.get("Fill"),sombra, rectCombustible, labelCombustible,botones.get("Close"));
 		
 		
 	}
@@ -148,12 +154,18 @@ public class VistaEstacionDeServicio implements VistaEntidad {
 		labelInstrucciones.setPrefSize(400,60);
 		labelInstrucciones.setFont(new Font(16));
 		
-		labelCombustible = new Label("Nivel de combustible: " + pj.getNave().getNivelDeCombustible());
-		labelCombustible.setBackground(Background.fill(Paint.valueOf("White")));
-		labelCombustible.setPrefSize(500,60);
-		labelCombustible.setTextAlignment(TextAlignment.CENTER);
+		double porcentajeNafta = (pj.getNave().getNivelDeCombustible() / pj.getNave().getCapacidadTanque()) * 100;
+		rectCombustible = new Rectangle(2 * porcentajeNafta, 60);
+		rectCombustible.setFill(Color.rgb(181, 142, 83));
+		sombra = new Rectangle(200, 60);
+		sombra.setFill(Color.BLACK);
+		
+		labelCombustible = new Label((int) pj.getNave().getNivelDeCombustible() + "/" + (int)pj.getNave().getCapacidadTanque());
+		labelCombustible.setTextFill(Color.WHITE);
+		labelCombustible.setAlignment(Pos.CENTER);
+		labelCombustible.setBackground(Background.EMPTY);
 		labelCombustible.setPrefSize(200,60);
-		labelCombustible.setFont(new Font(16));
+		labelCombustible.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 16));
 	}
 	
 	private void inicializarLayout() throws FileNotFoundException {

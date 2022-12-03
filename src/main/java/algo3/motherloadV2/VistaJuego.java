@@ -134,19 +134,13 @@ public class VistaJuego {
 		context.drawImage(imagenes.imagenADibujar(), ((WIDTH/2)) - (GRILLA_PJ_ANCHO/2), (HEIGHT/2));
 		
 		if(jugador.getTipoAnimacion() == 1) {
-			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2), (HEIGHT/2) + 56));
+			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2), (HEIGHT/2) + 56, 0));
 		} else if(jugador.getTipoAnimacion() == 2) {
-			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) + 32, (HEIGHT/2) + 32));
+			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) + 32, (HEIGHT/2) + 32, 0.5));
 		} else if(jugador.getTipoAnimacion() == 3) {
-			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) - 32, (HEIGHT/2) + 32));
+			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) - 32, (HEIGHT/2) + 32, -0.5));
 		}
-		
-//		if(jugador.getTipoAnimacion() == 3) {
-//			particulas.addAll(dibujarParticulasHumo(jugador, WIDTH/2 + GRILLA_PJ_ANCHO/4, HEIGHT/2 + GRILLA_PJ_ALTO/2 - 10));
-//		} else {
-//			particulas.addAll(dibujarParticulasHumo(jugador, WIDTH/2 - GRILLA_PJ_ANCHO/2, HEIGHT/2 + GRILLA_PJ_ALTO/2 - 10));
-//		}
-		
+	
 		if(jugador.getOrientacion() == TipoMovimiento.DERECHA) {
 			particulas.addAll(dibujarParticulasHumo(jugador, WIDTH/2 - GRILLA_PJ_ANCHO/2, HEIGHT/2 + GRILLA_PJ_ALTO/2 - 10, -2));
 		} else {
@@ -222,12 +216,12 @@ public class VistaJuego {
     	return imagenes;
     }
     
-    private List<Particulas> dibujarParticulasTierra(Jugador pj, double posStartX, double posStartY) {
+    private List<Particulas> dibujarParticulasTierra(Jugador pj, double posStartX, double posStartY, double sentido) {
     	var particulas = new ArrayList<Particulas>();
     	
     	for(int i = 0; i < 2; i++) {
     		//En orden -> Posicion de inicio X, Posicion de inicio Y, vector con la velocidad, tamaño de la particula, duracion, color.
-    		Particulas p = new Particulas(posStartX, posStartY, new Posicion((Math.random() - 0.5) * 2, Math.random()), Math.random() * 10, 0.5, Color.rgb(74, 48, 35));
+    		Particulas p = new Particulas(posStartX, posStartY, new Posicion((Math.random() - 0.5 + sentido) * 2, Math.random()), Math.random() * 10, 0.5, Color.rgb(74, 48, 35));
     		particulas.add(p);
     	}
     	
