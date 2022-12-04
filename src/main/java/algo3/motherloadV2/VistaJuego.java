@@ -60,7 +60,7 @@ public class VistaJuego {
 		WIDTH = stage.getWidth();
 		HEIGHT = stage.getHeight();
 		
-        juego = new Juego((int)COLUMNAS, configs.getDificultad());
+        juego = new Juego((int)COLUMNAS, configs.getDificultad(), configs);
         var imagenes = cargarImagenes();
         AnimacionJugador imagenesPJ = new AnimacionJugador(juego.getJugador(), GRILLA_PJ_ANCHO, GRILLA_PJ_ALTO);
         //var imagenesJugador = cargarImagenesJugador();
@@ -88,7 +88,7 @@ public class VistaJuego {
         escena.setOnKeyReleased(e -> {keysPressed.remove(e.getCode()); });
         escena.setOnMouseClicked(e -> checkInteraccionesMouse(e));
 
-         new AnimationTimer() {
+        new AnimationTimer() {
 
         	long last = 0;
 			@Override
@@ -112,10 +112,10 @@ public class VistaJuego {
 				
 			}
         }.start();
+        
         stage.setFullScreen(configs.isFullScreen());
         stage.show();
 	}
-	
 	
 	private void dibujar(GraphicsContext context, Juego juego, HUD hud,ArrayList<Image> imagenes, AnimacionJugador imagenesJugador) {
     	context.clearRect(0, 0, WIDTH, HEIGHT);

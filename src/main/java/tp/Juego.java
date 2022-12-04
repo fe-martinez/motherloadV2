@@ -2,6 +2,7 @@ package tp;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import estados.Estado;
@@ -33,21 +34,23 @@ public class Juego {
 	private Estado estado;
 	private EstadoDelJuego estadoDelJuego = EstadoDelJuego.JUGANDO;
 	private long msSinceLastFrame = 0;
+	private List<KeyCode> teclas;
 	
-	public Juego(int ancho, int alto) {
+	public Juego(int ancho, int alto, ConfigJuego configs) {
 		this.suelo = new Suelo(ancho, alto);
 		this.jugador =new Jugador(5, 3, alto, ancho);
 		this.tiendas = new PisoSuperior(jugador);
 		this.gameSaver = new GuardarPartida(jugador, suelo);
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
 		this.estado = new Inicial();
-		
+		teclas = configs.getTeclasKeyCode();
+		cargarTeclas();
 		//Usa Character de momento pero con JavaFX pasaria a ser KeyCode.
 		final Map<KeyCode, Accion> controles = Map.of(
-				KeyCode.UP, new AccionMovimiento(jugador, 0, -0.1),
-				KeyCode.DOWN, new AccionMovimiento(jugador, 0, 0.1),
-				KeyCode.RIGHT, new AccionMovimiento(jugador, 0.1, 0),
-				KeyCode.LEFT, new AccionMovimiento(jugador, -0.1, 0),
+				teclas.get(0), new AccionMovimiento(jugador, 0, -0.1),
+				teclas.get(1), new AccionMovimiento(jugador, 0, 0.1),
+				teclas.get(2), new AccionMovimiento(jugador, 0.1, 0),
+				teclas.get(3), new AccionMovimiento(jugador, -0.1, 0),
 				KeyCode.F, new AccionItem(jugador, new MejoraTanqueExtra()),
 				KeyCode.Q, new AccionItem(jugador, new MejoraTeleport()),
 				KeyCode.R, new AccionItem(jugador, new MejoraHullRepairNanobots()),
@@ -80,9 +83,6 @@ public class Juego {
 		return null;
 	}
 		
-	//Realiza las acciones que encuentra en la lista de acciones y las remueve de la misma.
-	//De momento, para ser utilizada por consola funciona de esta manera, pero la idea es que sea un loop que ejecute todas las acciones,
-	//una por cada una de las teclas que estan siendo presionadas de momento.
 	public void update(ArrayList<Accion> acciones, long dt) {
 		for(var accion: acciones) {
 			accion.aplicar();
@@ -98,6 +98,7 @@ public class Juego {
 		}
 	}
 	
+	
 	public Suelo getSuelo() {
 		return this.suelo;
 	}
@@ -112,6 +113,13 @@ public class Juego {
 
 	public void cargarPartida() {
 		gameSaver.cargarPartida(this.jugador, this.suelo);
+	}
+	
+	public void cargarTeclas() {
+		teclas.add(KeyCode.UP);
+		teclas.add(KeyCode.DOWN);
+		teclas.add(KeyCode.RIGHT);
+		teclas.add(KeyCode.LEFT);
 	}
 
 	public void guardarJuego() {

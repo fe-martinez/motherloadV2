@@ -4,19 +4,53 @@ import java.util.Random;
 import minerales.FabricaDeMinerales;
 
 public class FabricaDeSuelo {
-	private static Bloque ponerBloque() {
-		var rand = new Random();
-		int valor = rand.nextInt(200);
+	private static Bloque ponerBloque(int altura, int maxAlto) {
+		int rangoTierra, rangoHierro, rangoCobre, rangoBronce, rangoOro;
 		
-		if(valor > 0 && valor < 150) {
+		if(altura < maxAlto/5) {
+			rangoTierra = 875;
+			rangoHierro = 930;
+			rangoCobre = 975;
+			rangoBronce = 990;
+			rangoOro = 998;
+		} else if(altura < maxAlto/4) {
+			rangoTierra = 830;
+			rangoHierro = 890;
+			rangoCobre = 935;
+			rangoBronce = 978;
+			rangoOro = 995;
+		} else if(altura < maxAlto/3) {
+			rangoTierra = 790;
+			rangoHierro = 850;
+			rangoCobre = 900;
+			rangoBronce = 950;
+			rangoOro = 980;
+		} else if(altura < maxAlto/2) {
+			rangoTierra = 790;
+			rangoHierro = 850;
+			rangoCobre = 900;
+			rangoBronce = 950;
+			rangoOro = 980;
+		} else{
+			rangoTierra = 700;
+			rangoHierro = 750;
+			rangoCobre = 830;
+			rangoBronce = 900;
+			rangoOro = 960;
+		}
+		
+		var rand = new Random();
+		int valor = rand.nextInt(1000);
+
+		if(valor > 0 && valor < rangoTierra) {
 			return new Tierra();
-		} else if(valor >= 150 && valor < 168) {
+		} else if(valor >= rangoTierra && valor < rangoHierro) {
 			return FabricaDeMinerales.crear("Hierro");
-		} else if(valor >= 168 && valor < 182) {
+		} else if(valor >= rangoHierro && valor < rangoCobre) {
 			return FabricaDeMinerales.crear("Cobre");
-		} else if(valor >= 182 && valor < 190) {
+		} else if(valor >= rangoCobre && valor < rangoBronce) {
 			return FabricaDeMinerales.crear("Bronce");
-		} else if(valor >= 190 && valor < 196) {
+		} else if(valor >= rangoBronce && valor < rangoOro) {
 			return FabricaDeMinerales.crear("Oro");
 		} else {
 			return FabricaDeMinerales.crear("Diamante");
@@ -40,7 +74,7 @@ public class FabricaDeSuelo {
 		}
 		for(int i = 10; i < alto; i++) {
 			for(int j = 0; j < ancho; j++) {
-				bloques[i][j] = ponerBloque();
+				bloques[i][j] = ponerBloque(i, alto);
 			}
 		}
 		return bloques;
