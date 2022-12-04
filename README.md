@@ -20,7 +20,8 @@
     - Dificultad (yo pensaba en que la dificultad sea el tamaño del mapa, maybe cantidad de minerales).
 - Save y Load.
 - Zoom in y Zoom out + Resize de la ventana
-- * Slots de guardados.
+- Slots de guardados.
+- Mejorar el inventario
 
 # TERMINADO
 * Probar que la nueva implementacion de movimiento con los estados funcione correctamente.
