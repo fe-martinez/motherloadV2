@@ -3,35 +3,25 @@ package algo3.motherloadV2;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import jugador.Jugador;
 import tiendas.TiendaDeConsumibles;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
+import javafx.geometry.*;
 
 public class VistaTiendaDeConsumibles implements VistaEntidad {
-	private static double SIZE_BOTON = 100;
+	private static double SIZE_BOTON = 125;
 	List<Label> labels = new ArrayList<>();
 	List<Background> background = new ArrayList<>();
 	List<Image> images = new ArrayList<>();
@@ -39,19 +29,20 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	private StackPane sPane;
 	Group root;
 	GridPane gridPane;
-	HBox hbox = new HBox();
-	VBox vbox = new VBox();
 	boolean mostrando;
 	Jugador jugador;
 	TiendaDeConsumibles tienda;
 	HashMap<String,Button> botones;
 	List<String> keys = List.of("tanqueExtra","nanobots","dinamita","explosivos","teleport","close");
+	List<String> mejorasDisponibles = List.of("F","R","X","C","Q");
 	
-	Color grisOscuro = Color.rgb(74, 74, 74);
-	Color grisPlata = Color.rgb(150, 150, 150);
-	Color naranjita = Color.rgb(219, 126, 92);
+	public VistaTiendaDeConsumibles(Stage stage, Group root, Jugador jugador, TiendaDeConsumibles tienda) {
+		this.jugador = jugador;
+		this.root = root;
+		this.mostrando = false;
+		this.tienda = tienda;
+	}
 	
-	String mejoraSeleccionada;
 	
 	private void inicializarLabels() {
 		labels.add(new Label("Tanque de combustible de reserva\r\n"
@@ -106,7 +97,6 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	    GridPane.setConstraints(botones.get("dinamita"),2,0);
 	    GridPane.setConstraints(botones.get("explosivos"),0,1);
 	    GridPane.setConstraints(botones.get("teleport"),1,1);
-	    GridPane.setConstraints(botones.get("close"), 1, 2);
 	}
 	
 	private void crearBotonClose() {
@@ -147,74 +137,97 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
     	this.crearBotonClose();
 	    this.organizarBotonesEnGridpane();
 	}
-
-	private void configGridPane() {
+	
+	private void inicializarGridPane() {
 		gridPane = new GridPane();
-		gridPane.setPrefSize(600,600);
-		gridPane.setHgap(30);
-		gridPane.setVgap(30);
-		gridPane.setPadding(new Insets(50, 0, 50, 10));
-		gridPane.setBackground(Background.fill(grisPlata));
+	    Image img = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Tiendas/TiendaDeConsumibles/FondoTiendaDeConsumibles.png", 800, 600);
+	    
+	    BackgroundImage backgroundImg = new BackgroundImage(img,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
+	    Background background = new Background(backgroundImg);
+	    gridPane.setBackground(background);
+	    gridPane.setMaxSize(800, 600);
+	    gridPane.setPadding(new Insets(100));
+	    this.inicializarBotones();
+	    gridPane.getChildren().addAll(botones.get("tanqueExtra"),botones.get("nanobots"),botones.get("dinamita"),botones.get("explosivos"),botones.get("teleport"));
+	    
 	}
-
-	private void inicializarVistaCompra() {
-		hbox.setPrefSize(1000, 600);
-		hbox.getChildren().add(gridPane);
-		hbox.setSpacing(20);
-		hbox.setBackground(Background.fill(grisPlata));
-		vbox.setBackground(Background.fill(grisOscuro));
-
-		vbox.setPrefSize(400, 600);
-		Label esperando = new Label("ELIJA SU OPCION");
-		esperando.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 30));
-		
-		Button boton = new Button("Comprar");
-		boton.setFont(Font.font(30));
-		boton.setPrefSize(400, 100);
-		
-		Background botonBG = Background.fill(naranjita);
-		boton.setBackground(botonBG);
-		boton.setLayoutY(500);
-		
-		vbox.setAlignment(Pos.BOTTOM_CENTER);
-		
-		vbox.getChildren().add(esperando);
-		vbox.getChildren().add(boton);
-		hbox.getChildren().add(vbox);
-		
-		//Esto después lo seteo como corresponde
-		/*boton.setOnAction(e-> {
-			if (mejoraSeleccionada == null) {
-				Alert a = new Alert(AlertType.ERROR);
-				a.setContentText("No ha elegido una mejora");
-				a.show();
-			}
-			else {
-				tienda.interactuar(pj, mejoraSeleccionada);
+	
+	private void inicializarAccionesBotones() {
+		botones.get(keys.get(0)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(0).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(0).charAt(0));
 			}
 		});
-		*/
+		
+		botones.get(keys.get(1)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(1).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(1).charAt(0));
+			}
+		});
+		
+		botones.get(keys.get(2)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(2).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(2).charAt(0));
+			}
+		});
+		
+
+		botones.get(keys.get(3)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(3).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(3).charAt(0));
+			}
+		});
+		
+
+		botones.get(keys.get(4)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(4).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(4).charAt(0));
+			}
+		});
+		
+		   this.botones.get("close").setOnAction(e -> {
+		    	root.getChildren().remove(root.getChildren().size() - 1);
+		    	mostrando = false;
+		    });
+    }
+	
+	public void inicializarVistatiendaDeConsumibles() {
+		this.inicializarGridPane();
+		sPane = new StackPane();
+	    sPane.getChildren().addAll(gridPane,botones.get("close"));
+	    StackPane.setMargin(gridPane,new Insets(0,0,0,0));
+	    StackPane.setMargin(botones.get("close"),new Insets(0,650,510,0));
+	    sPane.setPrefSize(1024,768); // WIDTH Y HEIGHT
+	    this.inicializarAccionesBotones();
+
+	    root.getChildren().add(sPane);
+	    this.mostrando = true;   
 	}
-	
-	private void inicializar() {
-		this.inicializarBotones();
-		configGridPane();
-		gridPane.getChildren().addAll(botones.get("tanqueExtra"),botones.get("nanobots"),botones.get("dinamita"),botones.get("explosivos"),botones.get("teleport"),botones.get("close"));
-		inicializarVistaCompra();
-		root.getChildren().add(hbox);
-	 }
-	
+	  
 	public void mostrar() {
 		if(!this.mostrando) {
-			this.inicializar();
+			this.inicializarVistatiendaDeConsumibles();
 		}
-	}
-	
-	public VistaTiendaDeConsumibles(Stage stage, Group root, Jugador jugador, TiendaDeConsumibles tienda) {
-		this.jugador = jugador;
-		this.root = root;
-		this.mostrando = false;
-		this.tienda = tienda;
 	}
 }
 
