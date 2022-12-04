@@ -65,7 +65,7 @@ public class VistaMenu {
 		vbox = new VBox();
 		spane = new StackPane();
 		escena = new Scene(spane, WIDTH, HEIGHT);
-    	vistaConfigs = new VistaMenuConfig(stage, spane);
+    	vistaConfigs = new VistaMenuConfig(escena, spane, configs);
 		spane.getChildren().add(vbox);
 		
 		imgBotonJugar = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartida.png",WIDTH,HEIGHT);

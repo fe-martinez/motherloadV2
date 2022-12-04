@@ -1,17 +1,27 @@
 package algo3.motherloadV2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import tp.ConfigJuego;
 
@@ -29,9 +39,24 @@ public class VistaMenuConfig {
 	private ComboBox<String> resoluciones;
 	private ComboBox<String> dificultades;
 	private Button botonConfirmarCambios;
+	private Button botonArriba;
+	private ArrayList<KeyCode> teclasKeyCodes;
+	private VBox ventanaInput;
+	private Scene scene;
+	private KeyCode presionada;
+	private Button botonDerecha;
+	private ButtonBase botonAbajo;
+	private Button botonIzquierda;
+	private VBox controles;
 
-	public VistaMenuConfig(Stage stage, StackPane pantallaPrincipal) {
+	public VistaMenuConfig(Scene scene, StackPane pantallaPrincipal, ConfigJuego configActual) {
+		this.scene = scene;
 		this.pantallaPrincipal = pantallaPrincipal;
+		teclasKeyCodes = new ArrayList<KeyCode>();
+		teclasKeyCodes.add(KeyCode.getKeyCode(configActual.getTeclas().get(0)));
+		teclasKeyCodes.add(KeyCode.getKeyCode(configActual.getTeclas().get(1)));
+		teclasKeyCodes.add(KeyCode.getKeyCode(configActual.getTeclas().get(2)));
+		teclasKeyCodes.add(KeyCode.getKeyCode(configActual.getTeclas().get(3)));
 		inicializar();
 	}
 	
@@ -58,15 +83,78 @@ public class VistaMenuConfig {
 		botonConfirmarCambios.setMaxSize(300, 100);
 		botonConfirmarCambios.setOnAction(e -> setCambios());
 		
+		controles = new VBox();
+		controles.setAlignment(Pos.CENTER);
+		controles.setSpacing(10);
+		controles.setBackground(Background.fill(Color.rgb(150, 150, 150, 0.8)));
+		controles.setMaxWidth(450);
+		
+		Label labelControles = new Label("Modificar controles");
+		labelControles.setFont(Font.font(null, FontWeight.EXTRA_BOLD, 20));
+		
+		botonArriba = new Button("Arriba: " + teclasKeyCodes.get(0));
+		botonArriba.setOnAction(e -> getKeyCode(scene, pantallaPrincipal, 0));
+		botonArriba.setMaxSize(300, 100);
+		
+		botonAbajo = new Button("Abajo: " + teclasKeyCodes.get(1));
+		botonAbajo.setOnAction(e -> getKeyCode(scene, pantallaPrincipal, 1));
+		botonAbajo.setMaxSize(300, 100);
+		
+		botonDerecha = new Button("Derecha: " + teclasKeyCodes.get(2));
+		botonDerecha.setOnAction(e -> getKeyCode(scene, pantallaPrincipal, 2));
+		botonDerecha.setMaxSize(300, 100);
+		
+		botonIzquierda = new Button("Izquierda: " + teclasKeyCodes.get(3));
+		botonIzquierda.setOnAction(e -> getKeyCode(scene, pantallaPrincipal, 3));
+		botonIzquierda.setMaxSize(300, 100);
+		
+		controles.getChildren().addAll(labelControles, botonArriba, botonAbajo, botonDerecha, botonIzquierda);
+		
 		organizador.setMaxSize(900, 500);
 		organizador.setBackground(Background.fill(Color.rgb(200, 200, 200, 0.3)));
-		organizador.getChildren().addAll(resoluciones, dificultades, botonCerrar, botonConfirmarCambios);
+		organizador.getChildren().addAll(resoluciones, dificultades, controles);
+		organizador.getChildren().addAll(botonCerrar, botonConfirmarCambios);
 	}
 	
 	public void mostrar() {
 		pantallaPrincipal.getChildren().add(organizador);
 	}
 	
+	private void getKeyCode(Scene escena, StackPane ventana, int lugarArray) {
+		ventanaInput = new VBox();
+		ventanaInput.setPrefSize(450, 250);
+		ventanaInput.setMaxSize(450, 250);
+		ventanaInput.setBackground(Background.fill(Color.rgb(200, 200, 200, 0.9)));
+		ventanaInput.setAlignment(Pos.CENTER);
+		ventanaInput.requestFocus();
+		ventanaInput.setSpacing(20);
+
+		Label texto = new Label("Ingrese la nueva tecla");
+		texto.setFont(Font.font(20));
+		
+		Button cancelar = new Button("Cancelar");
+		cancelar.setMaxSize(200, 100);
+		cancelar.setOnAction(e -> ventana.getChildren().remove(ventana.getChildren().size() - 1));
+		
+		Button ok = new Button("Confirmar cambio");
+		ok.setMaxSize(200, 100);
+		ok.setOnAction(e -> {aplicarCambio(presionada, lugarArray); ventana.getChildren().remove(ventana.getChildren().size() - 1);});
+		ok.setDisable(true);
+		Label elegida = new Label("Su tecla elegida es: ");
+		elegida.setFont(Font.font(20));
+		
+		ventanaInput.getChildren().addAll(texto, cancelar, elegida ,ok);
+		ventana.getChildren().add(ventanaInput);
+		ventanaInput.requestFocus();
+		escena.setOnKeyPressed(e -> {	presionada = e.getCode(); 
+										elegida.setText("Su tecla elegida es: " + presionada.getChar()); 
+										ok.setDisable(false);});
+	}
+	
+	private void aplicarCambio(KeyCode presionada, int lugarArray) {
+		teclasKeyCodes.set(lugarArray, presionada);
+	}
+
 	public void setCambios() {
 		ConfigJuego configActual = ConfigJuego.readFile();
 		
@@ -91,10 +179,10 @@ public class VistaMenuConfig {
 		if(dificultadElegida != "Dificultad") {
 			valorDificultad = valorDificultades.get(dificultadElegida);
 		}
-
-		ConfigJuego nuevo = new ConfigJuego(isFullscreen, width, height, valorDificultad);
-		nuevo.writeConfigFile();
 		
+		var teclas = teclasKeyCodes.stream().map(e -> e.getChar()).collect(Collectors.toList());
+		ConfigJuego nuevo = new ConfigJuego(isFullscreen, width, height, valorDificultad, teclas);
+		nuevo.writeConfigFile();
 		Alert a = new Alert(AlertType.INFORMATION);
 		a.setHeaderText("Atención");
 		a.setContentText("Los cambios tendran efecto la proxima vez que inice el juego");
