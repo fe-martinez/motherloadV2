@@ -19,6 +19,8 @@ public class Inicial implements Estado{
 			pj.setVelY(pj.getVelY() + Juego.GRAVEDAD);
 			pj.setY(pj.getY() + pj.getVelY());
 		} else {
+			int fallDamage = interacciones.calcularDanio(pj.getVelY());
+			pj.getNave().recibirDanio(fallDamage);
 			pj.setVelY(0);
 		}
 	}

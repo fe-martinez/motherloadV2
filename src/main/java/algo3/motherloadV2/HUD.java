@@ -56,7 +56,6 @@ public class HUD {
 		context.setStroke(Color.BLACK);
 		context.fillRect(60, 20, 2 * 100, 20);
 		context.setFill(rojo);
-		System.out.println(porcentajeHP);
 		context.fillRect(60, 20, 2 * porcentajeHP, 20);
 		
 		double porcentajeNafta = (pj.getNave().getNivelDeCombustible() / pj.getNave().getCapacidadTanque()) * 100;

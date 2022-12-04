@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -63,14 +64,13 @@ public class VistaEstacionDeMantenimiento implements VistaEntidad {
         	labels.add(new Label("Elija la cantidad de combustible que desea cargar: "));
         	labels.add(new Label((int) pj.getNave().getNivelDeCombustible() + "/" + (int)pj.getNave().getCapacidadTanque()));
         	double porcentajeNafta = (pj.getNave().getNivelDeCombustible() / pj.getNave().getCapacidadTanque()) * 100;
-        	pj.getNave().getNivelDeCombustible();
         	rectCantidad = new Rectangle(2 * porcentajeNafta, 60);
         	rectCantidad.setFill(Color.rgb(181, 142, 83));
     		sombra = new Rectangle(200, 60);
     		sombra.setFill(Color.BLACK);
         } else {
-        	double porcentajeNafta = (pj.getNave().getHP() / pj.getNave().getMaxHP()) * 100;
-        	rectCantidad = new Rectangle(2 * porcentajeNafta, 60);
+        	double porcentajeHP = ((double)pj.getNave().getHP() / (double)pj.getNave().getMaxHP()) * 100;
+        	rectCantidad = new Rectangle(2 * porcentajeHP, 60);
         	rectCantidad.setFill(Color.rgb(209, 19, 19));
     		sombra = new Rectangle(200, 60);
     		sombra.setFill(Color.BLACK);
@@ -138,13 +138,12 @@ public class VistaEstacionDeMantenimiento implements VistaEntidad {
 			botones.put(key,new Button());
 		}
 		
-		this.inicializarCaracteristicasBotones();
-		
-	    botones.get(keys.get(0)).setOnAction(e -> this.tienda.vender(this.pj,Integer.parseInt(keys.get(0))));
-	    botones.get(keys.get(1)).setOnAction(e -> this.tienda.vender(this.pj,Integer.parseInt(keys.get(1))));
-	    botones.get(keys.get(2)).setOnAction(e -> this.tienda.vender(this.pj,Integer.parseInt(keys.get(2))));
-	    botones.get(keys.get(3)).setOnAction(e -> this.tienda.vender(this.pj,Integer.parseInt(keys.get(3))));
-	    botones.get(keys.get(4)).setOnAction(e -> this.tienda.vender(this.pj, 100));
+		this.inicializarCaracteristicasBotones();	
+	    botones.get(keys.get(0)).setOnAction(e -> {this.tienda.vender(this.pj, Integer.parseInt(keys.get(0))); actualizarBarra();});
+	    botones.get(keys.get(1)).setOnAction(e -> {this.tienda.vender(this.pj, Integer.parseInt(keys.get(1))); actualizarBarra();});
+	    botones.get(keys.get(2)).setOnAction(e -> {this.tienda.vender(this.pj, Integer.parseInt(keys.get(2))); actualizarBarra();});
+	    botones.get(keys.get(3)).setOnAction(e -> {this.tienda.vender(this.pj, Integer.parseInt(keys.get(3))); actualizarBarra();});
+	    botones.get(keys.get(4)).setOnAction(e -> {this.tienda.vender(this.pj, 100); actualizarBarra();});
 	}
 	
 	private void inicializarGridPane() {
@@ -202,8 +201,39 @@ public class VistaEstacionDeMantenimiento implements VistaEntidad {
 		layout.getChildren().addAll(pane1,pane2,pane3);
 		layout.setLayoutX((VistaJuego.WIDTH / 2) - 400);
 		layout.setLayoutY((VistaJuego.HEIGHT / 2) - 350);
-		
 	}
+	
+	private void actualizarBarra() {
+		 if(tienda instanceof EstacionDeServicio) {
+			 	labels.get(1).setText((int) pj.getNave().getNivelDeCombustible() + "/" + (int)pj.getNave().getCapacidadTanque());
+	        	double porcentajeNafta = (pj.getNave().getNivelDeCombustible() / pj.getNave().getCapacidadTanque()) * 100;
+	        	pj.getNave().getNivelDeCombustible();
+	        	rectCantidad = new Rectangle(2 * porcentajeNafta, 60);
+	        	rectCantidad.setFill(Color.rgb(181, 142, 83));
+	    		sombra = new Rectangle(200, 60);
+	    		sombra.setFill(Color.BLACK);
+	        } else {
+	    		labels.get(1).setText((int) pj.getNave().getHP() + "/" + (int)pj.getNave().getMaxHP());
+	        	double porcentajeHP = ((double)pj.getNave().getHP() / (double)pj.getNave().getMaxHP()) * 100;
+	        	rectCantidad = new Rectangle(2 * porcentajeHP, 60);
+	        	rectCantidad.setFill(Color.rgb(209, 19, 19));
+	    		sombra = new Rectangle(200, 60);
+	    		sombra.setFill(Color.BLACK);
+
+	        }
+		 
+		GridPane.setConstraints(sombra, 0, 1);
+		GridPane.setConstraints(rectCantidad, 0, 1);
+		GridPane.setConstraints(labels.get(1), 0, 1);
+		 
+		 pane3.getChildren().clear();
+		 pane3.getChildren().addAll(botones.get(keys.get(4)), sombra, rectCantidad , labels.get(1), botones.get(keys.get(5)));
+		 
+//		 pane3.getChildren().set(2, sombra);
+//		 pane3.getChildren().set(2, rectCantidad);
+//		 pane3.getChildren().set(1, labels.get(1));
+	}
+	
 	
 	public void inicializar() throws FileNotFoundException {
 		this.inicializarLayout();   

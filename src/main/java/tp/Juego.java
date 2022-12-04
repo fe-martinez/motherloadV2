@@ -95,6 +95,7 @@ public class Juego {
 			}
 			msSinceLastFrame -= MS_PER_FRAME;
 		}
+		//Aca termina de procesar el turno.
 	}
 	
 	public Suelo getSuelo() {
