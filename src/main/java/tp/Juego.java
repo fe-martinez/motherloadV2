@@ -31,7 +31,7 @@ public class Juego {
 	private GuardarPartida gameSaver;
 	private Map<KeyCode, Accion> controles;
 	private Estado estado;
-	
+	private EstadoDelJuego estadoDelJuego = EstadoDelJuego.JUGANDO;
 	private long msSinceLastFrame = 0;
 	
 	public Juego(int ancho, int alto) {
@@ -93,9 +93,9 @@ public class Juego {
 			if(estadoActual != null) {
 				this.estado = estadoActual;
 			}
+			this.estadoDelJuego = this.estadoJuego();
 			msSinceLastFrame -= MS_PER_FRAME;
 		}
-		//Aca termina de procesar el turno.
 	}
 	
 	public Suelo getSuelo() {
@@ -121,5 +121,8 @@ public class Juego {
 	public GuardarPartida getGuardarPartida() {
 		return this.gameSaver;
 	}
-		
+
+	public EstadoDelJuego getEstado() {
+		return this.estadoDelJuego;
+	}
 }
