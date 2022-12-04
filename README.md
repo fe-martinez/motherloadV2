@@ -1,4 +1,5 @@
 # Que cosas importantes faltan implementar! (Domingo 4/12)
+* HACER LAS CLASES CONTROLADORX
 * Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos. (Both)
 ## Fran
 * Cambiar el gasto de combustible (Fran)
