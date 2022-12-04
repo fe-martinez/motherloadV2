@@ -5,6 +5,7 @@
 * Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos. (Both)
 * Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P. (Clari)
 * Hacer las alertas (Clari)
+* Cambiar el gasto de combustible (Fran)
 
 # EXTRA 
 - Pausa (ya tenemos el menu igual, creo que con eso alcanza).
