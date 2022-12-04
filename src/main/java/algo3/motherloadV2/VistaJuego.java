@@ -26,6 +26,7 @@ import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.Tierra;
 import tp.ConfigJuego;
+import tp.EstadoDelJuego;
 import tp.Juego;
 
 public class VistaJuego {

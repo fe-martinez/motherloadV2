@@ -63,7 +63,7 @@ public class FabricaDeSuelo {
 		} else if(id == 'C') {
 			return FabricaDeMinerales.crear("Cobre");
 		} else if(id == 'D') {
-			return FabricadeMinerales.crear("Diamante");
+			return FabricaDeMinerales.crear("Diamante");
 		}
 		return new Tierra();
 	}
