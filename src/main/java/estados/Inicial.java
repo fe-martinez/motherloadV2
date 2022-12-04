@@ -1,4 +1,4 @@
-package tp;
+package estados;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,7 @@ import jugador.AccionMovimiento;
 import jugador.Interacciones;
 import jugador.Jugador;
 import jugador.TipoMovimiento;
+import tp.Juego;
 
 public class Inicial implements Estado{
 	private static final double COEF_REDUCCION_X = 0.008;

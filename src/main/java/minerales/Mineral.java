@@ -6,11 +6,13 @@ public abstract class Mineral implements Bloque {
 	private int precio;
 	private char letra;
 	private TipoDeBloque tipo;
+	private String nombre;
 	
-	public Mineral(int precio, char letra, TipoDeBloque tipo) {
+	public Mineral(int precio, char letra, TipoDeBloque tipo,String nombre) {
 		this.precio = precio;
 		this.letra = letra;
 		this.tipo = tipo;
+		this.nombre = nombre;
 	}
 	
 	//Devuelve el precio.
@@ -25,5 +27,9 @@ public abstract class Mineral implements Bloque {
 	
 	public TipoDeBloque getTipoDeBloque() {
 		return this.tipo;
+	}
+	
+	public String getNombre() {
+		return this.nombre;
 	}
 }

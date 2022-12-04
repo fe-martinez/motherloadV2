@@ -109,6 +109,18 @@ public class Inventario{
 		return this.mineralesRecolectados.get(posicion).getTipoDeBloque();
 	}
 	
+	public char getIDMineral(int posicion) {
+		return this.mineralesRecolectados.get(posicion).getBloqueID();
+	}
+	
+	public String getNombreMineral(int posicion) {
+		return this.mineralesRecolectados.get(posicion).getNombre();
+	}
+	
+	public int getPrecioMineral(int posicion) {
+		return this.mineralesRecolectados.get(posicion).getPrecio();
+	}
+	
 	public boolean inventarioVacio() {
 		return this.mineralesRecolectados.size() == 0;
 	}

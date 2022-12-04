@@ -3,6 +3,9 @@ package tp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
+
+import Estados.Estado;
+import Estados.Inicial;
 import javafx.scene.input.KeyCode;
 import jugador.Accion;
 import jugador.AccionItem;
@@ -18,7 +21,7 @@ public class Juego {
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
 
-	static final double GRAVEDAD = 0.0045;
+	public static final double GRAVEDAD = 0.0045;
 	public static final double MAX_TICKS = 75;
 	
 	private Suelo suelo;

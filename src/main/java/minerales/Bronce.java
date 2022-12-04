@@ -4,8 +4,9 @@ public class Bronce extends Mineral {
 	private static final char LETRA = 'B';
 	private static int PRECIO = 60;
 	private static TipoDeBloque TIPO = TipoDeBloque.BRONCE;
+	private static String NOMBRE = "Bronce";
 	
 	public Bronce() {
-		super(Bronce.PRECIO,Bronce.LETRA, Bronce.TIPO);
+		super(PRECIO,LETRA,TIPO,NOMBRE);
 	}
 }

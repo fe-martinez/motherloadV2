@@ -1,10 +1,11 @@
-package tp;
+package estados;
 
 import java.util.ArrayList;
 
 import jugador.Accion;
 import jugador.Interacciones;
 import jugador.Jugador;
+import tp.Juego;
 
 public class TaladrandoAbajo implements Estado {
 	private double ticks;
