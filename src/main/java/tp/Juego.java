@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
-import Estados.Estado;
-import Estados.Inicial;
+import estados.Estado;
+import estados.Inicial;
 import javafx.scene.input.KeyCode;
 import jugador.Accion;
 import jugador.AccionItem;
@@ -83,13 +83,12 @@ public class Juego {
 	//Realiza las acciones que encuentra en la lista de acciones y las remueve de la misma.
 	//De momento, para ser utilizada por consola funciona de esta manera, pero la idea es que sea un loop que ejecute todas las acciones,
 	//una por cada una de las teclas que estan siendo presionadas de momento.
-	public void realizarAccion(ArrayList<Accion> acciones, long dt) {
+	public void update(ArrayList<Accion> acciones, long dt) {
 		for(var accion: acciones) {
 			accion.aplicar();
 		}
 		msSinceLastFrame += dt / 1_000_000;
 		while (msSinceLastFrame >= MS_PER_FRAME) {
-			
 			var estadoActual = this.estado.update(acciones, jugador, interacciones);
 			if(estadoActual != null) {
 				this.estado = estadoActual;

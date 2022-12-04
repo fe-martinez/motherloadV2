@@ -17,6 +17,8 @@ public class Volando implements Estado {
 			pj.setY(pj.getY() + pj.getVelY());
 			return true;
 		} else {
+			int fallDamage = interacciones.calcularDanio(pj.getVelY());
+			pj.getNave().recibirDanio(fallDamage);
 			pj.setVelY(0);
 		}
 		return false;

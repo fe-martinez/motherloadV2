@@ -50,12 +50,13 @@ public class HUD {
 		Color rojo = Color.rgb(209, 19, 19);
 		Color amarillo = Color.rgb(181, 142, 83);
 		
-		double porcentajeHP = (pj.getNave().getHP() / pj.getNave().getMaxHP()) * 100;
+		double porcentajeHP = ((double)pj.getNave().getHP() / (double)pj.getNave().getMaxHP()) * 100;
 		context.drawImage(imagenes.get(0), 10, 10);
 		context.setFill(sombra);
 		context.setStroke(Color.BLACK);
 		context.fillRect(60, 20, 2 * 100, 20);
 		context.setFill(rojo);
+		System.out.println(porcentajeHP);
 		context.fillRect(60, 20, 2 * porcentajeHP, 20);
 		
 		double porcentajeNafta = (pj.getNave().getNivelDeCombustible() / pj.getNave().getCapacidadTanque()) * 100;

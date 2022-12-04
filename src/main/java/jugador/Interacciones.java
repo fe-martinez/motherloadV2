@@ -16,10 +16,8 @@ public class Interacciones {
 		this.tiendas = tiendas;
 	}
 	
-	//Calcula el daño según la altura desde la que cae.
-	//Si no se usa borrala :P
-	private int calcularDanio(int altura) {
-		return (int)(altura * 0.2);
+	public int calcularDanio(double velY) {
+		return (int)(velY * 10);
 	}
 	
 	//Permite al Jugador taladrar y ver si debe recolectar un Mineral o no.

@@ -93,7 +93,6 @@ public class VistaJuego {
 			@Override
 			public void handle(long now) {
 				dibujar(context, juego, hud, imagenes, imagenesPJ);
-				
 		    	//Convertir input y realizar accion son bastante diferentes a los de la Etapa 2. Estan integrados a esta version
 		    	// y no a la de consola.
 				var acciones = new ArrayList<Accion>();
@@ -104,7 +103,7 @@ public class VistaJuego {
 					}
 				}
 				long dt = last == 0 ? 0 : now - last;
-				juego.realizarAccion(acciones, dt);
+				juego.update(acciones, dt);
 				last = now;
 			}
         }.start();
