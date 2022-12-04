@@ -90,19 +90,6 @@ public class VistaEstacionDeMantenimiento implements VistaEntidad {
 		for(int i = 4; i < 6; i++) {
 			imagenes.put(keys.get(i), CreadorDeImagenes.obtenerImagen(imagenesBotones.get(i), 200, 100));
 		}
-		
-		/*Esta versión es más elegante pero no sé por qué no anda bien :P
-		buttonBackgroundImage = new HashMap<>();
-		for(int i = 0; i < keys.size(); i++) {
-			buttonBackgroundImage.put(keys.get(i),new BackgroundImage(imagenes.get(keys.get(i)),null,null,null,null));
-		}
-		buttonBackground = new HashMap<>();
-		for(int i = 0; i < keys.size(); i++) {
-			buttonBackground.put(keys.get(i),new Background(buttonBackgroundImage.get(keys.get(i))));
-		}
-		*/
-		
-		//Esta es la versión que anda, no está mal pero me gusta mucho más la versión anterior así que si la arreglás mejor :P
 		buttonBackgroundImage = new HashMap<>();
 		for(HashMap.Entry<String,Image> pair: imagenes.entrySet()) {
 		        buttonBackgroundImage.put(pair.getKey(),new BackgroundImage(pair.getValue(),BackgroundRepeat.NO_REPEAT,null,null,null));
@@ -245,8 +232,6 @@ public class VistaEstacionDeMantenimiento implements VistaEntidad {
 	 }
 	
 	 public void mostrar() {
-	    //Lo de mostando era porque se apilaban las ventanas mientras el jugador estaba parado encima de la tienda
-	    //Hay que encontrar una solucion mejor!
 	    if(!this.mostrando) {
 		    try {
 		    	this.inicializar();
