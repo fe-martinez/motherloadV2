@@ -10,6 +10,7 @@
 * Que la barrita de vida que aparece arriba se pinte según la vida del personaje (solo funciona cuando hay 100% de vida) (Fran)
 * Agregar la mecanica de daño. (Fran)
 * Crear los minerales que faltan :P
+* Hacer las alertas (Clari)
 
 # EXTRA 
 - Pausa (ya tenemos el menu igual, creo que con eso alcanza).
