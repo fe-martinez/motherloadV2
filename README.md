@@ -1,13 +1,16 @@
 # Que cosas importantes faltan implementar! (Domingo 4/12)
-* Hacer algo con los bordes del mapa. Poner otra imagen o no se.
-* Musica, sonidos. (Clari/Both)
-* Terminar config (Fran)
 * Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos. (Both)
-* Hacer las alertas (Clari)
+## Fran
 * Cambiar el gasto de combustible (Fran)
 * Salir al menú principal (Fran)
 * Poner los configs de EndGame (Fran)
 * Intentar ganar y ver que funcione :P (Fran)
+* Terminar config (Fran)
+## Clari
+* Hacer algo con los bordes del mapa. Poner otra imagen o no se.
+* Musica, sonidos.
+* Hacer las alertas.
+* Hacer la historia del juego.
 
 # EXTRA 
 - Pausa (ya tenemos el menu igual, creo que con eso alcanza).
