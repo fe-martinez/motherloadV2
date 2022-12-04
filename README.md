@@ -6,6 +6,7 @@
 * Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P. (Clari)
 * Hacer las alertas (Clari)
 * Cambiar el gasto de combustible (Fran)
+* Salir al menú principal (Fran)
 
 # EXTRA 
 - Pausa (ya tenemos el menu igual, creo que con eso alcanza).
