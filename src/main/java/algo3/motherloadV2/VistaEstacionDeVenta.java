@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import jugador.Jugador;
+import minerales.Mineral;
 
 public class VistaEstacionDeVenta implements VistaEntidad{
 	List<String> valores = List.of("$5","$10","$25","$50","Fill");
@@ -42,6 +43,9 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	private VBox cajaLista;
     
 	public VistaEstacionDeVenta(Stage stage, Group root, Jugador jugador) {
+		for(int i = 0; i < this.list.size(); i++) {
+			this.contador.add(0);
+		}
 		this.stage = stage;
 		this.jugador = jugador;
 		this.inicializarCaracteristicas();
@@ -49,27 +53,35 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	    this.inicializarAnchorPane();
 	}
 	
+	public int funcion(char IDMineral) {
+		int i = 0;
+		boolean encontrado = false;
+		while(i < this.list.size() && !encontrado) {
+			if(IDMineral == this.list.get(i).charAt(0)) {
+				encontrado = true;
+			}
+			i++;
+		}
+		return i;
+	}
+	
 	public void actualizarVista() {
 		this.inicializarCaracteristicas();
 		labels.clear();
 		if(!this.jugador.inventarioVacio()) {
 			int contador = 1;
-			for(int i = 0; i < this.jugador.getInventario().getCantidadDeMinerales()-1; i++) {
+			int i = 0;
+			while(i < this.jugador.getInventario().getCantidadDeMinerales()-1) {
 				if(this.jugador.getInventario().getTipoDeMineral(i) == this.jugador.getInventario().getTipoDeMineral(i+1)) {
 					contador++;
 				}
 				else {
-					this.contador.add(contador);
+					labels.add(new Label(this.jugador.getInventario().getNombreMineral(i) + " " + contador + " X $ " + this.jugador.getInventario().getPrecioMineral(i)+ " = $" + this.jugador.getInventario().getPrecioMineral(i) * contador));
 					contador = 1;
 				}
+				i++;
 			}
-			this.contador.add(contador);
-			
-		    for(int i = 0; i < this.contador.size(); i++) {
-		    	if(this.contador.get(i) > 0) {
-		    		labels.add(new Label(list.get(i) + " " + this.contador.get(i) + " X " + listaDePrecios.get(i) + " = $" + (Integer.parseInt(listaDePrecios.get(i)) * this.contador.get(i))));
-		    	}
-		    }
+			labels.add(new Label(this.jugador.getInventario().getNombreMineral(i) + " " + contador + " X $ " + this.jugador.getInventario().getPrecioMineral(i)+ " = $" + this.jugador.getInventario().getPrecioMineral(i) * contador));
 		}
 		else {
 			labels.add(new Label("Inventario vacío :("));
@@ -80,7 +92,6 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 	    }
 	    this.inicializarStackPane();
 	    this.inicializarAnchorPane();
-	    this.contador.clear();
 	}
 	
 	private void inicializarCaracteristicas() {
@@ -102,7 +113,8 @@ public class VistaEstacionDeVenta implements VistaEntidad{
 		   	this.popup.hide();
 		});
 	    
-	    botonVender.setOnAction(e -> {this.jugador.venderMinerales();
+	    botonVender.setOnAction(e -> {
+	    		this.jugador.venderMinerales();
 	    		this.actualizarVista();
 	    });
 	}
