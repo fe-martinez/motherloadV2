@@ -125,14 +125,12 @@ public class Interacciones {
 
 		public boolean chequearColisionHorizontal() {
 			if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
-				System.out.println("CHOCA DERECHA");
 				return true;
 			} else if(pj.getVelX() < 0 && chocaDireccionHorizontal(-1)) {
-				System.out.println("CHOCA IZQUIERDA");
 				return true;
 			}
 			
 			return false;
 		}
-	
+
 }
