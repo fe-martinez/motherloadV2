@@ -6,18 +6,20 @@ import minerales.FabricaDeMinerales;
 public class FabricaDeSuelo {
 	private static Bloque ponerBloque() {
 		var rand = new Random();
-		int valor = rand.nextInt(100);
+		int valor = rand.nextInt(200);
 		
-		if(valor > 0 && valor < 80) {
+		if(valor > 0 && valor < 150) {
 			return new Tierra();
-		} else if(valor >= 80 && valor < 88) {
+		} else if(valor >= 150 && valor < 168) {
 			return FabricaDeMinerales.crear("Hierro");
-		} else if(valor >= 88 && valor < 94) {
+		} else if(valor >= 168 && valor < 182) {
+			return FabricaDeMinerales.crear("Cobre");
+		} else if(valor >= 182 && valor < 190) {
 			return FabricaDeMinerales.crear("Bronce");
-		} else if(valor >= 94 && valor < 98) {
-			return FabricaDeMinerales.crear("Plata");
-		} else {
+		} else if(valor >= 190 && valor < 196) {
 			return FabricaDeMinerales.crear("Oro");
+		} else {
+			return FabricaDeMinerales.crear("Diamante");
 		}
 	}
 	
@@ -58,6 +60,10 @@ public class FabricaDeSuelo {
 			return FabricaDeMinerales.crear("Plata");
 		} else if(id == 'O') {
 			return FabricaDeMinerales.crear("Oro");
+		} else if(id == 'C') {
+			return FabricaDeMinerales.crear("Cobre");
+		} else if(id == 'D') {
+			return FabricadeMinerales.crear("Diamante");
 		}
 		return new Tierra();
 	}
