@@ -4,9 +4,6 @@
 * Terminar config (Fran)
 * Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos. (Both)
 * Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P. (Clari)
-* Dar una manera de ganar el juego. (Clari)
-* Darle estado al juego. (Clari)
-* Crear los minerales que faltan :P
 * Hacer las alertas (Clari)
 
 # EXTRA 
@@ -41,3 +38,6 @@
 * Que la est de venta y la de reparación se actualicen (Fran)
 * Que la barrita de vida que aparece arriba se pinte según la vida del personaje (solo funciona cuando hay 100% de vida) (Fran)
 * Agregar la mecanica de daño. (Fran)
+* Dar una manera de ganar el juego. (Clari)
+* Darle estado al juego. (Clari)
+* Crear los minerales que faltan :P
