@@ -1,18 +1,15 @@
 # Que cosas importantes faltan implementar! (Domingo 4/12)
 * Hacer algo con los bordes del mapa. Poner otra imagen o no se.
-* Musica, sonidos. Para los sonidos, crear una nueva varia
-* Config file.
-* Slots de guardados.
-* Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos.
+* Musica, sonidos. (Clari/Both)
+* Terminar config (Fran)
+* Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos. (Both)
+* Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P. (Clari)
+* Dar una manera de ganar el juego. (Clari)
+* Darle estado al juego. (Clari)
+* Que la est de venta y la de reparación se actualicen (Fran)
+* Que la barrita de vida que aparece arriba se pinte según la vida del personaje (solo funciona cuando hay 100% de vida) (Fran)
+* Agregar la mecanica de daño. (Fran)
 
-# IMPORTANTE
-* Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P.
-- Sonido al taladrar (va de la mano con la animacion creo).
-- Musica.
-- Dar una manera de ganar el juego.
-- Darle estado al juego.
-- Agregar la mecanica de daño. (hay una función, ver qué onda con eso :P)
-- 
 # EXTRA 
 - Pausa (ya tenemos el menu igual, creo que con eso alcanza).
 - Darle historia al juego.
@@ -22,6 +19,7 @@
     - Dificultad (yo pensaba en que la dificultad sea el tamaño del mapa, maybe cantidad de minerales).
 - Save y Load.
 - Zoom in y Zoom out + Resize de la ventana
+- * Slots de guardados.
 
 # TERMINADO
 * Probar que la nueva implementacion de movimiento con los estados funcione correctamente.
@@ -39,3 +37,4 @@
 * Afinar animaciones de pj.
 - Movimiento.
 - Animación correcta del taladro.
+* Config file.
