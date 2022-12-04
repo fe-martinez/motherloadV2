@@ -2,7 +2,6 @@ package algo3.motherloadV2;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -15,16 +14,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import jugador.Jugador;
-import mejoras.MejoraInstantanea;
 import tiendas.TiendaDeMejoras;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.stage.Popup;
 
 public class VistaTiendaDeMejoras implements VistaEntidad{
 	//Tanque
@@ -61,12 +57,12 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	
 	//MaxHealth
 	List<String> descripcionesMaxHealth = List.of(
-				"Caso de Hierro\r\n" + "17 de vida\r\n" + "$750\r\n",
-				"Caso de Bronce\r\n" + "30 de vida\r\n" + "$2.000\r\n",
-				"Caso de Acero\r\n" + "50 de vida\r\n" + "$5.000\r\n",
-				"Caso de Platino\r\n" + "80 de vida\r\n" + "$20.000\r\n",
+				"Casco de Hierro\r\n" + "17 de vida\r\n" + "$750\r\n",
+				"Casco de Bronce\r\n" + "30 de vida\r\n" + "$2.000\r\n",
+				"Casco de Acero\r\n" + "50 de vida\r\n" + "$5.000\r\n",
+				"Casco de Platino\r\n" + "80 de vida\r\n" + "$20.000\r\n",
 				"Casco de Einstenio\r\n" + "120 de vida\r\n" + "$20.000\r\n",
-				"Caso Supremo lml\r\n" + "180 de vida\r\n" + "$500.000\r\n"
+				"Casco Supremo lml\r\n" + "180 de vida\r\n" + "$500.000\r\n"
 			);
 	
 	List<Label> labelsMaxHealth = new ArrayList<>();
@@ -82,35 +78,18 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 	GridPane gridPaneInicio = new GridPane();
 	Tab inicio = new Tab("Inicio");
 	
-	//Fondo Blanco
-	//Image fondoBlanco = new Image("C:\\Users\\Clari\\Documents\\MotherloadV2\\motherloadV2\\src\\rsc\\Tiendas\\TiendaDeMejoras\\arena.jpg",1000,600,true,true);
-
-	//Tabpane
 	TabPane tabPane = new TabPane();
-	
-	//VBox
 	VBox vbox = new VBox();
-	
 	VBox vboxTanque;
 	HBox hboxActual;
-	
-	//Popup
-
-	Popup popup = new Popup();
-	
-	//Pantalla de inicio:
-	
-	//Botoncito
 	Button button;
-	//Scene
 	Scene myScene;
 	StackPane stackPane;
-	//Stage
 	Stage myStage;
 	
-	Color verdeTransparente = Color.rgb(74, 74, 74);
-	Color verdeMasOscuro = Color.rgb(150, 150, 150);
-	Color rojo = Color.rgb(219, 126, 92);
+	Color grisOscuro = Color.rgb(74, 74, 74);
+	Color grisPlata = Color.rgb(150, 150, 150);
+	Color naranjita = Color.rgb(219, 126, 92);
 	
 	String mejoraSeleccionada;
 	private TiendaDeMejoras tienda;
@@ -160,7 +139,6 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario3.png", 150, 150));
 		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario4.png", 150, 150));
 		this.imgsInventario.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inventario/inventario5.png", 150, 150));
-		
 	}
 	
 	private void inicializarImagenesMaxHealth() {
@@ -169,10 +147,7 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth3.png", 150, 150));
 		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth4.png", 150, 150));
 		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth5.png", 150, 150));
-		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth6.png", 150, 150));
-		
-
-		
+		this.imgsMaxHealth.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/MaxHealth/maxhealth6.png", 150, 150));	
 	}
 	
 	private void inicializarBackgroundTanque() {
@@ -286,35 +261,20 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.botonesMaxHealth.get(5).setOnAction(e -> {vboxMaxHealth.getChildren().set(0, labelsMaxHealth.get(5)); mejoraSeleccionada = "V6";});
 	}
 	
-	
-	
 	private void configGridPane(GridPane gridPane) {
 		gridPane.setPrefSize(600,600);
 		gridPane.setHgap(30);
 		gridPane.setVgap(30);
 		gridPane.setPadding(new Insets(50, 0, 50, 10));
-		gridPane.setBackground(Background.fill(verdeMasOscuro));
+		gridPane.setBackground(Background.fill(grisPlata));
 	}
 	
-	//LO DE VBOXTANQUE no se si es estrictamente necesario pasa que para poner los labels necesitaba la referencia.
-	//Pero creo que se puede utilizar un unico vbox para los 3.
-	private void inicializarTabTanque() {
-		this.inicializarBotonesTanque();
-		configGridPane(gridPaneTanque);
-		gridPaneTanque.getChildren().addAll(botonesTanque);
-		HBox hbox = new HBox();
-		vboxTanque = new VBox();
-		tanque.setContent(inicializarVistaCompra(gridPaneTanque, hbox, vboxTanque));
-		tanque.setClosable(false);
-	 }
-	
-	
-	private HBox inicializarVistaCompra(GridPane opciones, HBox hbox, VBox vbox) {
+	private HBox inicializarVistaCompra(GridPane opciones,HBox hbox,VBox vbox) {
 		hbox.setPrefSize(1000, 600);
 		hbox.getChildren().add(opciones);
 		hbox.setSpacing(20);
-		hbox.setBackground(Background.fill(verdeMasOscuro));
-		vbox.setBackground(Background.fill(verdeTransparente));
+		hbox.setBackground(Background.fill(grisPlata));
+		vbox.setBackground(Background.fill(grisOscuro));
 
 		vbox.setPrefSize(400, 600);
 		Label esperando = new Label("ELIJA SU OPCION");
@@ -324,7 +284,7 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		boton.setFont(Font.font(30));
 		boton.setPrefSize(400, 100);
 		
-		Background botonBG = Background.fill(rojo);
+		Background botonBG = Background.fill(naranjita);
 		boton.setBackground(botonBG);
 		boton.setLayoutY(500);
 		
@@ -334,18 +294,19 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		vbox.getChildren().add(boton);
 		hbox.getChildren().add(vbox);
 		
-		boton.setOnAction(e-> {if (mejoraSeleccionada == null) {
-									Alert a = new Alert(AlertType.ERROR);
-									a.setContentText("No ha elegido una mejora");
-									a.show();
-									} else {
-										tienda.interactuar(pj, mejoraSeleccionada);
-									}
-		}
-		);
+		boton.setOnAction(e-> {
+			if (mejoraSeleccionada == null) {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText("No ha elegido una mejora");
+				a.show();
+			}
+			else {
+				tienda.interactuar(pj, mejoraSeleccionada);
+			}
+		});
+		
 		return hbox;
 	}
-	
 	
 	private void inicializarTabMaxHealth() {
 		this.inicializarBotonesMaxHealth();
@@ -367,18 +328,31 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		inventario.setClosable(false);
 	}
 	
+	private void inicializarTabTanque() {
+		this.inicializarBotonesTanque();
+		configGridPane(gridPaneTanque);
+		gridPaneTanque.getChildren().addAll(botonesTanque);
+		HBox hbox = new HBox();
+		vboxTanque = new VBox();
+		tanque.setContent(inicializarVistaCompra(gridPaneTanque,hbox,vboxTanque));
+		tanque.setClosable(false);
+	 }
+	
 	private void inicializarTabInicio() {
 		this.labelInicio = new Label("¡Bienvenido a la tienda de actualizaciones!\r\n"
 				+ "Si estás buscando mejorar tu máquina excavadora, ¡has venido al lugar correcto!\r\n"
 				+ "Podés navegar por las diferentes categorías de actualización usando los botones de arriba.");
 		labelInicio.setFont(new Font(20));
 		gridPaneInicio.setPrefSize(1000,600);
-		gridPaneInicio.setBackground(Background.fill(Paint.valueOf("White")));
+		gridPaneInicio.setBackground(Background.fill(grisPlata));
+		//Image img = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Inicio.png",1000,600);
+		//BackgroundImage bImage = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, null, null);
+		//gridPaneInicio.setBackground(new Background(bImage));
 		gridPaneInicio.getChildren().add(labelInicio);
+		GridPane.setMargin(labelInicio,new Insets(200,0,0,100));
 		inicio.setContent(gridPaneInicio);
 		inicio.setClosable(false);
 	}
-	
 	
 	private void inicializarTabPane() {
 		this.inicializarTabInicio();
@@ -400,17 +374,18 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
         AnchorPane.setLeftAnchor(tabPane, 1.0);
         AnchorPane.setBottomAnchor(tabPane, 1.0);
 
-		
         Button botonClose = new Button("X");
         botonClose.setCancelButton(true);
         ventana.getChildren().add(botonClose);
 		AnchorPane.setTopAnchor(botonClose, 3.0);
 		AnchorPane.setRightAnchor(botonClose, 5.0);
 
-		botonClose.setOnAction(e -> {this.root.getChildren().remove(this.root.getChildren().size() - 1); this.mostrando = false;});
+		botonClose.setOnAction(e -> {
+			this.root.getChildren().remove(this.root.getChildren().size() - 1);
+			this.mostrando = false;
+		});
 	}
 
-	
 	private void interaccionesTabs() {
 		this.inicializarAccionesBotonesTanque();
 		this.inicializarAccionesBotonesInventario();
@@ -422,8 +397,6 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.inicializarTabPane();
     	this.inicializarPopup(root);
     	this.interaccionesTabs();
-    	//No me lo carga, ni idea :P
-    	//this.tabPane.setBackground(new Background(new BackgroundImage(fondoBlanco,BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT, null, null)));
 	}
 	
 	public VistaTiendaDeMejoras(Stage stage, Group root, TiendaDeMejoras tienda, Jugador pj) {
@@ -434,8 +407,6 @@ public class VistaTiendaDeMejoras implements VistaEntidad{
 		this.mostrando = false;
 	}
 	
-	//No sé si está bien así, cuando se crea recibe la referencia al Stage así que debería funcionar, sino bueno, la otra idea es que lo reciba por parámetro
-	//Pero si lo vamos a llamar desde otro lado no tiene sentido pasarlo por parámetro xdd
 	public void mostrar() {
 		if(!this.mostrando) {
 			try{
