@@ -47,6 +47,7 @@ public class VistaJuego {
 	private List<Particulas> particulas = new ArrayList<>();
 	private VistaInventario vistaInventario;
 	private HUD hud;
+	private Sonidos sonidos;
 	
 
 	public VistaJuego(Stage stage) {
@@ -67,6 +68,7 @@ public class VistaJuego {
         GraphicsContext context = canvas.getGraphicsContext2D();
         hud = new HUD(root, context, WIDTH, HEIGHT, juego.getJugador(), juego.getGuardarPartida());
         vistaInventario = new VistaInventario(root, juego.getJugador(), WIDTH, HEIGHT);
+        sonidos = new Sonidos();
 
         dibujar(context, juego, hud, imagenes, imagenesPJ);
         hud.dibujarHUD();
@@ -144,11 +146,24 @@ public class VistaJuego {
 		
 		if(jugador.getTipoAnimacion() == 1) {
 			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2), (HEIGHT/2) + 56, 0));
+			sonidos.reproducirSonidoTaladro();
 		} else if(jugador.getTipoAnimacion() == 2) {
 			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) + 32, (HEIGHT/2) + 32, 0.5));
+			sonidos.reproducirSonidoTaladro();
 		} else if(jugador.getTipoAnimacion() == 3) {
 			particulas.addAll(dibujarParticulasTierra(jugador, (WIDTH/2) - 32, (HEIGHT/2) + 32, -0.5));
+			sonidos.reproducirSonidoTaladro();
+		} else {
+			sonidos.pararSonidoTaladro();
 		}
+		
+		
+		if(jugador.getTipoAnimacion() == 4) {
+			sonidos.reproducirSonidoHelicoptero();
+		} else {
+			sonidos.pararSonidoHelicoptero();
+		}
+		
 	
 		if(jugador.getOrientacion() == TipoMovimiento.DERECHA) {
 			particulas.addAll(dibujarParticulasHumo(jugador, WIDTH/2 - GRILLA_PJ_ANCHO/2, HEIGHT/2 + GRILLA_PJ_ALTO/2 - 10, -2));
