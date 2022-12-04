@@ -1,11 +1,13 @@
 package algo3.motherloadV2;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -26,7 +28,8 @@ public class VistaEndGame {
 	String texto;
 	StackPane sPane;
 	Color colorBordeLabel = Color.rgb(0, 0, 0);
-	Color colorTextoLabel = Color.rgb(100,10,90);
+	Color colorTextoLabel = Color.rgb(0,0,0);
+	Color colorFondoLabel = Color.rgb(100,10,90,0.5);
 	Stage stage;
 	Scene scene;
 	
@@ -36,24 +39,26 @@ public class VistaEndGame {
 		sPane = new StackPane();
 		if(estadoJuego == EstadoDelJuego.GANADO) {
 			image = CreadorDeImagenes.obtenerImagen(IMG_WIN_GAME,1024,768);
-			texto = TEXTO_LOST_GAME;
+			texto = TEXTO_WIN_GAME;
 		}
 		else if(estadoJuego == EstadoDelJuego.PERDIDO) {
 			image = CreadorDeImagenes.obtenerImagen(IMG_LOST_GAME,1024,768);
 			texto = TEXTO_WIN_GAME;
+			texto = TEXTO_LOST_GAME;
 		}
 		
 		imgView = new ImageView(image);
 		
 		label = new Label(texto);
-		label.setPrefSize(1024,230);
-		label.setFont(new Font(20));
+		label.setPrefSize(1024,280);
+		label.setFont(new Font(50));
 		label.setBorder(Border.stroke(colorBordeLabel));
+		label.setBackground(Background.fill(colorFondoLabel));
 		label.setTextFill(colorTextoLabel);
 	
 		sPane.getChildren().add(imgView);
 		sPane.getChildren().add(label);
-		StackPane.setMargin(label,new Insets(538,0,0,0));
+		StackPane.setAlignment(label,Pos.BOTTOM_CENTER);
 		
 	}
 	
