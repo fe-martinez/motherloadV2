@@ -48,7 +48,7 @@ public class VistaJuego {
 	private VistaInventario vistaInventario;
 	private HUD hud;
 	private Sonidos sonidos;
-	
+	private Juego juego;
 
 	public VistaJuego(Stage stage) {
 		this.stage = stage;
@@ -59,7 +59,7 @@ public class VistaJuego {
 		WIDTH = stage.getWidth();
 		HEIGHT = stage.getHeight();
 		
-        Juego juego = new Juego((int)COLUMNAS, configs.getDificultad());
+        juego = new Juego((int)COLUMNAS, configs.getDificultad());
         var imagenes = cargarImagenes();
         AnimacionJugador imagenesPJ = new AnimacionJugador(juego.getJugador(), GRILLA_PJ_ANCHO, GRILLA_PJ_ALTO);
         //var imagenesJugador = cargarImagenesJugador();
@@ -87,14 +87,12 @@ public class VistaJuego {
         escena.setOnKeyReleased(e -> {keysPressed.remove(e.getCode()); });
         escena.setOnMouseClicked(e -> checkInteraccionesMouse(e));
 
-        new AnimationTimer() {
+         new AnimationTimer() {
 
         	long last = 0;
 			@Override
 			public void handle(long now) {
 				dibujar(context, juego, hud, imagenes, imagenesPJ);
-		    	//Convertir input y realizar accion son bastante diferentes a los de la Etapa 2. Estan integrados a esta version
-		    	// y no a la de consola.
 				var acciones = new ArrayList<Accion>();
 				for(var pressed: keysPressed) {
 					Accion accion = juego.convertirInput(pressed);
@@ -105,6 +103,10 @@ public class VistaJuego {
 				long dt = last == 0 ? 0 : now - last;
 				juego.update(acciones, dt);
 				last = now;
+				if(juego.getEstado() != EstadoDelJuego.JUGANDO) {
+					this.stop();
+				}
+				
 			}
         }.start();
         stage.setFullScreen(configs.isFullScreen());
@@ -139,7 +141,6 @@ public class VistaJuego {
 		context.drawImage(imagenes.get(8), backgroundX, 0);
 	}
     
-	//Estas son la version mas cuadrada con "zoom", si queres probarla cambia los llamados de dibujar()
 	private void dibujarJugador2(GraphicsContext context, AnimacionJugador imagenes,  Jugador jugador) {
 		context.drawImage(imagenes.imagenADibujar(), ((WIDTH/2)) - (GRILLA_PJ_ANCHO/2), (HEIGHT/2));
 		
