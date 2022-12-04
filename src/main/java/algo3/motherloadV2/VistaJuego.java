@@ -13,6 +13,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jugador.Accion;
@@ -23,6 +25,7 @@ import terreno.Aire;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.Tierra;
+import tp.ConfigJuego;
 import tp.Juego;
 
 public class VistaJuego {
@@ -42,27 +45,29 @@ public class VistaJuego {
 	public static final double MID_Y = HEIGHT / 2;
 	Stage stage;
 	private List<Particulas> particulas = new ArrayList<>();
+	private VistaInventario vistaInventario;
+	private HUD hud;
 	
 
 	public VistaJuego(Stage stage) {
 		this.stage = stage;
 	}
 	
-	public void start(boolean loadGame) {
-		//stage.setResizable(false);
-		
-		stage.setResizable(true);
+	public void start(boolean loadGame, ConfigJuego configs) {
+		stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 		WIDTH = stage.getWidth();
 		HEIGHT = stage.getHeight();
-        Juego juego = new Juego((int)COLUMNAS, (int)FILAS);
+		
+        Juego juego = new Juego((int)COLUMNAS, configs.getDificultad());
         var imagenes = cargarImagenes();
         AnimacionJugador imagenesPJ = new AnimacionJugador(juego.getJugador(), GRILLA_PJ_ANCHO, GRILLA_PJ_ALTO);
         //var imagenesJugador = cargarImagenesJugador();
         Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
-        HUD hud = new HUD(context, WIDTH, HEIGHT, juego.getJugador());
-        
+        hud = new HUD(root, context, WIDTH, HEIGHT, juego.getJugador(), juego.getGuardarPartida());
+        vistaInventario = new VistaInventario(root, juego.getJugador(), WIDTH, HEIGHT);
+
         dibujar(context, juego, hud, imagenes, imagenesPJ);
         hud.dibujarHUD();
         
@@ -72,14 +77,16 @@ public class VistaJuego {
         
         root.getChildren().add(canvas);
         Scene escena = new Scene(root, WIDTH, HEIGHT);
+        
         stage.setScene(escena);
        
         var keysPressed = new HashSet<KeyCode>();
         escena.setOnKeyPressed(e -> {keysPressed.add(e.getCode()); });
         escena.setOnKeyReleased(e -> {keysPressed.remove(e.getCode()); });
-        escena.setOnMouseClicked(e -> hud.checkMenu(e, root, juego.getGuardarPartida()));
-       //stage.setFullScreen(true);
+        escena.setOnMouseClicked(e -> checkInteraccionesMouse(e));
+
         new AnimationTimer() {
+
         	long last = 0;
 			@Override
 			public void handle(long now) {
@@ -99,6 +106,7 @@ public class VistaJuego {
 				last = now;
 			}
         }.start();
+        stage.setFullScreen(configs.isFullScreen());
         stage.show();
 	}
 	
@@ -121,6 +129,7 @@ public class VistaJuego {
     	}
     	
     	hud.dibujarHUD();
+    	vistaInventario.dibujarBotonInventario(context);
     }
 	
 	private static void dibujarFondo(GraphicsContext context, ArrayList<Image> imagenes, Jugador pj) {
@@ -224,23 +233,24 @@ public class VistaJuego {
     
     private List<Particulas> dibujarParticulasTierra(Jugador pj, double posStartX, double posStartY, double sentido) {
     	var particulas = new ArrayList<Particulas>();
-    	
     	for(int i = 0; i < 2; i++) {
     		//En orden -> Posicion de inicio X, Posicion de inicio Y, vector con la velocidad, tamaño de la particula, duracion, color.
     		Particulas p = new Particulas(posStartX, posStartY, new Posicion((Math.random() - 0.5 + sentido) * 2, Math.random()), Math.random() * 10, 0.5, Color.rgb(74, 48, 35));
     		particulas.add(p);
     	}
-    	
     	return particulas;
     }
     
     private List<Particulas> dibujarParticulasHumo(Jugador pj, double posStartX, double posStartY, double sentido) {
     	var particulas = new ArrayList<Particulas>();
-    	
     	Particulas p = new Particulas(posStartX, posStartY, new Posicion((Math.random()) * sentido, Math.random() * -0.5), Math.random() * 30, 0.3, Color.rgb(224, 224, 224, 0.2));
     	particulas.add(p);
-    	
     	return particulas;
+    }
+    
+    private void checkInteraccionesMouse(MouseEvent e) {
+        hud.checkMenu(e);
+        vistaInventario.checkInteraccionInventario(e);
     }
     
     

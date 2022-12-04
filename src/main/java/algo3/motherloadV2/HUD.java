@@ -26,17 +26,23 @@ public class HUD {
 	private double screenWidth;
 	private double screenHeight;
 	private Jugador pj;
+	private GuardarPartida guardar;
 	List<Image> imagenes;
+	private Group root;
+	private boolean isShowing;
 	
-	public HUD(GraphicsContext context, double screenWidth, double screenHeight, Jugador pj) {
+	public HUD(Group root, GraphicsContext context, double screenWidth, double screenHeight, Jugador pj, GuardarPartida guardar) {
 		this.context = context;
+		this.root = root;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
+		this.guardar = guardar;
 		this.imagenes = new ArrayList<Image>();
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/Health.png", 40, 40));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/IconFuel.png", 40, 40));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/InGameMenu.png", 64, 64));
 		this.pj = pj;
+		this.isShowing = false;
 	}
 	
 	public void dibujarHUD() {
@@ -72,54 +78,62 @@ public class HUD {
 		context.drawImage(imagenes.get(2), screenWidth - 100, 10);
 	}
 	
-	public void checkMenu(MouseEvent e, Group root, GuardarPartida guardar) {
+	private void dibujarMenu() {
+	  	StackPane pane = new StackPane();
+    	VBox vbox = new VBox();
+    	Rectangle rect = new Rectangle(0, 0, 900, 600);
+    	Color colorcito = new Color(0.7, 0.7, 0.7, 0.3);
+    	rect.setFill(colorcito);
+    	
+    	Label label = new Label("Work in progress :p");
+		label.setFont(Font.font(50));
+		
+		Button botonOK = new Button("Continue");
+		botonOK.setPrefWidth(200);
+		
+		Button botonSalir = new Button("Salir del juego");
+		botonSalir.setPrefWidth(200);
+		
+		Button botonMainMenu = new Button("Salir al menu principal");
+		botonMainMenu.setPrefWidth(200);
+		
+		Button saveGame = new Button("Guadar partida");
+		saveGame.setPrefWidth(200);
+		
+		vbox.setSpacing(20);
+		vbox.getChildren().add(label);
+		vbox.getChildren().add(botonOK);
+		vbox.getChildren().add(botonSalir);
+		vbox.getChildren().add(botonMainMenu);
+		vbox.getChildren().add(saveGame);
+		vbox.setAlignment(Pos.CENTER);
+		
+    	pane.getChildren().add(rect);
+    	pane.getChildren().add(vbox);
+    	
+    	pane.setAlignment(Pos.CENTER);
+    	pane.setLayoutX((VistaJuego.WIDTH - 900) / 2);
+    	pane.setLayoutY((VistaJuego.HEIGHT - 600) / 2);
+    	
+    	root.getChildren().add(pane);
+    	botonOK.setOnAction(t -> {root.getChildren().remove(pane); isShowing = false;});
+    	botonSalir.setOnAction(t -> System.exit(0));
+    	saveGame.setOnAction(t -> guardar.guardarPartida());
+	}
+	
+	
+	public void checkMenu(MouseEvent e) {
 		var x = e.getSceneX();
 		var y = e.getSceneY();
 		
 		if(x >= this.screenWidth - 100 && x <= screenWidth - 100 +64 && y >= 10 && y <= 10+64) {
-	    	StackPane pane = new StackPane();
-	    	VBox vbox = new VBox();
-	    	Rectangle rect = new Rectangle(0, 0, 900, 600);
-	    	Color colorcito = new Color(0.7, 0.7, 0.7, 0.3);
-	    	rect.setFill(colorcito);
-	    	
-	    	Label label = new Label("Work in progress :p");
-			label.setFont(Font.font(50));
-			
-			Button botonOK = new Button("Continue");
-			botonOK.setPrefWidth(200);
-			
-			Button botonSalir = new Button("Salir del juego");
-			botonSalir.setPrefWidth(200);
-			
-			Button botonMainMenu = new Button("Salir al menu principal");
-			botonMainMenu.setPrefWidth(200);
-			
-			Button saveGame = new Button("Guadar partida");
-			saveGame.setPrefWidth(200);
-			
-			vbox.setSpacing(20);
-			vbox.getChildren().add(label);
-			vbox.getChildren().add(botonOK);
-			vbox.getChildren().add(botonSalir);
-			vbox.getChildren().add(botonMainMenu);
-			vbox.getChildren().add(saveGame);
-			vbox.setAlignment(Pos.CENTER);
-			
-	    	pane.getChildren().add(rect);
-	    	pane.getChildren().add(vbox);
-	    	
-	    	pane.setAlignment(Pos.CENTER);
-	    	pane.setLayoutX((VistaJuego.WIDTH - 900) / 2);
-	    	pane.setLayoutY((VistaJuego.HEIGHT - 600) / 2);
-	    	
-	    	root.getChildren().add(pane);
-	    	botonOK.setOnAction(t -> root.getChildren().remove(pane));
-	    	botonSalir.setOnAction(t -> System.exit(0));
-	    	saveGame.setOnAction(t -> guardar.guardarPartida());
-	    	
+			if(!isShowing) {
+				dibujarMenu();
+				isShowing = true;
+			}
 		}
 	}
+	
 	
 	private int alturaPJ() {
 		var yPos = pj.getY();

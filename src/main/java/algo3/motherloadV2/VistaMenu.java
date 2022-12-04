@@ -19,19 +19,11 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tp.ConfigJuego;
 
 public class VistaMenu {
-	static final double WIDTH = 1024;
-	static final double HEIGHT = 768;
-	
-	private static final double FILAS_DIBUJADAS = 12;
-	private static final double COLUMNAS_DIBUJADAS = 12;
-	
-	private static final double GRILLA_ANCHO = WIDTH/COLUMNAS_DIBUJADAS;
-	private static final double GRILLA_ALTO = WIDTH/FILAS_DIBUJADAS;
-	
-	private static final double FILAS = 32;
-	private static final double COLUMNAS = 32;
+	double WIDTH = 1024;
+	double HEIGHT = 768;
 	
 	VistaJuego vistaJuego;
 	Group root;
@@ -52,8 +44,20 @@ public class VistaMenu {
 	Image imgBotonJugar;
 	ImageView viewBotonJugar, viewBotonJugarSelected, viewBotonCargar,viewBotonConfiguracion,viewBotonSalir;
 	Hyperlink botonJugar, botonCargar, botonConfig, botonSalir;
+	private VistaMenuConfig vistaConfigs;
 	
 	public VistaMenu(Stage stage) {
+    	var configs = ConfigJuego.readFile();
+    	if(configs != null) {
+    		this.WIDTH = configs.getScreenWidth();
+    		this.HEIGHT = configs.getScreenHeight();
+    		stage.setFullScreen(configs.isFullScreen());
+    	} else {
+    		this.WIDTH = 1024;
+    		this.HEIGHT = 768;
+    		stage.setFullScreen(false);
+    	}
+    	
 		vistaJuego = new VistaJuego(stage);
 		myStage = stage;
     	
@@ -61,7 +65,7 @@ public class VistaMenu {
 		vbox = new VBox();
 		spane = new StackPane();
 		escena = new Scene(spane, WIDTH, HEIGHT);
-		
+    	vistaConfigs = new VistaMenuConfig(stage, spane);
 		spane.getChildren().add(vbox);
 		
 		imgBotonJugar = CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/NuevaPartida.png",WIDTH,HEIGHT);
@@ -112,35 +116,9 @@ public class VistaMenu {
 		myStage.setScene(escena);
 		myStage.show();
 		
-		botonJugar.setOnAction(e -> vistaJuego.start(false));
+		botonJugar.setOnAction(e -> vistaJuego.start(false, configs));
 		botonSalir.setOnAction(e -> System.exit(0));
-		botonCargar.setOnAction(e ->vistaJuego.start(true));
-		botonConfig.setOnAction(e -> workInProgress());
-	}
-	
-	private void workInProgress() {
-    	pane = new StackPane();
-    	vbox2 = new VBox();
-    	rect = new Rectangle(0, 0, 600, 300);
-    	colorcito = new Color(0.7, 0.7, 0.7, 0.3);
-    	rect.setFill(colorcito);
-    	
-    	label = new Label("Work in progress :p");
-		label.setFont(Font.font(50));
-		
-		botonOK = new Button("OK");
-		botonOK.setPrefWidth(100);
-		
-		vbox2.setSpacing(20);
-		vbox2.getChildren().add(label);
-		vbox2.getChildren().add(botonOK);
-		vbox2.setAlignment(Pos.CENTER);
-		
-    	pane.getChildren().add(rect);
-    	pane.getChildren().add(vbox);
-    	spane.getChildren().add(pane);
-
-    	botonOK.setOnAction(e -> spane.getChildren().remove(pane));
-
+		botonCargar.setOnAction(e ->vistaJuego.start(true, configs));
+		botonConfig.setOnAction(e -> vistaConfigs.mostrar());
 	}
 }
