@@ -2,7 +2,7 @@
 * HACER LAS CLASES CONTROLADORX
 * Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos. (Both)
 ## Fran
-* Intentar ganar y ver que funcione :P (Fran)
+
 ## Clari
 * Hacer algo con los bordes del mapa. Poner otra imagen o no se.
 * Musica, sonidos.
@@ -48,3 +48,4 @@
 * Cambiar el gasto de combustible (Fran)
 * Salir al menú principal (Fran)
 * Terminar config (Fran) (kinda)
+* Intentar ganar y ver que funcione :P (Fran)
