@@ -45,7 +45,9 @@ public class TiendaDeConsumibles extends Entidad {
 		}
 		
 		if(jugador.hacerCompra(objeto.getCosto())) {
+			System.out.println(objeto.getMejoraID());
 			jugador.getInventario().agregarUsable(objeto);
+			System.out.println("SE COMPRO SATISFACTORIAMENTE");
 		}
 	}
 	

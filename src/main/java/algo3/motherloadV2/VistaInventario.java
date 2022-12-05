@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import jugador.Jugador;
+import mejoras.TipoUsable;
+import mejoras.Usable;
 import minerales.Mineral;
 
 public class VistaInventario {
@@ -26,6 +28,10 @@ public class VistaInventario {
 	private double screenWidth;
 	private double screenHeight;
 	private boolean isShowing;
+	private Label labelDinamita;
+	private Label labelRepair;
+	private Label labelTanque;
+	private Label labelTeleport;
 	
 	public VistaInventario(Group root, Jugador pj, double screenWidth, double screenHeight) {
 		this.root = root;
@@ -65,6 +71,39 @@ public class VistaInventario {
 		labelOro.setFont(Font.font(20));
 	}
 	
+	public void inicializarLabelsItems() {
+		var cantidadDinamita = 0;
+		var cantidadRepair = 0;
+		var cantidadTP = 0;
+		var cantidadTanque = 0;
+		
+		for(Usable actual: pj.getInventario().getUsables()) {
+			var actualID = actual.getMejoraID();
+			if(actualID == 'X') {
+				cantidadDinamita++;
+			} else if(actualID == 'F') {
+				cantidadTanque++;
+			} else if(actualID == 'Q') {
+				cantidadTP++;
+			} else if(actualID == 'R') {
+				cantidadRepair++;
+			}
+		}
+		
+		labelDinamita = new Label("Dinamita: " + cantidadDinamita);
+		labelDinamita.setFont(Font.font(20));
+		
+		labelRepair = new Label("HullRepairNanobots: " + cantidadRepair);
+		labelRepair.setFont(Font.font(20));
+		
+		labelTanque = new Label("Tanque extra: " + cantidadTanque);
+		labelTanque.setFont(Font.font(20));
+		
+		labelTeleport = new Label("Teleport: " + cantidadTP);
+		labelTeleport.setFont(Font.font(20));
+	}
+	
+	
 	public void checkInteraccionInventario(MouseEvent e) {
 		var x = e.getSceneX();
 		var y = e.getSceneY();
@@ -79,8 +118,9 @@ public class VistaInventario {
 	
 	public void dibujarInventario() {
 		inicializarLabels();
+		inicializarLabelsItems();
 		cajaInventario = new VBox();
-		cajaInventario.getChildren().addAll(labelHierro, labelBronce, labelPlata, labelOro);
+		cajaInventario.getChildren().addAll(labelHierro, labelBronce, labelPlata, labelOro, labelDinamita, labelRepair, labelTanque, labelTeleport);
 		cajaInventario.setSpacing(25);
 		cajaInventario.setPrefSize(500, 600);
 		cajaInventario.setBackground(Background.fill(Color.rgb(200, 200, 200, 0.5)));

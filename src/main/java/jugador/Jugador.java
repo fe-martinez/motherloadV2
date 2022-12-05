@@ -4,7 +4,7 @@ import minerales.Mineral;
 import terreno.Bloque;
 
 public class Jugador implements Bloque {
-	private static final int DINERO_INICIAL = 1000;
+	private static final int DINERO_INICIAL = 100000;
 	private static final char LETRA = '&';
 	
 	private Inventario inventario;

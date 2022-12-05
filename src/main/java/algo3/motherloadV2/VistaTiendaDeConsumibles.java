@@ -46,13 +46,20 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 	TiendaDeConsumibles tienda;
 	HashMap<String,Button> botones;
 	List<String> keys = List.of("tanqueExtra","nanobots","dinamita","explosivos","teleport","close");
+<<<<<<< Updated upstream
+=======
+	List<Character> mejorasDisponibles = List.of('F','R','X','C','Q');
+>>>>>>> Stashed changes
 	
 	Color grisOscuro = Color.rgb(74, 74, 74);
 	Color grisPlata = Color.rgb(150, 150, 150);
 	Color naranjita = Color.rgb(219, 126, 92);
 	
+<<<<<<< Updated upstream
 	String mejoraSeleccionada;
 	
+=======
+>>>>>>> Stashed changes
 	private void inicializarLabels() {
 		labels.add(new Label("Tanque de combustible de reserva\r\n"
 				+ "$2000\r\n"
@@ -156,6 +163,7 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 		gridPane.setPadding(new Insets(50, 0, 50, 10));
 		gridPane.setBackground(Background.fill(grisPlata));
 	}
+<<<<<<< Updated upstream
 
 	private void inicializarVistaCompra() {
 		hbox.setPrefSize(1000, 600);
@@ -191,6 +199,59 @@ public class VistaTiendaDeConsumibles implements VistaEntidad {
 			}
 			else {
 				tienda.interactuar(pj, mejoraSeleccionada);
+=======
+	
+	private void inicializarAccionesBotones() {
+		botones.get(keys.get(0)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(0).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador, mejorasDisponibles.get(0));
+			}
+		});
+		
+		botones.get(keys.get(1)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(1).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(1));
+			}
+		});
+		
+		botones.get(keys.get(2)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(2).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(2));
+			}
+		});
+		
+
+		botones.get(keys.get(3)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(3).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(3));
+			}
+		});
+		
+
+		botones.get(keys.get(4)).setOnAction(e -> {
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setContentText(labels.get(4).getText());
+			a.showAndWait();
+			var resultado = a.getResult();
+			if(resultado == ButtonType.OK) {
+				tienda.interactuar(jugador,mejorasDisponibles.get(4));
+>>>>>>> Stashed changes
 			}
 		});
 		*/

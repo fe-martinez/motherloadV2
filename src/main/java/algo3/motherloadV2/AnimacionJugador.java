@@ -83,10 +83,4 @@ public class AnimacionJugador {
 		}
 		return imagenes.get(pj.getTipoAnimacion() + 3);
 	}
-	
-	
-	
-	
-	
-	
 }

@@ -11,9 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-
 import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
 
 public class ConfigJuego {
 	private boolean fullScreen;
