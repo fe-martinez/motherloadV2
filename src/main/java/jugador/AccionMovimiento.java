@@ -1,7 +1,6 @@
 package jugador;
 
 public class AccionMovimiento implements Accion{
-	private static final double GASTO_COMBUSTIBLE_MOVIMIENTO = 0.002;
 	private Jugador pj;
 	private double dx;
 	private double dy;
@@ -31,8 +30,7 @@ public class AccionMovimiento implements Accion{
 		if(this.dy != 0) {
 			this.pj.setVelY(dy);
 		}
-		
-		this.pj.getNave().gastarCombustible(GASTO_COMBUSTIBLE_MOVIMIENTO);
+
 		return true;
 	}
 	

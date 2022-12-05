@@ -31,7 +31,7 @@ public class VistaMenuConfig {
 
 	private List<String> opcionesPantalla = List.of("1024x768", "1280x720", "1920x1080", "Fullscreen");
 	private List<String> opcionesDificultades = List.of("Muy muy fácil", "Fácil", "Medio", "Díficil");
-	private Map<String, Integer> valorDificultades = Map.of(opcionesDificultades.get(0), 64,
+	private Map<String, Integer> valorDificultades = Map.of(opcionesDificultades.get(0), 30,
 															opcionesDificultades.get(1), 1000,
 															opcionesDificultades.get(2), 5000,
 															opcionesDificultades.get(3), 10000);

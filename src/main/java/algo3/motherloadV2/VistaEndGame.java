@@ -32,17 +32,22 @@ public class VistaEndGame {
 	Color colorFondoLabel = Color.rgb(100,10,90,0.5);
 	Stage stage;
 	Scene scene;
+	private double stageWidth;
+	private double stageHeight;
+	private boolean isFullScreen;
 	
-	public VistaEndGame(EstadoDelJuego estadoJuego,Stage stage) {
+	public VistaEndGame(EstadoDelJuego estadoJuego, Stage stage, double stageWidth, double stageHeight, boolean isFullScreen) {
 		this.stage = stage;
+		this.stageWidth = stageWidth;
+		this.stageHeight = stageHeight;
+		this.isFullScreen = isFullScreen;
 		
 		sPane = new StackPane();
 		if(estadoJuego == EstadoDelJuego.GANADO) {
-			image = CreadorDeImagenes.obtenerImagen(IMG_WIN_GAME,1024,768);
+			image = CreadorDeImagenes.obtenerImagen(IMG_WIN_GAME, this.stage.getWidth(), this.stage.getHeight());
 			texto = TEXTO_WIN_GAME;
-		}
-		else if(estadoJuego == EstadoDelJuego.PERDIDO) {
-			image = CreadorDeImagenes.obtenerImagen(IMG_LOST_GAME,1024,768);
+		} else if(estadoJuego == EstadoDelJuego.PERDIDO) {
+			image = CreadorDeImagenes.obtenerImagen(IMG_LOST_GAME, this.stage.getWidth(), this.stage.getHeight());
 			texto = TEXTO_WIN_GAME;
 			texto = TEXTO_LOST_GAME;
 		}
@@ -50,21 +55,28 @@ public class VistaEndGame {
 		imgView = new ImageView(image);
 		
 		label = new Label(texto);
-		label.setPrefSize(1024,280);
+		label.setPrefSize(stageWidth, stageHeight/3);
 		label.setFont(new Font(50));
 		label.setBorder(Border.stroke(colorBordeLabel));
 		label.setBackground(Background.fill(colorFondoLabel));
 		label.setTextFill(colorTextoLabel);
-	
+		label.setAlignment(Pos.CENTER);
+		
 		sPane.getChildren().add(imgView);
 		sPane.getChildren().add(label);
-		StackPane.setAlignment(label,Pos.BOTTOM_CENTER);
+		StackPane.setAlignment(label, Pos.TOP_CENTER);
 		
 	}
 	
 	public void mostrar() {
-		scene = new Scene(sPane);
+		stage.setWidth(stageWidth);
+		stage.setHeight(stageHeight);
+		stage.setFullScreen(isFullScreen);
+		Group root = new Group();
+		root.getChildren().add(sPane);
+		scene = new Scene(root, stage.getWidth(), stage.getHeight());
 		stage.setScene(scene);
+		stage.setFullScreen(isFullScreen);
 	}
 	
 }

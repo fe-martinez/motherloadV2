@@ -17,7 +17,7 @@ public class TaladrandoDerecha implements Estado{
 	public Estado update(ArrayList<Accion> acciones, Jugador pj, Interacciones interacciones) {
 		//pj.setX(pj.getX() + ((0.1 * 10) / Juego.MAX_TICKS));
 		pj.setTipoAnimacion(2);
-		
+		pj.getNave().gastarCombustible(Juego.GASTO_COMBUSTIBLE_MOVIMIENTO);
 		ticks += 1;
 		if(ticks > Juego.MAX_TICKS) {
 			pj.setX(pj.getX() + 1);

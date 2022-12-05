@@ -39,8 +39,8 @@ public class VistaJuego {
 	public static final double GRILLA_PJ_ANCHO = 64;
 	public static final double GRILLA_PJ_ALTO = 64;
 	
-	public static final double FILAS = 64;
-	public static final double COLUMNAS = 64;
+	public static double FILAS = 64;
+	public static double COLUMNAS = 64;
 	
 	public static final double MID_X = WIDTH / 2;
 	public static final double MID_Y = HEIGHT / 2;
@@ -50,6 +50,7 @@ public class VistaJuego {
 	private HUD hud;
 	private Sonidos sonidos;
 	private Juego juego;
+	private VistaEndGame vistaEndGame;
 
 	public VistaJuego(Stage stage) {
 		this.stage = stage;
@@ -59,15 +60,15 @@ public class VistaJuego {
 		stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 		WIDTH = stage.getWidth();
 		HEIGHT = stage.getHeight();
-		
-        juego = new Juego((int)COLUMNAS, configs.getDificultad(), configs);
+		FILAS = configs.getDificultad();
+        juego = new Juego((int)COLUMNAS, (int)FILAS, configs);
         var imagenes = cargarImagenes();
         AnimacionJugador imagenesPJ = new AnimacionJugador(juego.getJugador(), GRILLA_PJ_ANCHO, GRILLA_PJ_ALTO);
         //var imagenesJugador = cargarImagenesJugador();
         Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
-        hud = new HUD(root, context, WIDTH, HEIGHT, juego.getJugador(), juego.getGuardarPartida());
+        hud = new HUD(root, context, WIDTH, HEIGHT, juego.getJugador(), juego.getGuardarPartida(), stage);
         vistaInventario = new VistaInventario(root, juego.getJugador(), WIDTH, HEIGHT);
         sonidos = new Sonidos();
 
@@ -106,7 +107,7 @@ public class VistaJuego {
 				last = now;
 				if(juego.getEstado() != EstadoDelJuego.JUGANDO) {
 					this.stop();
-					var vistaEndGame = new VistaEndGame(juego.getEstado(), stage);
+					vistaEndGame = new VistaEndGame(juego.getEstado(), stage, configs.getScreenWidth(), configs.getScreenHeight(), configs.isFullScreen());
 					vistaEndGame.mostrar();
 				}
 				
@@ -210,6 +211,8 @@ public class VistaJuego {
     		return imagenes.get(1);
     	} else if(bloque instanceof Aire && y < 9) {
     		return imagenes.get(0);
+    	} else if(bloque instanceof Aire && y > FILAS - 15) {
+    		return imagenes.get(13);
     	} else if(bloque instanceof Aire && y >= 9) {
     		return imagenes.get(3);
     	} else if(bloque.getBloqueID() == 'P') {
@@ -224,7 +227,7 @@ public class VistaJuego {
     		return imagenes.get(11);
     	} else if(bloque.getBloqueID() == 'C') {
     		return imagenes.get(12);
-    	}
+    	} 
     	
     	return imagenes.get(1);
     }
@@ -245,6 +248,7 @@ public class VistaJuego {
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Pasto.png", GRILLA_ANCHO, GRILLA_ALTO));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Diamante.png", GRILLA_ANCHO, GRILLA_ALTO));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Cobre.png", GRILLA_ANCHO, GRILLA_ALTO));
+		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/FondoFinal.png", GRILLA_ANCHO, GRILLA_ALTO));
   
     	return imagenes;
     }

@@ -23,7 +23,9 @@ public class Juego {
 	public static final double VELOCITY = 150 / FPS;
 
 	public static final double GRAVEDAD = 0.0045;
-	public static final double MAX_TICKS = 75;
+	public static final double MAX_TICKS = 30;
+	public static final double GASTO_COMBUSTIBLE_IDLE = 0.0005;
+	public static final double GASTO_COMBUSTIBLE_MOVIMIENTO = 0.002;
 	
 	private Suelo suelo;
 	private PisoSuperior tiendas;
@@ -67,7 +69,7 @@ public class Juego {
 		if(jugador.noPuedeContinuar()){
 			return EstadoDelJuego.PERDIDO;
 		}
-		if(jugador.getY() == suelo.getAlto()) {
+		if(jugador.getY() > suelo.getAlto() - 10) {
 			return EstadoDelJuego.GANADO;
 		}
 		

@@ -61,22 +61,25 @@ public class FabricaDeSuelo {
 	public static Bloque[][] crear(int alto, int ancho) {
 		var bloques = new Bloque[alto][ancho];
 		for(int k = 0; k < ancho; k++) {
-			bloques[0][k] = new Aire();
-			bloques[1][k] = new Aire();
-			bloques[2][k] = new Aire();
-			bloques[3][k] = new Aire();
-			bloques[4][k] = new Aire();
-			bloques[5][k] = new Aire();
-			bloques[6][k] = new Aire();
-			bloques[7][k] = new Aire();
-			bloques[8][k] = new Aire();
+			for(int l = 0; l < 9; l++) {
+				bloques[l][k] = new Aire();
+			}
 			bloques[9][k] = new Tierra();
 		}
+		
 		for(int i = 10; i < alto; i++) {
 			for(int j = 0; j < ancho; j++) {
 				bloques[i][j] = ponerBloque(i, alto);
 			}
 		}
+		
+		for(int i = 0; i < 15; i++) {
+			for(int j = 0; j < ancho; j++) {
+				bloques[alto - i - 1][j] = new Aire();
+			}
+		}
+		
+	
 		return bloques;
 	}
 

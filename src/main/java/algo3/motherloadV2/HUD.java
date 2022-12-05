@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import jugador.Jugador;
 import tp.GuardarPartida;
 
@@ -30,13 +31,15 @@ public class HUD {
 	List<Image> imagenes;
 	private Group root;
 	private boolean isShowing;
+	private Stage stage;
 	
-	public HUD(Group root, GraphicsContext context, double screenWidth, double screenHeight, Jugador pj, GuardarPartida guardar) {
+	public HUD(Group root, GraphicsContext context, double screenWidth, double screenHeight, Jugador pj, GuardarPartida guardar, Stage stage) {
 		this.context = context;
 		this.root = root;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		this.guardar = guardar;
+		this.stage = stage;
 		this.imagenes = new ArrayList<Image>();
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/Health.png", 40, 40));
 		imagenes.add(CreadorDeImagenes.obtenerImagen("../motherloadV2/src/rsc/Menu/IconFuel.png", 40, 40));
@@ -119,6 +122,7 @@ public class HUD {
     	botonOK.setOnAction(t -> {root.getChildren().remove(pane); isShowing = false;});
     	botonSalir.setOnAction(t -> System.exit(0));
     	saveGame.setOnAction(t -> guardar.guardarPartida());
+    	botonMainMenu.setOnAction(e -> new VistaMenu(stage));
 	}
 	
 	

@@ -70,7 +70,6 @@ public class ConfigJuego {
 					var lineaTeclas = scanner.nextLine();
 					var arrayTeclas = lineaTeclas.replace("=", "").replace("[", "").replace("]", "").replace(" ", "").split(",");
 					teclas = Arrays.asList(arrayTeclas);
-					System.out.print(teclas);
 				}
 				
 				return new ConfigJuego(fullScreenString, screenWidthValue, screenHeightValue, dificultad, teclas);

@@ -65,6 +65,8 @@ public class Inicial implements Estado{
 			actualizarX(pj);
 		}
 		
+		pj.getNave().gastarCombustible(Juego.GASTO_COMBUSTIBLE_IDLE);
+		
 		//La idea es que si se esta oprimiendo ARRIBA, no ejecute otras cosas.
 		for(Accion actual: acciones) {
 			if(actual instanceof AccionMovimiento) {
