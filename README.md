@@ -2,11 +2,7 @@
 * HACER LAS CLASES CONTROLADORX
 * Revisar Flywheel y Controller. Con controller se puede dar la opcion de customizar los movimientos. (Both)
 ## Fran
-* Cambiar el gasto de combustible (Fran)
-* Salir al menú principal (Fran)
-* Poner los configs de EndGame (Fran)
-* Intentar ganar y ver que funcione :P (Fran)
-* Terminar config (Fran)
+
 ## Clari
 * Hacer algo con los bordes del mapa. Poner otra imagen o no se.
 * Musica, sonidos.
@@ -17,10 +13,7 @@
 - Pausa (ya tenemos el menu igual, creo que con eso alcanza).
 - Darle historia al juego.
 - Apartado configuracion:
-    - Resolución de la ventana.
     - Volumen de la musica y sonidos.
-    - Dificultad (yo pensaba en que la dificultad sea el tamaño del mapa, maybe cantidad de minerales).
-- Save y Load.
 - Zoom in y Zoom out + Resize de la ventana
 - Slots de guardados.
 - Mejorar el inventario
@@ -49,3 +42,7 @@
 * Darle estado al juego. (Clari)
 * Crear los minerales que faltan :P
 * Ver de crear un método actualizar para las tiendas. Una cosa es inicializar el pane y el root y todo eso, y otra cosa es actualizar los valores según el estado actual del personaje :P. (Clari)
+* Cambiar el gasto de combustible (Fran)
+* Salir al menú principal (Fran)
+* Terminar config (Fran) (kinda)
+* Intentar ganar y ver que funcione :P (Fran)
