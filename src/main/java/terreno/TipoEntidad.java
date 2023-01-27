@@ -1,7 +1,10 @@
 package terreno;
 
 public enum TipoEntidad {
-	AIRE,
-	JUGADOR,
-	TIENDA;
+	TIENDA,
+	COMBUSTIBLE,
+	REPARACION,
+	VENTA,
+	MEJORAS,
+	USABLES;
 }

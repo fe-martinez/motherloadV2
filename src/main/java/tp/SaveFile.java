@@ -2,20 +2,36 @@ package tp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import jugador.Inventario;
 import jugador.Jugador;
 import jugador.Posicion;
+import mejoras.MejoraDinamita;
+import mejoras.MejoraExplosivos;
+import mejoras.MejoraHullRepairNanobots;
+import mejoras.MejoraTanqueExtra;
+import mejoras.MejoraTeleport;
 import mejoras.Usable;
+import minerales.FabricaDeMinerales;
 import minerales.Mineral;
 import terreno.Suelo;
 
 //La idea es evitar que todas las clases del juego deban implementar Serializable.
 public class SaveFile implements Serializable {
-	/**
-	 * 
-	 */
+	private static char BRONCE = 'B';
+	private static char COBRE = 'C';
+	private static char ORO = 'O';
+	private static char DIAMANTE = 'D';
+	private static char PLATA = 'P';
+	private static char HIERRO = 'H';
+	
+	private static char USABLE_TANQUE = 'F';
+	private static char USABLE_DINAMITA = 'X';
+	private static char USABLE_EXPLOSIVOS = 'C';
+	private static char USABLE_TELEPORT = 'Q';
+	private static char USABLE_NANOBOTS = 'R';
+	
 	private static final long serialVersionUID = 7456931393272320988L;
+	
 	//Stats de jugador
 	
 	double posX;
@@ -92,7 +108,42 @@ public class SaveFile implements Serializable {
 		return true;
 	}
 	
-	public boolean cargarInventario(SaveFile save, Jugador pj) {		
+	public boolean cargarInventario(SaveFile save, Jugador pj) {
+		String aCrear = "";
+		for(Character actual: save.minerales) {
+			if(actual == HIERRO) {
+				aCrear = "Hierro";
+			} else if(actual == BRONCE) {
+				aCrear = "Bronce";
+			} else if(actual == COBRE) {
+				aCrear = "Cobre";
+			} else if(actual == PLATA) {
+				aCrear = "Plata";
+			} else if(actual == ORO) {
+				aCrear = "Oro";
+			} else if(actual == DIAMANTE) {
+				aCrear = "Diamante";
+			}
+			pj.getInventario().agregarInventario(FabricaDeMinerales.crear(aCrear));
+		}
+		
+		for(Character usableActual: save.usables) {
+			Usable crearUsable = null;
+			if(usableActual == USABLE_DINAMITA) {
+				crearUsable = new MejoraDinamita(null);
+			} else if(usableActual == USABLE_EXPLOSIVOS) {
+				crearUsable = new MejoraExplosivos(null);
+			} else if(usableActual == USABLE_NANOBOTS) {
+				crearUsable = new MejoraHullRepairNanobots();
+			} else if(usableActual == USABLE_TANQUE) {
+				crearUsable = new MejoraTanqueExtra();
+			} else if(usableActual == USABLE_TELEPORT) {
+				crearUsable = new MejoraTeleport();
+			}
+			
+			pj.getInventario().agregarUsable(crearUsable);
+		}
+		
 		return true;
 	}
 	
@@ -100,12 +151,5 @@ public class SaveFile implements Serializable {
 		suelo.cargarCharMap(save.altoMapa, save.anchoMapa, save.mapa);
 		return false;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

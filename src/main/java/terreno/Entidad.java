@@ -1,6 +1,5 @@
 package terreno;
 
-import algo3.motherloadV2.VistaTiendaDeConsumibles;
 import jugador.Jugador;
 import jugador.Posicion;
 
@@ -15,7 +14,8 @@ public abstract class Entidad {
 		this.letra = letra;
 	}
 
-	public void interactuar(Jugador jugador) {
+	public boolean interactuar(Jugador jugador) {
+		return false;
 	}
 	
 	public Posicion getPosicion() {
@@ -30,7 +30,7 @@ public abstract class Entidad {
 		return this.letra;
 	}
 
-	public void interactuar(Jugador jugador, char opcion) {
-		
+	public boolean interactuar(Jugador jugador, char opcion) {
+		return false;
 	}
 }

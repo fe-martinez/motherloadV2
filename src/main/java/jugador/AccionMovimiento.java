@@ -34,13 +34,6 @@ public class AccionMovimiento implements Accion{
 		return true;
 	}
 	
-	public boolean esVolar() {
-		if(this.dy < 0) {
-			return true;
-		}
-		return false;
-	}
-	
 	public TipoMovimiento tipoMovimiento() {
 		if(this.dy < 0) {
 			return TipoMovimiento.ARRIBA;

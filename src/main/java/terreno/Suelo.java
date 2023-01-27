@@ -35,6 +35,8 @@ public class Suelo {
 	public boolean casilleroVacio(Posicion posicion) {
 		if(posicion.getY() == this.alto - 1) {
 			return false;
+		} if(posicion.getX() >= this.ancho) {
+			return true;
 		}
 		
 		return(bloques[(int)posicion.getY()][(int)posicion.getX()].getBloqueID() == ' ');

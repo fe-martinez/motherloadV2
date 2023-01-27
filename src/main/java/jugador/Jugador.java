@@ -1,10 +1,13 @@
 package jugador;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import minerales.Mineral;
 import terreno.Bloque;
 
 public class Jugador implements Bloque {
-	private static final int DINERO_INICIAL = 1000;
+	private static final int DINERO_INICIAL = 20;
 	private static final char LETRA = '&';
 	
 	private Inventario inventario;
@@ -17,10 +20,8 @@ public class Jugador implements Bloque {
 	private double velX;
 	private int TipoAnimacion;
 	private TipoMovimiento orientacion;
+	private List<String> notificaciones;
 	
-
-	//Cuidado con los limites a las pos, las pruebas usan y != 0
-	//Entonces cambiá las pruebas xD
 	public Jugador(double posX, double posY,int altoTerreno, int anchoTerreno) {
 		if(posX < 0 || altoTerreno < 10 || anchoTerreno < 10) {
 			return;
@@ -39,6 +40,8 @@ public class Jugador implements Bloque {
 		this.velY = 0;
 		this.velX = 0;
 		this.orientacion = TipoMovimiento.DERECHA;
+		notificaciones = new ArrayList<String>();
+		
 	}	
 
 	//------------------------------------------------
@@ -56,10 +59,9 @@ public class Jugador implements Bloque {
 	
 	//Setea la cantidad de dinero actual.
 	public void setDinero(int dinero) {
-		if(dinero < 0) {
-			//throw an exception
+		if(dinero >= 0) {
+			this.dinero = dinero;
 		}
-		this.dinero = dinero;
 	}
 	
 	//Devuelve el dinero actual.
@@ -141,7 +143,9 @@ public class Jugador implements Bloque {
 	//Permite agregar al inventario los bloques si son minerales.
 	public void observarBloque(Bloque bloque) {
 		if(bloque instanceof Mineral) {
-			inventario.agregarInventario((Mineral)bloque);
+			if(!inventario.agregarInventario((Mineral)bloque)) {
+				agregarNotificacion("Inventario lleno");
+			}
 		}
 	}
 	
@@ -196,5 +200,36 @@ public class Jugador implements Bloque {
 	public void setOrientacion(TipoMovimiento orientacion) {
 		this.orientacion = orientacion;
 	}
+	
+	public List<String> getNotificaciones() {
+		return notificaciones;
+	}
+	
+	public void agregarNotificacion(String notificacion) {
+		//La idea es que ante algun problema, no se arme un array masivo.
+		if(this.notificaciones.size() > 10) {
+			notificaciones.remove(0);
+		}
+		
+		this.notificaciones.add(notificacion);
+	}
+	
+	public void gastarCombustible(double gastoCombustible) {
+		this.nave.gastarCombustible(gastoCombustible);
+		if(this.nave.getNivelDeCombustible() < 4.0 && this.nave.getNivelDeCombustible() > 4.0 - 0.0005) {
+			agregarNotificacion("Queda poco combustible");
+		} else if(this.nave.getNivelDeCombustible() < 1.0 && this.nave.getNivelDeCombustible() > 1.0 - 0.0005) {
+			agregarNotificacion("Queda MUY poco combustible");
+		}
+	}
+
+	public void recibirDanio(int fallDamage) {
+		this.nave.recibirDanio(fallDamage);
+		if(fallDamage > 0) {
+			agregarNotificacion("-" + fallDamage + "hp");			
+		}
+	}
+	
+	
 }
 

@@ -1,0 +1,9 @@
+.button:hover {
+	-fx-border-color:black;
+	-fx-border-width: 3 3 3 3;
+}
+
+.button:focused {
+	-fx-border-color:black;
+	-fx-border-width: 3 3 3 3;	
+}

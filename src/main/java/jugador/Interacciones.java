@@ -1,6 +1,6 @@
 package jugador;
 
-import algo3.motherloadV2.VistasTiendas;
+import terreno.Entidad;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 import terreno.TipoEntidad;
@@ -16,6 +16,7 @@ public class Interacciones {
 		this.tiendas = tiendas;
 	}
 	
+	//Calcula del daño que recibe el jugador según la altura que recibe del mismo.
 	public int calcularDanio(double velY) {
 		return (int)(velY * 10);
 	}
@@ -31,7 +32,7 @@ public class Interacciones {
 		}
 		
 		if(this.tiendas != null) {
-			if(pj.getY() == 0 && tiendas.colisionEntidad(buscada).getTipoEntidad() == TipoEntidad.TIENDA) {
+			if(pj.getY() == 0 && tiendas.colisionEntidad(buscada) != null) {
 				return false;
 			}
 		}
@@ -52,26 +53,23 @@ public class Interacciones {
 		return false;
 	}
 	
-	public boolean chequearTienda() {
+	//Devuelve true si el personaje coincide con una tienda, false en caso contrario
+	public boolean personajeCoincideConTienda() {
 		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
-			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
-				VistasTiendas.buscarPisada(tiendas.colisionEntidad(pj.getPosicion()));
-				pj.setX(pj.getX() + 1);
-				return true;
-			}
+			return (tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA);
 		}
 		return false;
+	}
+	//Devuelve una tienda si el personaje coincide con una tienda y false en caso contrario.
+	public Entidad chequearTienda() {
+		if(personajeCoincideConTienda()) {
+				return tiendas.colisionEntidad(pj.getPosicion());
+		}
+		return null;
 	}
 	
 	public boolean chequearBloques() {
 		boolean destruido = taladrar(pj.getPosicion());
-		
-		if((int)pj.getY() == 8 && this.tiendas != null && tiendas.getTiendaPos((int)pj.getX()) != null) {
-			if(tiendas.colisionEntidad(pj.getPosicion()).getTipoEntidad() == TipoEntidad.TIENDA) {
-				tiendas.colisionEntidad(pj.getPosicion()).interactuar(pj);
-			}
-		}
-		
 		return destruido;
 	}
 			
@@ -91,44 +89,23 @@ public class Interacciones {
 		return true;
 	}
 		
-		//La idea general de las colisiones. EL modelo del pj se dibuja desde la esquina superior izquierda
-		//pj.getX() * GRILLA_ANCHO es el pixel donde arranca a dibujarse pj. Si le sumamos PJ_ANCHO, nos da el ultimo pixel.
-		//Tomando la parte entera de pj.getX() y la parte entera de la division del ultimo pixel y el ancho de la grilla
-		//nos da sobre que casilleros de la matriz esta parado el dibujo del pj (puede ser 1 o maximo 2 casilleros a la vez).
-		//esta funcion es para ver si puede caer, pero el concepto es ese. si el modelo del pj es un poco mas chico en pixeles que
-		//el de las casillas siempre va a haber hueco para que pase el jugador.
-//		public boolean puedePasarEntreCasillas() {
-//			var limiteDerecho = (pj.getX() * VistaJuego.GRILLA_ANCHO) + VistaJuego.GRILLA_PJ_ANCHO;
-//			var casillaLimiteDerecho = (int)(limiteDerecho/VistaJuego.GRILLA_ANCHO);
-//			System.out.println((int)pj.getX() + "--" + casillaLimiteDerecho);
-//			
-//			Posicion izquierda = new Posicion((int)pj.getX(), (int)pj.getY());
-//			Posicion derecha = new Posicion(casillaLimiteDerecho, (int)pj.getY());
-//			
-//			if(suelo.casilleroVacio(izquierda) && suelo.casilleroVacio(derecha)) {
-//					return true;
-//			}
-//			return false;
-//		}
-		
-		public boolean chequearColisionVertical() {
-			if(pj.getVelY() > 0 && chocaDireccionVertical(1)) {
-				return true;
-			} else if(pj.getVelY() < 0 && chocaDireccionVertical(-1)) {
-				return true;
-			}
-			
-			return false;
-		}
+	
+	public boolean chequearColisionVertical() {
+		if(pj.getVelY() > 0 && chocaDireccionVertical(1)) {
+			return true;
+		} else if(pj.getVelY() < 0 && chocaDireccionVertical(-1)) {
+			return true;
+		}	
+		return false;
+	}
 
-		public boolean chequearColisionHorizontal() {
-			if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
-				return true;
-			} else if(pj.getVelX() < 0 && chocaDireccionHorizontal(-1)) {
-				return true;
-			}
-			
-			return false;
+	public boolean chequearColisionHorizontal() {
+		if(pj.getVelX() > 0 && chocaDireccionHorizontal(1)) {
+			return true;
+		} else if(pj.getVelX() < 0 && chocaDireccionHorizontal(-1)) {
+			return true;
+		}	
+		return false;
 		}
 
 }

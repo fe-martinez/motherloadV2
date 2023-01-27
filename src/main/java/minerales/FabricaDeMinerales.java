@@ -1,28 +1,28 @@
 package minerales;
 
 public class FabricaDeMinerales {
-	
 	//Crea el Mineral especificado según el String recibido.
 	public static Mineral crear(String tipoMineral) {
+		Mineral mineral = null;
 		if(tipoMineral == "Cobre") {
-			return new Cobre();
+			mineral = new Cobre();
 		}
 		else if(tipoMineral == "Bronce") {
-			return new Bronce();
+			mineral = new Bronce();
 		}
 		else if(tipoMineral == "Hierro") {
-			return new Hierro();
+			mineral = new Hierro();
 		}
 		else if(tipoMineral == "Plata") {
-			return new Plata();
+			mineral = new Plata();
 		}
 		else if(tipoMineral == "Oro") {
-			return new Oro();
+			mineral = new Oro();
 		}
 		else if(tipoMineral == "Diamante") {
-			return new Diamante();
+			mineral = new Diamante();
 		}
 
-		return null;
+		return mineral;
 	}
 }

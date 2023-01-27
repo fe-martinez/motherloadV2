@@ -1,9 +1,8 @@
 package tiendas;
 
 import java.util.Arrays;
-import java.util.List;
 
-import algo3.motherloadV2.VistaEstacionDeServicio;
+import java.util.List;
 import jugador.Jugador;
 import jugador.Posicion;
 import terreno.Entidad;
@@ -12,10 +11,10 @@ import terreno.TipoEntidad;
 public class EstacionDeServicio extends Entidad implements EstacionDeMantenimiento {
 	private static final char LETRA = '#';
 	private static final TipoEntidad TIPO = TipoEntidad.TIENDA;
-	private static final List<Integer> LITROS_DISPONIBLES = Arrays.asList(5, 10, 25, 50, 100);
+	private static final int CODIGO_TANQUE_LLENO = 1000;
+	private static final List<Integer> LITROS_DISPONIBLES = Arrays.asList(5, 10, 25, 50, CODIGO_TANQUE_LLENO);
 	private static final int PRECIO_COMBUSTIBLE = 1;
-	private int cantidad;
-
+	
 	public EstacionDeServicio(Posicion posicion) {
 		super(posicion, TIPO, LETRA);
 	}
@@ -29,7 +28,7 @@ public class EstacionDeServicio extends Entidad implements EstacionDeMantenimien
 		}
 		
 		int i = LITROS_DISPONIBLES.indexOf((int)cantidadCombustible);
-		if(LITROS_DISPONIBLES.get(i) == 100) {
+		if(LITROS_DISPONIBLES.get(i) == CODIGO_TANQUE_LLENO) {
 			return (capacidadTanque - cantidadActual) * EstacionDeServicio.PRECIO_COMBUSTIBLE;
 		}
 		
@@ -37,28 +36,18 @@ public class EstacionDeServicio extends Entidad implements EstacionDeMantenimien
 		double cantidadCargar = faltante < cantidadCombustible ? faltante: cantidadCombustible;
 		return cantidadCargar;
 	}
-	
-	//Calcula la cantidad de plata que se gastará en base a la cantidad de combustible que se carga.
-	public double cantidadDeDinero(double cantidadDeCombustible) {
-		return cantidadDeCombustible * EstacionDeServicio.PRECIO_COMBUSTIBLE;
-	}
-	
-	//Permite vender a un jugador dado una cantidad dada de combustible.
-	public void vender(Jugador jugador, double cantidad) {
+		
+	//Permite vender a un jugador dado una cantidad dada de combustible. Devuelve true si se pudo comprar, false en caso contrario.
+	public boolean vender(Jugador jugador, double cantidad) {
 		double cantidadCombustible = cantidadDeCombustible(cantidad, jugador.getNave().getCapacidadTanque(), jugador.getNave().getNivelDeCombustible());
 		if(cantidadCombustible == -1) {
-			return;
+			return false;
 		}
 		
+		boolean sePuedeComprar = false;
 		if(jugador.hacerCompra(cantidadCombustible)) {
-			jugador.getNave().cargarCombustible(cantidadCombustible, cantidad);
+			sePuedeComprar = jugador.getNave().cargarCombustible(cantidadCombustible, cantidad);
 		}
-	}
-
-	//Realiza la interacción del Jugador dado con la Tienda actual.
-	public void interactuar(Jugador jugador, int cantidad) {
-		if(EstacionDeServicio.LITROS_DISPONIBLES.contains(this.cantidad)){
-			vender(jugador,this.cantidad);
-		}
+		return sePuedeComprar;
 	}
 }

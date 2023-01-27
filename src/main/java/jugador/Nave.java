@@ -46,8 +46,16 @@ public class Nave {
 	}
 	
 	//Permite cargar una cantidad de combustible deseada por la cantidad de plata especificada.
-	public void cargarCombustible(double cantidadCombustible, double cantidadDePlata) {
+	public boolean cargarCombustible(double cantidadCombustible, double cantidadDePlata) {
+		if(this.tanqueLleno()) {
+			return false;
+		}
 		this.nivelCombustible += cantidadCombustible;
+		if(this.nivelCombustible > this.capacidadTanque) {
+			this.nivelCombustible = this.capacidadTanque;
+		}
+		
+		return true;
 	}
 	
 	//Aumenta la capacidad máxima del tanque, seteando el nivel actual al máximo.
@@ -120,11 +128,15 @@ public class Nave {
 	}
 	
 	//Permite reparar la nave según la cantidad de vida especificada.
-	public void repararDmg(int vidaSumar) {
+	public boolean repararDmg(int vidaSumar) {
+		if(this.naveSana()) {
+			return false;
+		}
 		this.hp += vidaSumar;
 		if(this.hp > this.maxHP) {
 			this.hp = this.maxHP;
 		}
+		return true;
 	}
 	
 	//Recibe daño mientras este sea un valor positivo.
@@ -137,5 +149,13 @@ public class Nave {
 		if(this.hp < 0) {
 			this.hp = 0;
 		}
+	}
+	
+	public boolean tanqueLleno() {
+		return this.nivelCombustible == this.capacidadTanque;
+	}
+	
+	public boolean naveSana() {
+		return this.hp == this.maxHP;
 	}
 }

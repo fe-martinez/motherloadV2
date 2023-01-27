@@ -1,16 +1,15 @@
 package tiendas;
 
 import java.util.HashMap;
-
 import java.util.Map;
-
-import algo3.motherloadV2.VistaTiendaDeConsumibles;
 import jugador.Jugador;
 import jugador.Posicion;
 import mejoras.MejoraDinamita;
+import mejoras.MejoraExplosivos;
 import mejoras.MejoraHullRepairNanobots;
 import mejoras.MejoraTanqueExtra;
 import mejoras.MejoraTeleport;
+import mejoras.TipoUsable;
 import mejoras.Usable;
 import terreno.Entidad;
 import terreno.TipoEntidad;
@@ -19,7 +18,7 @@ public class TiendaDeConsumibles extends Entidad {
 	Posicion posicion;
 	private static final char LETRA = '*';
 	private static final TipoEntidad TIPO = TipoEntidad.TIENDA;
-	Map<Character, Usable> usables;
+	Map<TipoUsable, Usable> usables;
 	
 	public TiendaDeConsumibles(Posicion posicion) {
 		super(posicion, TIPO, LETRA);
@@ -30,29 +29,31 @@ public class TiendaDeConsumibles extends Entidad {
 	
 	//Inicializa las mejoras en el map.
 	public void inicializarConsumibles() {
-		this.usables.put('R', new MejoraHullRepairNanobots());
-		this.usables.put('X', new MejoraTanqueExtra());
-		this.usables.put('T', new MejoraTeleport());
-		this.usables.put('D', new MejoraDinamita(null));
+		this.usables.put(TipoUsable.REPAIR, new MejoraHullRepairNanobots());
+		this.usables.put(TipoUsable.TANQUE_EXTRA, new MejoraTanqueExtra());
+		this.usables.put(TipoUsable.TELEPORT, new MejoraTeleport());
+		this.usables.put(TipoUsable.DINAMITA, new MejoraDinamita(null));
+		this.usables.put(TipoUsable.EXPLOSIVOS, new MejoraExplosivos(null));
 	}
 	
-	//Le vende la opción dada al Jugador dado.
-	public void vender(Jugador jugador, char opcion) {
+	//Le vende la opción dada al Jugador dado. Devuelve true si se pudo comprar, false en caso contrario.
+	public boolean vender(Jugador jugador, TipoUsable opcion) {
 		Usable objeto = usables.get(opcion);
-		
+		System.out.println(opcion);
+		System.out.println(objeto);
 		if(objeto == null) {
-			return;
+			return false;
 		}
 		
-		if(jugador.hacerCompra(objeto.getCosto())) {
+		boolean sePuedeComprar = jugador.hacerCompra(objeto.getCosto());
+		if(sePuedeComprar) {
 			jugador.getInventario().agregarUsable(objeto);
 		}
+		return sePuedeComprar;
 	}
-	
 
-	@Override
-	//Permite al Jugador dado interactuar con la Tienda actual.
-	public void interactuar(Jugador jugador,char opcion) {
-		vender(jugador, opcion);
+	//Permite al Jugador dado interactuar con la Tienda actual. Si en la interacción se realizó una compra, devuelve true, sino false.
+	public boolean interactuar(Jugador jugador, TipoUsable opcion) {
+		return vender(jugador, opcion);
 	}
 }

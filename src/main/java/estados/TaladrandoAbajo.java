@@ -12,17 +12,16 @@ public class TaladrandoAbajo implements Estado {
 
 	public TaladrandoAbajo() {
 		this.ticks = 0;
-//		pj.setX((int)pj.getX());
-//		pj.setY((int)pj.getY());
 	}
 
 	@Override
 	public Estado update(ArrayList<Accion> acciones, Jugador pj, Interacciones interacciones) {
-		pj.setY(pj.getY() + ((0.1 * 10) / Juego.MAX_TICKS));
+		
 		pj.setTipoAnimacion(1);
-		pj.getNave().gastarCombustible(Juego.GASTO_COMBUSTIBLE_MOVIMIENTO);
+		pj.gastarCombustible(Juego.GASTO_COMBUSTIBLE_MOVIMIENTO);
 		ticks += 1;
 		if(ticks > Juego.MAX_TICKS) {
+				pj.setY(pj.getY() + 1);
 				if(interacciones.chequearBloques()) {
 					pj.setVelX(0);
 					pj.setVelY(0);				

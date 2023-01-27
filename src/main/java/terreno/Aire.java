@@ -7,8 +7,4 @@ public class Aire implements Bloque{
 	public char getBloqueID() {
 		return Aire.LETRA;
 	}
-
-	public TipoEntidad getTipoEntidad() {
-		return TipoEntidad.AIRE;
-	}
 }

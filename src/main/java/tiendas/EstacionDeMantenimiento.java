@@ -3,5 +3,5 @@ package tiendas;
 import jugador.Jugador;
 
 public interface EstacionDeMantenimiento {
-	public void vender(Jugador jugador, double cantidad);
+	public boolean vender(Jugador jugador, double cantidad);
 }

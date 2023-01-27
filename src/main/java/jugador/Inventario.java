@@ -38,11 +38,13 @@ public class Inventario{
 	}
 	
 	//Permite agregar un Mineral dado al Inventario.
-	public void agregarInventario(Mineral mineral) {
+	public boolean agregarInventario(Mineral mineral) {
 		if(mineralesRecolectados.size() < this.maxInventario) {
 			mineralesRecolectados.add(mineral);
+			this.ordenarMinerales();
+			return true;
 		}
-		this.ordenarMinerales();
+		return false;		
 	}
 	
 	//Devuelve la lista de minerales recolectados.
@@ -96,13 +98,8 @@ public class Inventario{
 	}
 	
 	//Busca un usable y si está, lo remueve.
-	public void eliminarUsable(Usable buscado) {
-		for(int i = 0; i < this.usables.size(); i++) {
-			if(usables.get(i).getTipo() == buscado.getTipo()) {
-				usables.remove(i);
-				return;
-			}
-		}
+	public void eliminarUsable(Usable buscado) {		
+		usables.remove(0);
 	}
 	
 	public TipoDeBloque getTipoDeMineral(int posicion) {

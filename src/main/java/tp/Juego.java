@@ -1,10 +1,8 @@
 package tp;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import estados.Estado;
 import estados.Inicial;
 import javafx.scene.input.KeyCode;
@@ -14,10 +12,12 @@ import jugador.AccionMovimiento;
 import jugador.Interacciones;
 import jugador.Jugador;
 import mejoras.*;
+import terreno.Entidad;
 import terreno.PisoSuperior;
 import terreno.Suelo;
 
 public class Juego {	
+	private static final int VALUE_DIFICULTAD_MUY_FACIL = 50;
 	public static final int FPS = 60;
 	public static final long MS_PER_FRAME = 1000 / FPS;
 	public static final double VELOCITY = 150 / FPS;
@@ -40,14 +40,21 @@ public class Juego {
 	
 	public Juego(int ancho, int alto, ConfigJuego configs) {
 		this.suelo = new Suelo(ancho, alto);
-		this.jugador =new Jugador(5, 3, alto, ancho);
+		this.jugador = new Jugador(5, 3, alto, ancho);
+		if(configs != null) {
+			if(configs.getDificultad() == VALUE_DIFICULTAD_MUY_FACIL) {
+				this.jugador.setDinero(1500000);
+			}
+		}
 		this.tiendas = new PisoSuperior(jugador);
 		this.gameSaver = new GuardarPartida(jugador, suelo);
 		this.interacciones = new Interacciones(jugador, suelo, tiendas);
 		this.estado = new Inicial();
-		teclas = configs.getTeclasKeyCode();
+		teclas = new ArrayList<KeyCode>();
 		cargarTeclas();
-		//Usa Character de momento pero con JavaFX pasaria a ser KeyCode.
+		if(configs != null) {
+			teclas = configs.getTeclasKeyCode();			
+		}
 		final Map<KeyCode, Accion> controles = Map.of(
 				teclas.get(0), new AccionMovimiento(jugador, 0, -0.1),
 				teclas.get(1), new AccionMovimiento(jugador, 0, 0.1),
@@ -56,11 +63,19 @@ public class Juego {
 				KeyCode.F, new AccionItem(jugador, new MejoraTanqueExtra()),
 				KeyCode.Q, new AccionItem(jugador, new MejoraTeleport()),
 				KeyCode.R, new AccionItem(jugador, new MejoraHullRepairNanobots()),
-				KeyCode.X, new AccionItem(jugador, new MejoraDinamita(suelo))
+				KeyCode.X, new AccionItem(jugador, new MejoraDinamita(suelo)),
+				KeyCode.C, new AccionItem(jugador, new MejoraExplosivos(suelo))
 				);
 		this.controles = controles;
 	}
 	
+	public Entidad getTienda(int pos) {
+		return this.tiendas.getTiendaPos(pos);
+	}
+	
+	public PisoSuperior getTiendas() {
+		return this.tiendas;
+	}
 	//Indica el estado del juego actual.
 	//Si el jugador no puede continuar, devuelve PERDIDO.
 	//Si el jugador llegó al final del terreno, devuelve GANADO.
@@ -76,6 +91,9 @@ public class Juego {
 		return EstadoDelJuego.JUGANDO;
 	}
 	
+	public Interacciones getInteracciones() {
+		return this.interacciones;
+	}
 	//Recibe un movimiento y lo convierte en una Accion, que será añadida a la lista de acciones si es válida.
 	public Accion convertirInput(KeyCode movimiento) {
 		Accion accion = controles.get(movimiento);
@@ -117,11 +135,15 @@ public class Juego {
 		gameSaver.cargarPartida(this.jugador, this.suelo);
 	}
 	
-	public void cargarTeclas() {
+	private void cargarTeclas() {
 		teclas.add(KeyCode.UP);
 		teclas.add(KeyCode.DOWN);
 		teclas.add(KeyCode.RIGHT);
 		teclas.add(KeyCode.LEFT);
+	}
+	
+	public List<KeyCode> teclasActuales() {
+		return teclas;
 	}
 
 	public void guardarJuego() {

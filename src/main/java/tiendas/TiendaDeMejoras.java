@@ -2,8 +2,6 @@ package tiendas;
 
 import java.util.Map;
 import java.util.Scanner;
-
-import algo3.motherloadV2.VistaTiendaDeMejoras;
 import jugador.Jugador;
 import jugador.Posicion;
 import mejoras.MejoraCapacidadDelTanque;
@@ -23,6 +21,12 @@ public class TiendaDeMejoras extends Entidad{
 	private static final TipoEntidad TIPO = TipoEntidad.TIENDA;
 	private static final List<Integer> TIERS_PRECIO = Arrays.asList(750, 2000, 5000, 20000, 100000, 150000);
 	private static final List<Integer> TIERS_MAX_CAPACIDAD = Arrays.asList(15, 25, 40, 60, 70, 120);
+	private static final List<Integer> TIERS_MAX_VIDA = Arrays.asList(17, 30, 50, 80, 120, 180);
+	private static final List<String> CODIGO_MEJORAS_INVENTARIO = List.of("I1","I2","I3","I4","I5","I6");
+	private static final List<String> CODIGO_MEJORAS_VIDA = List.of("V1","V2","V3","V4","V5","V6");
+	private static final List<String> CODIGO_MEJORAS_TANQUE = List.of("T1","T2","T3","T4","T5","T6");
+	private static final int CANTIDAD_DE_MEJORAS = 6;
+	
 	Scanner input;
 	Posicion posicion;
 	Map<String, MejoraInstantanea> mejoras;
@@ -37,36 +41,34 @@ public class TiendaDeMejoras extends Entidad{
 
 	//Inicializa las mejoras que se pueden comprar junto con sus precios.
 	private void inicializarMejoras() {
-		this.mejoras.put("I1", new MejoraMaxInventario(TIERS_MAX_CAPACIDAD.get(0), TIERS_PRECIO.get(0)));
-		this.mejoras.put("I2", new MejoraMaxInventario(TIERS_MAX_CAPACIDAD.get(1), TIERS_PRECIO.get(1)));
-		this.mejoras.put("I3", new MejoraMaxInventario(TIERS_MAX_CAPACIDAD.get(2), TIERS_PRECIO.get(2)));
-		this.mejoras.put("I4", new MejoraMaxInventario(TIERS_MAX_CAPACIDAD.get(3), TIERS_PRECIO.get(3)));
-		this.mejoras.put("I5", new MejoraMaxInventario(TIERS_MAX_CAPACIDAD.get(4), TIERS_PRECIO.get(4)));
-		this.mejoras.put("I6", new MejoraMaxInventario(TIERS_MAX_CAPACIDAD.get(5), TIERS_PRECIO.get(5)));
-				
-		this.mejoras.put("V1", new MejoraMaxVida(17, TIERS_PRECIO.get(0)));
-		this.mejoras.put("V2", new MejoraMaxVida(30, TIERS_PRECIO.get(1)));
-		this.mejoras.put("V3", new MejoraMaxVida(50, TIERS_PRECIO.get(2)));
-		this.mejoras.put("V4", new MejoraMaxVida(80, TIERS_PRECIO.get(3)));
-		this.mejoras.put("V5", new MejoraMaxVida(120, TIERS_PRECIO.get(4)));
-		this.mejoras.put("V6", new MejoraMaxVida(180, TIERS_PRECIO.get(5)));
-		
-		this.mejoras.put("T1", new MejoraCapacidadDelTanque(TIERS_MAX_CAPACIDAD.get(0), TIERS_PRECIO.get(0)));
-		this.mejoras.put("T2", new MejoraCapacidadDelTanque(TIERS_MAX_CAPACIDAD.get(1), TIERS_PRECIO.get(1)));
-		this.mejoras.put("T3", new MejoraCapacidadDelTanque(TIERS_MAX_CAPACIDAD.get(2), TIERS_PRECIO.get(2)));
-		this.mejoras.put("T4", new MejoraCapacidadDelTanque(TIERS_MAX_CAPACIDAD.get(3), TIERS_PRECIO.get(3)));
-		this.mejoras.put("T5", new MejoraCapacidadDelTanque(TIERS_MAX_CAPACIDAD.get(4), TIERS_PRECIO.get(4)));
-		this.mejoras.put("T6", new MejoraCapacidadDelTanque(TIERS_MAX_CAPACIDAD.get(5), TIERS_PRECIO.get(5)));
-		
+		for(int i = 0; i < CANTIDAD_DE_MEJORAS; i++) {
+			this.mejoras.put(CODIGO_MEJORAS_INVENTARIO.get(i),new MejoraMaxInventario(TIERS_MAX_CAPACIDAD.get(i), TIERS_PRECIO.get(i)));
+			this.mejoras.put(CODIGO_MEJORAS_VIDA.get(i), new MejoraMaxVida(TIERS_MAX_VIDA.get(i), TIERS_PRECIO.get(i)));
+			this.mejoras.put(CODIGO_MEJORAS_TANQUE.get(i), new MejoraCapacidadDelTanque(TIERS_MAX_CAPACIDAD.get(i), TIERS_PRECIO.get(i)));
+		}
+
+	}
+	
+	private void remove(int index,List<String> lista) {
+		if(index != -1) {
+			for(int i = 0; i <= index; i++) {
+				this.mejoras.remove(lista.get(i));
+			}
+		}
 	}
 	
 	//Elimina la mejora según el código especificado.
-	//Si no se usa borra este método xfi :P
 	private void eliminarMejora(String codigo) {
-		this.mejoras.remove(codigo);
+		int index1,index2,index3;
+		index1 = CODIGO_MEJORAS_INVENTARIO.indexOf(codigo);
+		index2 = CODIGO_MEJORAS_VIDA.indexOf(codigo);
+		index3 = CODIGO_MEJORAS_TANQUE.indexOf(codigo);
+		this.remove(index1,CODIGO_MEJORAS_INVENTARIO);
+		this.remove(index2,CODIGO_MEJORAS_VIDA);
+		this.remove(index3,CODIGO_MEJORAS_TANQUE);		
 	}
 	
-	//Permite vender la Mejora dada al Jugador dado.
+	//Permite vender la Mejora dada al Jugador dado. Devuelve true si se pudo comprar, false en caso contrario.
 	public boolean vender(Jugador jugador, MejoraInstantanea mejora) {
 		if(jugador.hacerCompra(mejora.getValor())){
 			mejora.utilizar(jugador);		
@@ -75,15 +77,16 @@ public class TiendaDeMejoras extends Entidad{
 		return false;
 	}
 
-	//Permite al Jugador dado interactuar con la Tienda actual.
-	public void interactuar(Jugador jugador, String codigo) {
+	//Permite al Jugador dado interactuar con la Tienda actual. Devuelve true si la interacción tuvo por resultado la compra exitosa, false en caso contrario.
+	public boolean interactuar(Jugador jugador, String codigo) {
 		MejoraInstantanea mejora = this.mejoras.get(codigo);
 		if(mejora == null) {
-			System.out.println("No tenemos esa mejora o ya la vendimos :(");
-			return;
+			return false;
 		}
 		if(vender(jugador, mejora)) {
-			eliminarMejora(codigo);			
+			eliminarMejora(codigo);	
+			return true;
 		}
+		return true;
 	}
 }

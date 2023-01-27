@@ -2,14 +2,6 @@ package terreno;
 
 import java.util.Map;
 
-import algo3.motherloadV2.VistaEstacionDeReparacion;
-import algo3.motherloadV2.VistaEstacionDeServicio;
-import algo3.motherloadV2.VistaEstacionDeVenta;
-import algo3.motherloadV2.VistaJuego;
-import algo3.motherloadV2.VistaTiendaDeConsumibles;
-import algo3.motherloadV2.VistaTiendaDeMejoras;
-import javafx.scene.Group;
-import javafx.stage.Stage;
 import jugador.Jugador;
 import jugador.Posicion;
 import tiendas.EstacionDeReparacion;
@@ -17,6 +9,8 @@ import tiendas.EstacionDeServicio;
 import tiendas.EstacionDeVenta;
 import tiendas.TiendaDeConsumibles;
 import tiendas.TiendaDeMejoras;
+import vistas.VistaJuego;
+
 import java.util.HashMap;
 
 public class PisoSuperior {
@@ -61,6 +55,15 @@ public class PisoSuperior {
 	public Entidad colisionEntidad(Posicion pos) {
 		if(this.tiendas != null) {
 			return this.getTiendaPos((int)pos.getX());
+		}
+		return null;
+	}
+	
+	public Entidad getTiendaTipo(TipoEntidad tipo) {
+		for (var entry : tiendas.entrySet()) {
+		    if(entry.getValue().getTipoEntidad() == tipo) {
+		    	return entry.getValue();
+		    }
 		}
 		return null;
 	}

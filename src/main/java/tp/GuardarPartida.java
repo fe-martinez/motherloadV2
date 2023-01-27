@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import jugador.Jugador;
 import terreno.Suelo;
 
@@ -14,6 +13,7 @@ public class GuardarPartida {
 	private Suelo suelo;
 	ObjectOutputStream output;
 	ObjectInputStream input;
+	SaveFile saveFile;
 	
 	public GuardarPartida(Jugador pj, Suelo suelo) {
 		this.pj = pj;
@@ -21,14 +21,14 @@ public class GuardarPartida {
 	}
 	
 	public boolean guardarPartida() {
-		var saveFile = new SaveFile();
+		saveFile = new SaveFile();
 		
 		saveFile.guardarStats(pj);
 		saveFile.guardarInventario(pj.getInventario());
 		saveFile.guardarMapa(suelo);
 		
 		try {
-			this.output = new ObjectOutputStream(new FileOutputStream("../motherloadV2/src/gameData/savegame.dat"));
+			this.output = new ObjectOutputStream(new FileOutputStream("src/gameData/savegame.dat"));
 			output.writeObject(saveFile);
 			output.close();
 			return true;
@@ -42,7 +42,7 @@ public class GuardarPartida {
 		
 		
 		try {
-			this.input = new ObjectInputStream(new FileInputStream("../motherloadV2/src/gameData/savegame.dat"));
+			this.input = new ObjectInputStream(new FileInputStream("src/gameData/savegame.dat"));
 			SaveFile save = (SaveFile) input.readObject();
 			save.cargarStats(save, pj);
 			save.cargarMapa(save, suelo);
@@ -50,11 +50,9 @@ public class GuardarPartida {
 			input.close();
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Alertas.showAlerta("Fallo cargar partida");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Alertas.showAlerta("Fallo cargar partida");
 		}
 		return false;
 	}

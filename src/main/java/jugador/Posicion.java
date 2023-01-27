@@ -59,13 +59,9 @@ public class Posicion {
 		return false;
 	}
 	
-	//Para que las interacciones concuerden con la posicion de la animacion.
-	//(int) corta todo lo que viene detras del punto. (int)3.6666 --> 3.0.
-	//round lo lleva al entero mas cercano. Math.round(3.666) --> 4.0.
+	//Recibe una posición y la rendodea para que las interacciones concuerden con la posicion de la animación.
 	public static Posicion redondear(Posicion pos) {
-		//var decimalX = Math.abs(pos.getX() - ((int)pos.getX()));
 		var nuevaX = pos.getX();
-		//var decimalY = Math.abs(pos.getY() - ((int)pos.getY()));
 		var nuevaY = pos.getY();
 
 		Posicion nueva = new Posicion(nuevaX, nuevaY);

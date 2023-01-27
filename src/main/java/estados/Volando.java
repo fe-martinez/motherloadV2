@@ -18,7 +18,7 @@ public class Volando implements Estado {
 			return true;
 		} else {
 			int fallDamage = interacciones.calcularDanio(pj.getVelY());
-			pj.getNave().recibirDanio(fallDamage);
+			pj.recibirDanio(fallDamage);
 			pj.setVelY(0);
 		}
 		return false;
@@ -54,6 +54,8 @@ public class Volando implements Estado {
 	@Override
 	public Estado update(ArrayList<Accion> acciones, Jugador pj, Interacciones interacciones) {
 		pj.setTipoAnimacion(4);
+		
+		pj.gastarCombustible(Juego.GASTO_COMBUSTIBLE_MOVIMIENTO);
 		
 		if(!interacciones.chequearColisionVertical()) {
 				actualizarY(pj);

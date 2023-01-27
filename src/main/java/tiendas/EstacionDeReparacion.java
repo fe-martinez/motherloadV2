@@ -1,6 +1,5 @@
 package tiendas;
 
-import algo3.motherloadV2.VistaEstacionDeReparacion;
 import jugador.Jugador;
 import jugador.Posicion;
 import terreno.Entidad;
@@ -11,25 +10,31 @@ public class EstacionDeReparacion extends Entidad implements EstacionDeMantenimi
 	private static final int PRECIO_REPARACION = 10;
 	private static final char LETRA = '!';
 	private static final TipoEntidad TIPO = TipoEntidad.TIENDA;
-
+	private static final int CODIGO_REPAIR_TOTAL = 1000;
+	
 	public EstacionDeReparacion(Posicion posicion) {
 		super(posicion, TIPO, LETRA);
 	}
 
-	//Repara la nave del Jugador elegido según la opción de gasto elegido.
-	public void vender(Jugador jugador, double gasto) {
+	//Repara la nave del Jugador elegido según la opción de gasto elegido. Devuelve true si se pudo comprar, false en caso contrario.
+	public boolean vender(Jugador jugador, double gasto) {
 		double hpPedidos = gasto/PRECIO_REPARACION;
 		double hpFaltante = jugador.getNave().getMaxHP() - jugador.getNave().getHP();
-		double hpReparados = hpPedidos < hpFaltante ? hpPedidos : hpFaltante;
-		double gastoEfectivo = (hpReparados * PRECIO_REPARACION) < gasto ? (hpReparados * PRECIO_REPARACION) : gasto;
-		
-		if(jugador.hacerCompra(gastoEfectivo)) {
-			jugador.getNave().repararDmg((int)hpReparados);
+		double hpReparados = 0;
+		if(gasto == CODIGO_REPAIR_TOTAL) {
+			hpReparados = hpFaltante;
+		} else {
+			hpReparados = hpPedidos < hpFaltante ? hpPedidos : hpFaltante;
 		}
+		
+		double gastoEfectivo = hpReparados * PRECIO_REPARACION;
+		
+		boolean sePuedeComprar = false;
+		if(jugador.hacerCompra(gastoEfectivo)) {
+			sePuedeComprar = jugador.getNave().repararDmg((int)hpReparados);
+		}
+		
+		return sePuedeComprar;
 	}
 
-	//Realiza la interacción entre el Jugador y la Tienda.
-	public void interactuar(Jugador jugador, int cantidad) {
-		vender(jugador, cantidad);
-	}
 }

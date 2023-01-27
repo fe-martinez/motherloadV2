@@ -20,7 +20,7 @@ public class Inicial implements Estado{
 			pj.setY(pj.getY() + pj.getVelY());
 		} else {
 			int fallDamage = interacciones.calcularDanio(pj.getVelY());
-			pj.getNave().recibirDanio(fallDamage);
+			pj.recibirDanio(fallDamage);
 			pj.setVelY(0);
 		}
 	}
@@ -65,7 +65,7 @@ public class Inicial implements Estado{
 			actualizarX(pj);
 		}
 		
-		pj.getNave().gastarCombustible(Juego.GASTO_COMBUSTIBLE_IDLE);
+		pj.gastarCombustible(Juego.GASTO_COMBUSTIBLE_IDLE);
 		
 		//La idea es que si se esta oprimiendo ARRIBA, no ejecute otras cosas.
 		for(Accion actual: acciones) {

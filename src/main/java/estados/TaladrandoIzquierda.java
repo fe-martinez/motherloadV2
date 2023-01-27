@@ -1,6 +1,7 @@
 package estados;
 
 import java.util.ArrayList;
+
 import jugador.Accion;
 import jugador.Interacciones;
 import jugador.Jugador;
@@ -13,9 +14,8 @@ public class TaladrandoIzquierda implements Estado {
 	}
 	@Override
 	public Estado update(ArrayList<Accion> acciones, Jugador pj, Interacciones interacciones) {
-		//pj.setX(pj.getX() + ((-0.1 * 10) / Juego.MAX_TICKS));
 		pj.setTipoAnimacion(3);
-		pj.getNave().gastarCombustible(Juego.GASTO_COMBUSTIBLE_MOVIMIENTO);
+		pj.gastarCombustible(Juego.GASTO_COMBUSTIBLE_MOVIMIENTO);
 		ticks += 1;
 		if(ticks > Juego.MAX_TICKS) {
 			pj.setX(pj.getX() - 1);
